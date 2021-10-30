@@ -1,0 +1,735 @@
+<odoo>
+    <data>
+        <template id="admin_system_user_access_assets_backend" name="Archive assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/admin_vendor_portal_access/static/src/js/remove_export_option.js"/>
+            </xpath>
+        </template>
+        <record id="admin_purchase_requisition.admin_set_mass_sourcing_action_wizard" model="ir.actions.act_window">
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]"/>
+        </record>
+
+        <record id="admin_purchase_requisition_form" model="ir.ui.view">
+            <field name="name">admin.purchase.requisition.form</field>
+            <field name="model">admin.purchase.requisition</field>
+            <field name="inherit_id" ref="admin_purchase_requisition.admin_purchase_requisition_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_purchase_requisition_forms" model="ir.ui.view">
+            <field name="name">admin.purchase.requisition.forms</field>
+            <field name="model">admin.purchase.requisition</field>
+            <field name="inherit_id" ref="admin_purchase_requisition.admin_purchase_requisition_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_purchase_requisition_form1" model="ir.ui.view">
+            <field name="name">admin.purchase.requisition.form1</field>
+            <field name="model">admin.purchase.requisition</field>
+            <field name="inherit_id" ref="admin_purchase_requisition.admin_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_rfq']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="copy">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_requisition_material_details_form" model="ir.ui.view">
+            <field name="name">purchase.requisition.material.details.form</field>
+            <field name="model">purchase.requisition.material.details</field>
+            <field name="inherit_id" ref="admin_purchase_requisition.purchase_requisition_material_details_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_requisition_material_details_forms" model="ir.ui.view">
+            <field name="name">purchase.requisition.material.details.forms</field>
+            <field name="model">purchase.requisition.material.details</field>
+            <field name="inherit_id" ref="admin_purchase_requisition.purchase_requisition_material_details_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admins_request_for_quotation_view_form" model="ir.ui.view">
+            <field name="name">admins.request.for.quotation.form</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="inherit_id" ref="admin_request_for_quotation.admin_request_for_quotation_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admins_request_for_quotation_view_forms" model="ir.ui.view">
+            <field name="name">admins.request.for.quotation.forms</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="inherit_id" ref="admin_request_for_quotation.admin_request_for_quotation_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_quotation_view_form1" model="ir.ui.view">
+            <field name="name">admin.request.for.quotation.form1</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="inherit_id" ref="admin_request_for_quotation.admin_request_for_quotation_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//button[@name='confirm_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//button[@name='verify_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//button[@name='approve_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="copy">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_vendor_rfq_view_form" model="ir.ui.view">
+            <field name="name">admin.vendor.rfq.form</field>
+            <field name="model">admin.vendor.rfq</field>
+            <field name="inherit_id" ref="admin_request_for_quotation.admin_vendor_rfq_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_vendor_rfq_view_form" model="ir.ui.view">
+            <field name="name">admin.vendor.rfq.form</field>
+            <field name="model">admin.vendor.rfq</field>
+            <field name="inherit_id" ref="admin_request_for_quotation.admin_vendor_rfq_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.information.form</field>
+            <field name="model">admin.request.for.information</field>
+            <field name="inherit_id" ref="admin_request_for_information.admin_request_for_information_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_view_forms" model="ir.ui.view">
+            <field name="name">admin.request.for.information.forms</field>
+            <field name="model">admin.request.for.information</field>
+            <field name="inherit_id" ref="admin_request_for_information.admin_request_for_information_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_view_form1" model="ir.ui.view">
+            <field name="name">admin.request.for.information.form1</field>
+            <field name="model">admin.request.for.information</field>
+            <field name="inherit_id" ref="admin_request_for_information.admin_request_for_information_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='confirm_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='verify_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='approve_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="copy">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_line_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.information.line.form</field>
+            <field name="model">admin.request.for.information.line</field>
+            <field name="inherit_id" ref="admin_request_for_information.admin_request_for_information_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_line_view_forms" model="ir.ui.view">
+            <field name="name">admin.request.for.information.line.forms</field>
+            <field name="model">admin.request.for.information.line</field>
+            <field name="inherit_id" ref="admin_request_for_information.admin_request_for_information_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_line_view_form1" model="ir.ui.view">
+            <field name="name">admin.request.for.information.line.form1</field>
+            <field name="model">admin.request.for.information.line</field>
+            <field name="inherit_id" ref="admin_request_for_information.admin_request_for_information_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_proposals_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.proposals.form</field>
+            <field name="model">admin.request.for.proposals</field>
+            <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposals_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_proposals_view_forms" model="ir.ui.view">
+            <field name="name">admin.request.for.proposals.forms</field>
+            <field name="model">admin.request.for.proposals</field>
+            <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposals_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_proposals_view_form1" model="ir.ui.view">
+            <field name="name">admin.request.for.proposals.form1</field>
+            <field name="model">admin.request.for.proposals</field>
+            <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposals_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='confirm_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='verify_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='approve_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="copy">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_proposal_line_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.proposal.line.form</field>
+            <field name="model">admin.request.for.proposal.line</field>
+            <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposal_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_proposal_line_view_forms" model="ir.ui.view">
+            <field name="name">admin.request.for.proposal.line.forms</field>
+            <field name="model">admin.request.for.proposal.line</field>
+            <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposal_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_request_for_proposal_line_view_form1" model="ir.ui.view">
+            <field name="name">admin.request.for.proposal.line.form1</field>
+            <field name="model">admin.request.for.proposal.line</field>
+            <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposal_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="pr_bid_form" model="ir.ui.view">
+            <field name="name">purchase.bid.form</field>
+            <field name="model">purchase.bid</field>
+            <field name="inherit_id" ref="admin_purchase_bid.pr_bid_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="pr_bid_forms" model="ir.ui.view">
+            <field name="name">purchase.bid.forms</field>
+            <field name="model">purchase.bid</field>
+            <field name="inherit_id" ref="admin_purchase_bid.pr_bid_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="pr_bid_form1" model="ir.ui.view">
+            <field name="name">purchase.bid.form1</field>
+            <field name="model">purchase.bid</field>
+            <field name="inherit_id" ref="admin_purchase_bid.pr_bid_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_confirm']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_verify']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_approve']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level2</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm_bid_selection']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_verify_bid_selection']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(admin_cancel_and_halt_reason.admin_reset_to_draft_reason_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level2,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level5</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_submit_to_verify_bid_selection']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_force_postbid']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7</attribute>
+                </xpath>
+                <xpath expr="//field[@name='vendor_line']/tree/button[@name='action_kick']" position="attributes">
+                   <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level2</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="copy">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_bid_vendor_form" model="ir.ui.view">
+            <field name="name">purchase.bid.vendor.form</field>
+            <field name="model">purchase.bid.vendor</field>
+            <field name="inherit_id" ref="admin_purchase_bid.purchase_bid_vendor_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_bid_vendor_forms" model="ir.ui.view">
+            <field name="name">purchase.bid.vendor.forms</field>
+            <field name="model">purchase.bid.vendor</field>
+            <field name="inherit_id" ref="admin_purchase_bid.purchase_bid_vendor_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_bid_vendor_form1" model="ir.ui.view">
+            <field name="name">purchase.bid.vendor.form1</field>
+            <field name="model">purchase.bid.vendor</field>
+            <field name="inherit_id" ref="admin_purchase_bid.purchase_bid_vendor_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="delete">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_bid_vendor_form2" model="ir.ui.view">
+            <field name="name">purchase.bid.vendor.form2</field>
+            <field name="model">purchase.bid.vendor</field>
+            <field name="inherit_id" ref="admin_purchase_bid.purchase_bid_vendor_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_bid_vendor_tree1" model="ir.ui.view">
+            <field name="name">purchase.bid.vendor.tree</field>
+            <field name="model">purchase.bid.vendor</field>
+            <field name="inherit_id" ref="admin_purchase_bid.purchase_bid_vendor_tree"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_forms" model="ir.ui.view">
+            <field name="name">purchase.order.forms</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="po_delivery_line_view_form" model="ir.ui.view">
+            <field name="name">po.delivery.line.form</field>
+            <field name="model">po.delivery.line</field>
+            <field name="inherit_id" ref="admin_purchase_order.po_delivery_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="po_delivery_line_view_form1" model="ir.ui.view">
+            <field name="name">po.delivery.line.form1</field>
+            <field name="model">po.delivery.line</field>
+            <field name="inherit_id" ref="admin_purchase_order.po_delivery_line_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="po_delivery_line_view_tree" model="ir.ui.view">
+            <field name="name">po.delivery.line.tree</field>
+            <field name="model">po.delivery.line</field>
+            <field name="inherit_id" ref="admin_purchase_order.po_delivery_line_view_tree"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2b')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="po_delivery_line_view_tree1" model="ir.ui.view">
+            <field name="name">po.delivery.line.tree1</field>
+            <field name="model">po.delivery.line</field>
+            <field name="inherit_id" ref="admin_purchase_order.po_delivery_line_view_tree"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <record id="action_admin_sales_invoice_form_open_level3" model="ir.actions.act_window">-->
+<!--            <field name="name">Vendor SI</field>-->
+<!--            <field name="res_model">admin.sales.invoice</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="view_mode">tree,form,pivot</field>-->
+<!--            <field name="domain">[('admin_si_type', '=', 'no_po')]</field>-->
+<!--            <field name="search_view_id" ref="admin_purchase_order.view_admin_sales_invoice_search"/>-->
+<!--        </record>-->
+
+        <record id="admin_sales_invoice_view_form1" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.form1</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="inherit_id" ref="admin_purchase_order.admin_sales_invoice_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2b'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='countered']" position="after">
+                    <field name="check_create" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_sales_invoice_view_form2" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.form2</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="inherit_id" ref="admin_purchase_order.admin_sales_invoice_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2b')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_sales_invoice_view_form3" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.form3</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="inherit_id" ref="admin_purchase_order.admin_sales_invoice_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">1</attribute>
+                    <attribute name="edit">1</attribute>
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_invoice_payment_view_form" model="ir.ui.view">
+            <field name="name">admin.invoice.payment.form</field>
+            <field name="model">admin.invoice.payment</field>
+            <field name="inherit_id" ref="admin_purchase_order.admin_invoice_payment_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="admin_invoice_payment_view_forms" model="ir.ui.view">
+            <field name="name">admin.invoice.payment.forms</field>
+            <field name="model">admin.invoice.payment</field>
+            <field name="inherit_id" ref="admin_purchase_order.admin_invoice_payment_view_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="contracts_and_agreements_form" model="ir.ui.view">
+            <field name="name">contracts.and.agreements.form</field>
+            <field name="model">contracts.and.agreements</field>
+            <field name="inherit_id" ref="admin_contracts_and_agreements.contracts_and_agreements_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="contracts_and_agreements_forms" model="ir.ui.view">
+            <field name="name">contracts.and.agreements.forms</field>
+            <field name="model">contracts.and.agreements</field>
+            <field name="inherit_id" ref="admin_contracts_and_agreements.contracts_and_agreements_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="duplicate">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="contracts_and_agreements_form1" model="ir.ui.view">
+            <field name="name">contracts.and.agreements.form1</field>
+            <field name="model">contracts.and.agreements</field>
+            <field name="inherit_id" ref="admin_contracts_and_agreements.contracts_and_agreements_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_verify']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level4</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_approve']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level5</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="partner_evaluation_form" model="ir.ui.view">
+            <field name="name">partner.evaluation.view.form</field>
+            <field name="model">partner.evaluation</field>
+            <field name="inherit_id" ref="admin_vendor.partner_evaluation_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_css" invisible="1"/>
+                </xpath>
+                <xpath expr="//button[@name='submit_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='confirm_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level3,admin_vendor_portal_access.group_vendor_portal_level4,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='verify_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level5,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='%(admin_vendor.admin_select_type_of_evaluation_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='btn_reject']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level5</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="partner_regular_evaluation_form" model="ir.ui.view">
+            <field name="name">partner.regular.evaluation.form</field>
+            <field name="model">partner.regular.evaluation</field>
+            <field name="inherit_id" ref="admin_vendor.partner_regular_evaluation_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='confirm_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level6</attribute>
+                </xpath>
+                <xpath expr="//button[@name='verify_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level5</attribute>
+                </xpath>
+                <xpath expr="//button[@name='approve_request']" position="attributes">
+                    <attribute name="groups">admin_vendor_portal_access.group_vendor_portal_level7,admin_vendor_portal_access.group_vendor_portal_level6,admin_vendor_portal_access.group_vendor_portal_level2</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="res_partner_kanban_view">
+            <field name="name">res.partner.kanban</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_form1" model="ir.ui.view">
+            <field name="name">res.partner.form1</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_admin_vendor_form" model="ir.ui.view">
+            <field name="name">res.partner.form2</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="admin_vendor.res_partner_admin_vendor_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='accredited']" position="after">
+                    <field name="x_css" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_tree" model="ir.ui.view">
+            <field name="name">res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

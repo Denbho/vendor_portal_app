@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sequence_admin_vendor_rfq" model="ir.sequence">
+            <field name="name">Vendor RFQ</field>
+            <field name="code">vendor.request.for.quotation</field>
+            <field name="prefix">RFQ</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <menuitem id="admin_request_for_quotation_menu" name="Request For Quotation"
+                  parent="purchase.menu_procurement_management" sequence="1"/>
+
+        <record id="admin_vendor_rfq_view_tree" model="ir.ui.view">
+            <field name="name">admin.vendor.rfq.tree</field>
+            <field name="model">admin.vendor.rfq</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor RFQ tree" edit="false" create="false" delete="false">
+                    <field name="partner_id"/>
+                    <field name="rfq_id"/>
+                    <field name="company_id"/>
+                    <field name="rfq_line_ids"/>
+                    <field name="state"/>
+                    <field name="declined_reason_id" optional="hidden"/>
+                    <field name="declined_note" widget="html" optional="hidden"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_vendor_rfq_view_form" model="ir.ui.view">
+            <field name="name">admin.vendor.rfq.form</field>
+            <field name="model">admin.vendor.rfq</field>
+            <field name="arch" type="xml">
+                <form string="Vendor RFQ form" edit="false" create="false" delete="false">
+                    <header>
+                        <button name="btn_accept" string="Accept" type="object" class="oe_highlight"
+                                states="waiting_for_acceptance"/>
+                        <button string="Decline" name="%(admin_reason_to_decline_rfq_action_wizard)d"
+                                states="waiting_for_acceptance" type="action"/>
+                        <button name="btn_submit" string="Submit" type="object" class="oe_highlight"
+                                states="accepted"/>
+                        <field name="state" widget="statusbar" statusbar_visible="waiting_for_acceptance,accepted,submitted,done" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="partner_id"/>
+                            </h1>
+                            <div>
+                                <label for="rfq_id" class="oe_inline"/>
+                                <field name="rfq_id" class="oe_inline oe_input_align"/>
+                            </div>
+                            <div>
+                                <label for="company_id" class="oe_inline"/>
+                                <field name="company_id" class="oe_inline oe_input_align"/>
+                            </div>
+                        </div>
+                        <group>
+                          <field name="declined_reason_id" attrs="{'invisible': [('state', '!=', 'declined')]}"/>
+                          <field name="declined_note" widget="html" attrs="{'invisible': [('state', '!=', 'declined')]}"/>
+                        </group>
+                        <group>
+                            <field name="rfq_line_ids" nolabel="1" colspan="2">
+                                <tree string="Vendor RFQ" decoration-muted="selected=='not selected'"
+                                      decoration-success="selected=='selected'">
+                                    <field name="selected" invisible="1"/>
+                                    <field name="product_id"/>
+                                    <field name="prod_qty"/>
+                                    <field name="product_uom"/>
+                                    <field name="price"/>
+                                    <field name="sub_total_price"/>
+                                    <field name="delivery_cost"/>
+                                    <field name="gross_total"/>
+                                    <field name="minimum_order_qty"/>
+                                    <field name="delivery_lead_time"/>
+                                    <field name="warranty"/>
+                                    <field name="terms"/>
+                                    <field name="validity_from"/>
+                                    <field name="validity_to"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <separator string="Other Information"/>
+                        <field name="other_information" no_label="1"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_admin_vendor_rfq_search">
+            <field name="name">admin.vendor.rfq.search</field>
+            <field name="model">admin.vendor.rfq</field>
+            <field name="arch" type="xml">
+                <search string="RFQ Mails">
+                    <field name="partner_id"/>
+                    <field name="rfq_id"/>
+                    <field name="company_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" name="partner_id" context="{'group_by': 'partner_id'}"/>
+                        <filter string="RFQ" name="rfq_id" context="{'group_by': 'rfq_id'}"/>
+                        <filter string="Company" name="company_id" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="admin_vendor_rfq_open_action" model="ir.actions.act_window">
+            <field name="name">RFQ Mails</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.vendor.rfq</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_admin_vendor_rfq_search"/>
+             <field name="domain">[('rfq_id', '=', active_id)]</field>
+        </record>
+
+        <record id="admin_vendor_rfq_action" model="ir.actions.act_window">
+            <field name="name">RFQ Mails</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.vendor.rfq</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="admin_vendor_rfq_action_menu" name="RFQ Mails"
+                  parent="admin_request_for_quotation_menu" action="admin_vendor_rfq_action"
+                  sequence="2"/>
+
+        <record id="admin_request_for_quotation_view_tree" model="ir.ui.view">
+            <field name="name">admin.request.for.quotation.tree</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="arch" type="xml">
+                <tree string="Request For Quotation Tree">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <field name="create_date"/>
+                    <field name="est_del_date"/>
+                    <field name="close_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_request_for_quotation_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.quotation.form</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="arch" type="xml">
+                <form string="Request For Quotation Form">
+                    <header>
+                        <button name="submit_request" string="Submit"
+                                class="oe_highlight" states="draft" type="object"/>
+                        <button name="confirm_request" string="Confirm"
+                                class="oe_highlight" states="submitted" type="object"/>
+                        <button name="verify_request" string="Verify"
+                                class="oe_highlight" states="confirmed" type="object"/>
+                        <button name="approve_request" string="Approve" help="Final Approval"
+                                class="oe_highlight" states="verified" type="object"/>
+                        <button name="create_vendor_rfq_line" string="Send Invitation Email" type="object"
+                                class="btn-primary" states="approved" icon="fa-paper-plane" state="draft"/>
+                        <button name="set_rfq_done" string="Set RFQ to Done" type="object"
+                                states="sent" class="oe_link" icon="fa-check-square"/>
+                        <button name="send_email_to_vendors" string="Send Email to Vendors" type="object"
+                                states="sent" class="oe_link" icon="fa-paper-plane"/>
+                        <button name="%(admin_cancel_and_halt_reason.admin_reset_to_draft_reason_action_wizard)d" type="action"
+                                states="submitted,confirmed,verified" string="Reset to Draft"/>
+                        <button name="%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d" string="Cancel"
+                                states="draft,submitted,confirmed,verified,approved,sent" type="action"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,done"/>
+                    </header>
+                    <sheet>
+                        <div name="button_box">
+                            <button class="oe_stat_button" type="action"
+                                    name="%(admin_vendor_rfq_open_action)d"
+                                    icon="fa-bookmark" attrs="{'invisible': [('state', 'in', ['draft', False])]}">
+                                <div class="o_stat_info">
+                                    <field name="vendor_quotation_count" class="o_stat_value"/>
+                                    <span class="o_stat_text">Vendor Quotations</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id"/>
+                                <label for="company_id"/>
+                                <div>
+                                    [<field name="company_code" class="oe_inline" required="1"/>]
+                                    <field name="company_id" groups="base.group_multi_company" class="oe_inline" required="1"/>
+                                </div>
+                                <field name="create_date"/>
+                            </group>
+                            <group>
+                                <field name="est_del_date" required="1"/>
+                                <field name="open_date" required="1"/>
+                                <field name="close_date" attrs="{'readonly':[('state', 'in', ['done','canceled'])]}"/>
+                                <field name="vendor_ids" widget="many2many_tags" options="{'no_create': True}" required="1"
+                                        domain="[('type','=','contact'),('is_blocked','=',False)]"
+                                        context="{'search_default_supplier': 1}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                          <page name="material" string="Materials">
+                            <group>
+                                <field name="rfq_line_ids" nolabel="1" colspan="2" context="{'default_vendor_ids': vendor_ids}"
+                                       attrs="{'invisible':[('state', '!=', 'draft')]}">
+                                    <tree string="RFQ Lines">
+                                        <field name="default_product_code"/>
+                                        <field name="product_id" optional="hide"/>
+                                        <field name="product_description"/>
+                                        <field name="latest_price" options="{'optional': 'show'}"/>
+                                        <field name="stock_location_id" optional="hide"/>
+                                        <field name="company_name" optional="hide"/>
+                                        <field name="prod_qty"/>
+                                        <field name="bom_price" optional="hide"/>
+                                        <field name="market_price" optional="hide"/>
+                                        <field name="target_price" optional="hide"/>
+                                        <field name="product_uom_name" invisible="1"/>
+                                        <field name="product_uom"/>
+                                        <field name="product_uom_category_id" invisible="1"/>
+                                        <field name="vendor_ids" widget="many2many_tags" options="{'no_create': True}"
+                                               attrs="{'column_invisible': [('parent.state', 'in', ['done'])]}"/>
+                                        <field name="assigned_vendor_ids" widget="many2many_tags"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                                        <field name="price" optional="hide"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                                        <field name="sub_total_price" optional="hide"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                                        <field name="delivery_cost" optional="hide"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                                        <field name="minimum_order_qty" optional="hide"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                                        <field name="warranty"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                                               optional="hide"/>
+                                        <field name="terms"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                                               optional="hide"/>
+                                        <field name="validity_from"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                                               optional="hide"/>
+                                        <field name="validity_to"
+                                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                                               optional="hide"/>
+                                        <field name="state" optional="hide"/>
+                                    </tree>
+                                    <form string="RFQ Lines">
+                                        <header>
+                                            <button string="Select Vendor" type="action" states="sent"
+                                                name="%(admin_select_vendor_rfq_action_wizard)d"
+                                                class="oe_link" icon="fa-hourglass-half"/>
+                                            <button string="Reverse Selected Vendor/s" type="object"
+                                                name="reverse_selected_vendor"
+                                                attrs="{'invisible': ['|',('state', '!=', 'sent'),('assigned_vendor_ids', '=', [])]}"
+                                                class="oe_highlight" confirm="Are you sure you want to reverse all selected vendor/s?"/>
+                                            <field name="state" widget="statusbar" statusbar_visible="draft,sent,done"
+                                                   options="{'clickable': '1'}"/>
+                                        </header>
+                                        <field name="product_image" widget="image" class="oe_avatar"
+                                               options="{'preview_image': 'image_128'}"/>
+                                        <div class="oe_title">
+                                            <h1>
+                                                <field name="product_id"/>
+                                            </h1>
+                                            <div>
+                                                <label for="default_product_code" class="oe_inline"/>
+                                                <field name="default_product_code" class="oe_inline oe_input_align"/>
+                                            </div>
+                                        </div>
+                                        <group>
+                                            <group>
+                                                <field name="product_description"/>
+                                                <field name="latest_price" widget="html"/>
+                                            </group>
+                                            <group>
+                                                <field name="bom_price"/>
+                                                <field name="market_price"/>
+                                                <field name="target_price"/>
+                                                <label for="prod_qty"/>
+                                                <div>
+                                                    <field name="prod_qty" class="oe_inline"/>
+                                                    <field name="product_uom" class="oe_inline"/>
+                                                    <field name="product_uom_category_id" invisible="1"/>
+                                                </div>
+                                                <field name="stock_location_id"/>
+                                                <field name="vendor_ids" widget="many2many_tags"
+                                                       options="{'no_create': True}"
+                                                       domain="[('type','=','contact'),('is_blocked','=',False)]"
+                                                       context="{'search_default_supplier': 1}"/>
+                                                <field name="assigned_vendor_ids" widget="many2many_tags" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page name="vendor_rfqs" string="Vendor Quotations">
+                                                <field name="vendor_rfq_line_ids" nolabel="1" colspan="2"
+                                                       attrs="{'readonly': [('state', '=', 'done')]}">
+                                                    <tree string="Vendor RFQ" create="false"
+                                                          edit="false" delete="false" decoration-muted="selected=='not selected'"
+                                                          decoration-success="selected=='selected'" default_order="price">
+                                                        <field name="selected" invisible="1"/>
+                                                        <field name="partner_id"/>
+                                                        <field name="price"/>
+                                                        <field name="sub_total_price"/>
+                                                        <field name="delivery_cost"/>
+                                                        <field name="gross_total"/>
+                                                        <field name="minimum_order_qty"/>
+                                                        <field name="delivery_lead_time"/>
+                                                        <field name="warranty"/>
+                                                        <field name="terms"/>
+                                                        <field name="validity_from"/>
+                                                        <field name="validity_to"/>
+                                                    </tree>
+                                                </field>
+                                            </page>
+                                            <page name="companies_rfq" string="Company Related Material RFQ">
+                                                <field name="quantity_company_ids" nolabel="1" colspan="2"
+                                                       attrs="{'readonly': [('state', '=', 'done')]}">
+                                                    <tree string="Company Requirement" editable="1">
+                                                        <field name="company_id"/>
+                                                        <field name="company_code"/>
+                                                        <field name="product_id"/>
+                                                        <field name="qty" sum="Total"/>
+                                                        <field name="product_uom"/>
+                                                    </tree>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                                    </form>
+                                </field>
+                            </group>
+                          </page>
+                          <page name="approvals" string="Approvals"
+                                states="submitted,confirmed,verified,approved,sent,done,canceled">
+                              <group>
+                                  <group>
+                                      <label for="submitted_by"
+                                             states="submitted,confirmed,verified,approved,sent,done"/>
+                                      <div states="submitted,confirmed,verified,approved,sent,done">
+                                          <field name="submitted_by" class="oe_inline"/>
+                                          <![CDATA[ &nbsp;&nbsp;&nbsp; ]]>
+                                          <field name="submitted_date" class="oe_inline"/>
+                                      </div>
+                                      <label for="confirmed_by"
+                                             states="confirmed,verified,approved,sent,done"/>
+                                      <div states="confirmed,verified,approved,sent,done">
+                                          <field name="confirmed_by" class="oe_inline"/>
+                                          <![CDATA[ &nbsp;&nbsp;&nbsp; ]]>
+                                          <field name="confirmed_date" class="oe_inline"/>
+                                      </div>
+                                      <label for="verified_by" states="verified,approved,sent,done"/>
+                                      <div states="verified,approved,sent,done">
+                                          <field name="verified_by" class="oe_inline"/>
+                                          <![CDATA[ &nbsp;&nbsp;&nbsp; ]]>
+                                          <field name="verified_date" class="oe_inline"/>
+                                      </div>
+                                  </group>
+                                  <group>
+                                      <label for="approved_by" string="Approved (Final)"
+                                              states="approved,sent,done"/>
+                                      <div states="approved,sent,done">
+                                          <field name="approved_by" class="oe_inline"/>
+                                          <![CDATA[ &nbsp;&nbsp;&nbsp; ]]>
+                                          <field name="approved_date" class="oe_inline"/>
+                                      </div>
+                                      <label for="canceled_by" states="canceled"/>
+                                      <div states="canceled">
+                                          <field name="canceled_by" class="oe_inline"/>
+                                          <![CDATA[ &nbsp;&nbsp;&nbsp; ]]>
+                                          <field name="canceled_date" class="oe_inline"/>
+                                      </div>
+                                  </group>
+                              </group>
+                          </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_request_for_quotation_view_form2" model="ir.ui.view">
+            <field name="name">admin.request.for.quotation.form2</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="inherit_id" ref="admin_request_for_quotation_view_form"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='rfq_line_ids']" position="after">
+                <field name="rfq_line_ids2" nolabel="1" colspan="2" attrs="{'invisible':[('state' , '=', 'draft')]}">
+                    <tree string="RFQ Lines" create='false' delete='false'>
+                        <field name="default_product_code"/>
+                        <field name="product_id" optional="hide"/>
+                        <field name="product_description"/>
+                        <field name="latest_price" options="{'optional': 'show'}"/>
+                        <field name="stock_location_id" optional="hide"/>
+                        <field name="company_name" optional="hide"/>
+                        <field name="prod_qty"/>
+                        <field name="bom_price" optional="hide"/>
+                        <field name="market_price" optional="hide"/>
+                        <field name="target_price" optional="hide"/>
+                        <field name="product_uom_name" invisible="1"/>
+                        <field name="product_uom"/>
+                        <field name="product_uom_category_id" invisible="1"/>
+                        <field name="vendor_ids" widget="many2many_tags" options="{'no_create': True}"
+                               attrs="{'column_invisible': [('parent.state', 'in', ['done'])]}"/>
+                        <field name="assigned_vendor_ids" widget="many2many_tags"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                        <field name="price" optional="hide"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                        <field name="sub_total_price" optional="hide"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                        <field name="delivery_cost" optional="hide"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                        <field name="minimum_order_qty" optional="hide"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"/>
+                        <field name="warranty"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                               optional="hide"/>
+                        <field name="terms"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                               optional="hide"/>
+                        <field name="validity_from"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                               optional="hide"/>
+                        <field name="validity_to"
+                               attrs="{'column_invisible': [('parent.state', 'not in', ['done'])]}"
+                               optional="hide"/>
+                        <field name="state" optional="hide"/>
+                    </tree>
+                    <form string="RFQ Lines">
+                        <header>
+                            <button string="Select Vendor" type="action" states="sent"
+                                name="%(admin_select_vendor_rfq_action_wizard)d"
+                                    class="oe_link" icon="fa-hourglass-half"/>
+                            <button string="Reverse Selected Vendor/s" type="object"
+                                name="reverse_selected_vendor"
+                                attrs="{'invisible': ['|',('state', '!=', 'sent'),('assigned_vendor_ids', '=', [])]}"
+                                class="oe_highlight" confirm="Are you sure you want to reverse all selected vendor/s?"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,sent,done"
+                                   options="{'clickable': '1'}"/>
+                        </header>
+                        <field name="product_image" widget="image" class="oe_avatar"
+                               options="{'preview_image': 'image_128'}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="product_id"/>
+                            </h1>
+                            <div>
+                                <label for="default_product_code" class="oe_inline"/>
+                                <field name="default_product_code" class="oe_inline oe_input_align"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="product_description"/>
+                                <field name="latest_price" widget="html"/>
+                            </group>
+                            <group>
+                                <field name="bom_price"/>
+                                <field name="market_price"/>
+                                <field name="target_price"/>
+                                <label for="prod_qty"/>
+                                <div>
+                                    <field name="prod_qty" class="oe_inline"/>
+                                    <field name="product_uom" class="oe_inline"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                </div>
+                                <field name="stock_location_id"/>
+                                <field name="vendor_ids" widget="many2many_tags"
+                                       options="{'no_create': True}" domain="[('type','=','contact'),('is_blocked','=',False)]"
+                                       context="{'search_default_supplier': 1}"/>
+                                <field name="assigned_vendor_ids" widget="many2many_tags" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="vendor_rfqs" string="Vendor Quotations">
+                                <field name="vendor_rfq_line_ids" nolabel="1" colspan="2"
+                                       attrs="{'readonly': [('state', '=', 'done')]}">
+                                    <tree string="Vendor RFQ" create="false"
+                                          edit="false" delete="false" decoration-muted="selected=='not selected'"
+                                          decoration-success="selected=='selected'" default_order="price">
+                                        <field name="selected" invisible="1"/>
+                                        <field name="partner_id"/>
+                                        <field name="price"/>
+                                        <field name="sub_total_price"/>
+                                        <field name="delivery_cost"/>
+                                        <field name="gross_total"/>
+                                        <field name="minimum_order_qty"/>
+                                        <field name="delivery_lead_time"/>
+                                        <field name="warranty"/>
+                                        <field name="terms"/>
+                                        <field name="validity_from"/>
+                                        <field name="validity_to"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="companies_rfq" string="Company Related Material RFQ">
+                                <field name="quantity_company_ids" nolabel="1" colspan="2"
+                                       attrs="{'readonly': [('state', '=', 'done')]}">
+                                    <tree string="Company Requirement" editable="1">
+                                        <field name="company_id"/>
+                                        <field name="company_code"/>
+                                        <field name="product_id"/>
+                                        <field name="qty" sum="Total"/>
+                                        <field name="product_uom"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </form>
+                </field>
+              </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_admin_request_for_quotation_search">
+            <field name="name">admin.request.for.quotation.search</field>
+            <field name="model">admin.request.for.quotation</field>
+            <field name="arch" type="xml">
+                <search string="Request For Quotation">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <filter string="In Progress" name="sent" domain="[('state', '=', 'sent')]" help="In Progress RFQ"/>
+                    <separator/>
+                    <filter string="Required Delivery Date" name="est_del_date" date="est_del_date"/>
+                    <filter string="RFQ Closing Date" name="close_date" date="close_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Purchasing Officer" name="group_user_id" context="{'group_by': 'user_id'}"/>
+                        <filter string="Company" name="group_company_id" context="{'group_by': 'company_id'}"/>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Created Date" name="group_create_date" domain="[]" context="{'group_by': 'create_date'}"/>
+                        <filter string="Required Delivery Date" name="group_est_del_date" domain="[]" context="{'group_by': 'est_del_date'}"/>
+                        <filter string="RFQ Closing Date" name="group_close_date" domain="[]" context="{'group_by': 'close_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="admin_request_for_quotation_action" model="ir.actions.act_window">
+            <field name="name">Request For Quotation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.request.for.quotation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_admin_request_for_quotation_search"/>
+        </record>
+
+        <menuitem id="admin_request_for_quotation_action_menu" name="RFQ Details"
+                  parent="admin_request_for_quotation_menu" action="admin_request_for_quotation_action"
+                  sequence="1"/>
+
+        <record id="admin_request_for_quotation_line_vendor_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.quotation.line.vendor.form</field>
+            <field name="model">admin.request.for.quotation.line.vendor</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Quoted form">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="partner_id"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="rfq_line_id" force_save="1" readonly="1"/>
+                                <label for="validity_from" string="Validity"/>
+                                <div>
+                                    <field name="validity_from" class="oe_inline"/> -
+                                    <field name="validity_to" class="oe_inline"/>
+                                </div>
+                                <field name="product_id"/>
+                                <field name="warranty"/>
+                                <field name="terms"/>
+                            </group>
+                            <group>
+                                <label for="prod_qty"/>
+                                <div>
+                                    <field name="prod_qty" class="oe_inline"/>
+                                    <field name="product_uom" class="oe_inline"/>
+                                </div>
+                                <field name="price"/>
+                                <field name="sub_total_price"/>
+                                <field name="delivery_cost"/>
+                                <field name="gross_total"/>
+                                <field name="minimum_order_qty"/>
+                                <field name="delivery_lead_time"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_request_for_quotation_line_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.quotation.line.form</field>
+            <field name="model">admin.request.for.quotation.line</field>
+            <field name="arch" type="xml">
+                <form string="RFQ Lines">
+                    <header>
+                        <button string="Select Vendor" type="action" states="sent"
+                                name="%(admin_select_vendor_rfq_action_wizard)d" class="oe_link" icon="fa-list-ul"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,done"
+                               options="{'clickable': '1'}"/>
+                    </header>
+                    <sheet>
+                        <field name="product_image" widget="image" class="oe_avatar"
+                               options="{'preview_image': 'image_128'}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="product_id"/>
+                            </h1>
+                            <div>
+                                <label for="default_product_code" class="oe_inline"/>
+                                <field name="default_product_code" class="oe_inline oe_input_align"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="rfq_id" force_save="1" readonly="1"/>
+                                <field name="product_description"/>
+                            </group>
+                            <group>
+                                <label for="prod_qty"/>
+                                <div>
+                                    <field name="prod_qty" class="oe_inline"/>
+                                    <field name="product_uom" class="oe_inline"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                </div>
+                                <field name="stock_location_id"/>
+                                <field name="vendor_ids" widget="many2many_tags" options="{'no_create': True}"
+                                      domain="[('type','=','contact'),('is_blocked','=',False)]"
+                                      context="{'search_default_supplier': 1}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="vendor_rfqs" string="Vendor Quotations">
+                                <field name="vendor_rfq_line_ids" nolabel="1" colspan="2">
+                                    <tree string="Vendor RFQ" create="false"
+                                          edit="false" delete="false" decoration-muted="selected=='not selected'"
+                                          decoration-success="selected=='selected'">
+                                        <field name="selected" invisible="1"/>
+                                        <field name="partner_id"/>
+                                        <field name="price"/>
+                                        <field name="sub_total_price"/>
+                                        <field name="delivery_cost"/>
+                                        <field name="gross_total"/>
+                                        <field name="minimum_order_qty"/>
+                                        <field name="warranty"/>
+                                        <field name="terms"/>
+                                        <field name="validity_from"/>
+                                        <field name="validity_to"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="companies_rfq" string="Company Related Material RFQ">
+                                <field name="quantity_company_ids" nolabel="1" colspan="2">
+                                    <tree string="Company Requirement" editable="1">
+                                        <field name="company_id"/>
+                                        <field name="product_id"/>
+                                        <field name="qty" sum="Total"/>
+                                        <field name="product_uom"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="property_admin_monitoring.menu_property_sale_monitoring">
+            <field name="groups_id" eval="[(4, ref('admin_system_user_access.property_credit_officer_level2')), (4, ref('admin_system_user_access.property_credit_officer_level3')), (4, ref('admin_system_user_access.group_admin_account_officer_staff')), (4, ref('admin_system_user_access.group_admin_account_officer_leader')), (4, ref('property_admin_monitoring.group_property_supervisor')), (4, ref('property_admin_monitoring.group_property_admin'))]"/>
+        </record>
+        <record model="ir.ui.menu" id="property_admin_monitoring.menu_properties">
+           <field name="groups_id" eval="[(4, ref('admin_system_user_access.property_credit_officer_level2')), (4, ref('admin_system_user_access.property_credit_officer_level3')), (4, ref('admin_system_user_access.group_admin_account_officer_staff')), (4, ref('admin_system_user_access.group_admin_account_officer_leader')), (4, ref('property_admin_monitoring.group_property_supervisor')), (4, ref('property_admin_monitoring.group_property_admin'))]"/>
+        </record>
+    </data>
+</odoo>

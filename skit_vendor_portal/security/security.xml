@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+	<record id="group_vendor_portal_notify_user" model="res.groups">
+            <field name="name">Notify Vendor Creation</field>
+            <field name="category_id" ref="admin_vendor_portal_access.module_category_vendor_portal"/>
+        </record>
+    </data>
+</odoo>

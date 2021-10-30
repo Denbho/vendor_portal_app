@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_rfp_send_invitation" model="ir.cron">
+        <field name="name">RFP: Send Invitation Email (Opening Date)</field>
+        <field name="model_id" ref="model_admin_request_for_proposals"/>
+        <field name="state">code</field>
+        <field name="code">model._opening_date_send_invitation_email()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+    </record>
+    <record id="ir_cron_rfp_no_response_vendor" model="ir.cron">
+        <field name="name">RFP: No Response (Vendor)</field>
+        <field name="model_id" ref="model_admin_request_for_proposals"/>
+        <field name="state">code</field>
+        <field name="code">model._update_no_response_vendor()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+    </record>
+</odoo>

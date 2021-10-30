@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="purchase.menu_purchase_rfq">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user')), (4, ref('purchase.group_purchase_manager'))]"/>
+        </record>
+    </data>
+</odoo>

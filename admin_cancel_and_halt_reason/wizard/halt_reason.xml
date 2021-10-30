@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="admin_halt_reason_view_form" model="ir.ui.view">
+            <field name="name">admin.halt.reason.form</field>
+            <field name="model">admin.halt.reason</field>
+            <field name="arch" type="xml">
+                <form string="Halt Reason Form">
+                    <group>
+                      <field name="reason_id"/>
+                    </group>
+                    <separator string="Description"/>
+                    <field name="description" no_label="1" />
+                    <footer>
+                        <button string="Halt" type="object" name="btn_halt" class="oe_highlight"/>
+                        <button string="Cancel" class='oe_link' special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_halt_reason_action_wizard" model="ir.actions.act_window">
+            <field name="name">Halt Reason</field>
+            <field name="res_model">admin.halt.reason</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

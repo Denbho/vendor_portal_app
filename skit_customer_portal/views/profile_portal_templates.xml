@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="portal_my_details" inherit_id="portal.portal_my_details">
+  		<xpath expr="//form" position="attributes">
+            <attribute name="enctype">multipart/form-data</attribute>
+        </xpath>
+        <xpath expr="//div[@class='row o_portal_details']" position="replace">
+        	<div class="o_portal_details">
+	       		<div class="card">
+	            	<div class="card-body">
+		            	<div class="portal_container profile_container">
+		              		<div class="row">
+		              			<t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+				                <div class="col-lg-2 col-md-2">
+									<input type="file" class="display_none o_forum_file_upload" name="image_1920" accept="image/*"/>
+                					<div class="o_card_people profile-avatar-image">
+                						<div class="avatar-edit display_none">
+	                                    	<i class="fa fa-camera fa-1g float-sm-none float-md-left profile_pic_edit" title="Edit"></i>
+	                                    	<i class="fa fa-trash-o float-sm-none float-md-right profile_pic_clear" title="Delete"></i>
+                            			</div>
+										<img class="rounded-circle o_forum_avatar_img w-100 mb-3" t-att-src="website.image_url(user.partner_id, 'image_1920')"/>
+                    				</div>
+				                </div>
+		                		<div class="col-lg-6 col-md-6 p_name_code">
+		                            <div class="common-text1 p-1">Welcome home</div>
+		                            <div class="common-text2"><t t-esc="partner.name"></t></div>
+		                            <div class="common-text1 p-1">
+		                                <span>Customer No.: <t t-esc="partner.partner_assign_number"></t></span>
+		                            </div>
+				            	</div>
+		              		</div>
+		              		<div class="row row-no-margin mt-4 edit_profile_container">
+				              	<div class="col-lg-12">
+		                            <table width="100%">
+			                            <tr>
+				                       		<td class="first_hdr_td" width="15%"><div><h4>Contact Information</h4></div></td>
+				                            <td class="second_hdr_td" width="60%"><div><hr width="100%"></hr></div></td>
+				                           	<td class="third_hdr_td" width="5%">
+				                         		<i t-if="not error_message" class="fa fa-pencil edit_profile"></i>
+				                              	<button type="submit" t-attf-class="#{error_message and 'display_block' or 'display_none'} btn btn-primary update_customer font-weight_bold font-large border-0 bg-dark">
+				                                	Save
+				                            	</button> 
+				                         	</td>
+			                            </tr>
+		                            </table>
+			                    </div>
+		                        <div class="row row-no-margin col-lg-12">
+		                        	<div class="col-lg-6 profile_col">
+			                        	
+			                        	<div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''}">
+			                                <label class="col-form-label" for="email">Email:</label>
+			                                <div class="font-large d-inline w-50 col-12 col-sm-7"><t t-esc="partner.email"></t></div>
+		                            	</div>
+		                            	
+		                            	<div t-attf-class="form-group #{error.get('partner_assign_number') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="partner_assign_number">CN #:</label>
+			                            	<div class="col-12 col-sm-7 display-inline-block"><t t-esc="partner.partner_assign_number"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('phone') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="phone">Contact No.:</label>
+			                                <input type="tel" name="phone" t-attf-class="form-control #{error.get('phone') and 'is-invalid display-inline-block' or 'display_none'} editable_element" t-att-value="phone or partner.phone" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.phone"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('mobile') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="mobile">Mobile No.:</label>
+			                                <input type="tel" name="mobile" t-attf-class="form-control #{error.get('mobile') and 'is-invalid' or ''} display_none editable_element" t-att-value="mobile or partner.mobile" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.mobile"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('date_of_birth') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="date_of_birth">Date of Birth:</label>
+			                                <input type="date" name="date_of_birth" t-attf-class="form-control #{error.get('date_of_birth') and 'is-invalid' or ''} display_none editable_element" t-att-value="date_of_birth or partner.date_of_birth" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.date_of_birth"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('age') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="age">Age</label>
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block"><t t-esc="partner.age"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('gender') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="gender">Gender:</label>
+				                          	<select name="gender" t-attf-class="display_none font-large w-50 editable_element form-control #{error.get('gender') and 'is-invalid' or ''}">
+				                           		<option value="">Gender...</option>
+				                             	<option value="male" t-att-selected="partner.gender == 'male'">Male</option>
+				                             	<option value="female" t-att-selected="partner.gender == 'female'">Female</option>
+				                             	<option value="other" t-att-selected="partner.gender == 'other'">Other</option>
+				                         	</select>
+				                         	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element text_capitalize"><t t-esc="partner.gender"></t></div>
+				                     	</div>
+				                     	
+			                         	<div class="address_editable display_none">     
+			                            	
+				                     		<div t-attf-class="form-group #{error.get('country_id') and 'o_has_error' or ''}">
+				                                <label class="col-form-label" for="country_id">Country:</label>
+				                                <select name="country_id" t-attf-class="res_country_dropdown font-large form-control #{error.get('country_id') and 'is-invalid' or ''}">
+				                                    <option value="">Country...</option>
+				                                    <t t-foreach="countries or []" t-as="country">
+				                                        <option t-att-value="country.id" t-att-selected="country.id == int(country_id) if country_id else country.id == partner.country_id.id">
+				                                            <t t-esc="country.name" />
+				                                        </option>
+				                                    </t>
+				                                </select>
+				                            </div>
+				                     		
+				                            <div t-attf-class="form-group #{error.get('state_id') and 'o_has_error' or ''}">
+				                                <label class="col-form-label" for="state_id">Region/States:</label>
+				                                <select name="state_id" t-attf-class="res_state_dropdown font-large form-control #{error.get('state_id') and 'is-invalid' or ''}">
+				                                    <option value="">select...</option>
+				                                    <t t-foreach="states or []" t-as="state">
+				                                        <option t-att-value="state.id" t-att-data-country_id="state.country_id.id" t-att-selected="state.id == partner.state_id.id">
+				                                            <t t-esc="state.name" />
+				                                        </option>
+				                                    </t>
+				                                </select>
+				                            </div> 
+				                            
+				                            <div t-attf-class="display_none display_depends_country form-group #{error.get('province_id') and 'o_has_error' or ''}">
+					                        	<label class="col-form-label" for="province_id">Province:</label>
+					                          	<select name="province_id" t-attf-class="display_none editable_element font-large w-50 form-control #{error.get('province_id') and 'is-invalid' or ''}">
+					                           		<option value="">Province...</option>
+					                              	<t t-foreach="province_ids or []" t-as="province_val">
+				                                        <option t-att-value="province_val.id" t-att-data-state_id="province_val.state_id.id" t-att-selected="province_val.id == partner.province_id.id">
+				                                            <t t-esc="province_val.name" />
+				                                        </option>
+					                             	</t>
+					                         	</select>
+				                     		</div>
+				                            
+				                             <div t-attf-class="display_none display_depends_country form-group #{error.get('city_id') and 'o_has_error' or ''}">
+					                        	<label class="col-form-label" for="city_id">City:</label>
+					                          	<select name="city_id" t-attf-class="display_none editable_element font-large w-50 form-control #{error.get('city_id') and 'is-invalid' or ''}">
+					                           		<option value="">City...</option>
+					                              	<t t-foreach="cities or []" t-as="city_val">
+				                                        <option t-att-value="city_val.id" t-att-data-province_id="city_val.province_id.id" t-att-selected="city_val.id == partner.city_id.id">
+				                                            <t t-esc="city_val.name" />
+				                                        </option>
+					                             	</t>
+					                         	</select>
+				                     		</div>
+				                     		
+				                     		 <div t-attf-class="display_none display_depends_country form-group #{error.get('barangay_id') and 'o_has_error' or ''}">
+					                        	<label class="col-form-label" for="barangay_id">Barangay:</label>
+					                          	<select name="barangay_id" t-attf-class="display_none editable_element font-large w-50 form-control #{error.get('barangay_id') and 'is-invalid' or ''}">
+					                           		<option value="">Barangay...</option>
+					                              	<t t-foreach="barangay_ids or []" t-as="barangay_val">
+				                                        <option t-att-value="barangay_val.id" t-att-data-city_id="barangay_val.city_id.id" t-att-selected="barangay_val.id == partner.barangay_id.id">
+				                                            <t t-esc="barangay_val.name" />
+				                                        </option>
+					                             	</t>
+					                         	</select>
+				                     		</div>
+				                     		
+				                     		<div t-attf-class="form-group #{error.get('street') and 'o_has_error' or ''}">
+			                                	<label class="col-form-label" for="street">Street 1:</label>
+			                                	<input type="text" name="street" t-attf-class="form-control #{error.get('street') and 'is-invalid display-inline-block' or ''} display-inline-block" t-att-value="street or partner.street"/>
+			                            	</div>
+			                            	
+			                            	<div t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''}">
+			                                	<label class="col-form-label" for="street2">Street 2:</label>
+			                                	<input type="text" name="street2" t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''} display-inline-block" t-att-value="street2 or partner.street2"/>
+			                            	</div>
+			                            	
+				                            <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''}">
+				                                <label class="col-form-label" for="zipcode">Zip Code:</label>
+				                                <input type="text" name="zipcode" t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''} display-inline-block" t-att-value="zipcode or partner.zip" />
+				                            </div>
+						          		</div> 
+						          		
+			                         	<div t-attf-class="form-group #{error.get('religion_id') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="religion_id">Religion:</label>
+				                          	<select name="religion_id" t-attf-class="display_none font-large w-50 editable_element form-control #{error.get('religion_id') and 'is-invalid' or ''}">
+				                           		<option value="">Religion...</option>
+				                              	<t t-foreach="religions or []" t-as="religion_val">
+			                                        <option t-att-value="religion_val.id" t-att-selected="religion_val.id == int(religion_id) if religion_id else religion_val.id == partner.religion_id.id">
+			                                            <t t-esc="religion_val.name" />
+			                                        </option>
+				                             	</t>
+				                         	</select>
+				                         	<div class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.religion_id.name"></t></div>
+				                     	</div>
+				                     	
+							        	<div class="address_non_editable">
+		                             		<div class="form-group row form-field">
+							                	<div class="col-lg-3 col-md-4 address_lbl_div">
+							                 		<label class="col-form-label w-100" for="Name">Address:</label>
+							                  	</div>
+							                    <div class="col-lg-7 ml-5 pl-4 address_sec_div">
+							                    	<address class="align-items-baseline">
+			                                    		<div>
+			                                        		<div t-if="partner.street"><span t-field="partner.street"/></div>
+			                                        		<div t-if="partner.street2"><span t-field="partner.street2"/></div>
+					                                        <div t-if="partner.barangay_id">
+					                                            <span t-field="partner.barangay_id.name"/>
+					                                        </div>
+					                                        <div t-if="partner.city">
+					                                            <span t-field="partner.city"/> 
+					                                        </div>
+					                                        <div t-if="partner.province_id">
+					                                            <span t-field="partner.province_id"/>
+					                                        </div>
+					                                        <div t-if="partner.state_id or partner.zip">
+					                                            <span t-field="partner.state_id"/> <span t-field="partner.zip"/>
+					                                        </div>
+					                                         <div t-if="partner.country_id">
+					                                            <span t-field="partner.country_id"/>
+					                                        </div>
+			                                    		</div>
+			                                		</address>
+							                    </div> 
+							                </div>
+							     		</div>
+						     		</div>
+						     		
+						     		<div class="col-lg-6 profile_col">
+							     		
+							     		<div t-attf-class="form-group #{error.get('marital') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="marital">Marital Status:</label>
+				                          	<select name="marital" t-attf-class="display_none font-large w-50 editable_element form-control #{error.get('marital') and 'is-invalid' or ''}">
+				                           		<option value="">Marital Status...</option>
+				                             	<option value="single" t-att-selected="partner.marital == 'single'">Single</option>
+				                             	<option value="married" t-att-selected="partner.marital == 'married'">Married</option>
+				                             	<option value="cohabitant" t-att-selected="partner.marital == 'cohabitant'">Legal Cohabitant</option>
+				                         		<option value="widower" t-att-selected="partner.marital == 'widower'">Widower</option>
+				                             	<option value="divorced" t-att-selected="partner.marital == 'divorced'">Divorced</option>
+				                             	<option value="separated" t-att-selected="partner.marital == 'separated'">Separated</option>
+				                             	<option value="annulled" t-att-selected="partner.marital == 'annulled'">Annulled</option>
+				                         	</select>
+				                         	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element text_capitalize"><t t-esc="partner.marital"></t></div>
+				                     	</div>
+				                     	
+				                   		<div t-attf-class="form-group #{error.get('nationality_country_id') and 'o_has_error' or ''}">
+					                  		<label class="col-form-label" for="nationality_country_id">Nationality:</label>
+				                     		<select name="nationality_country_id" t-attf-class="display_none editable_element res_nationality_dropdown font-large form-control #{error.get('nationality_country_id') and 'is-invalid' or ''}">
+				                        		<option value="">Nationality...</option>
+				                              	<t t-foreach="nationalities or []" t-as="nationlity_val">
+			                                        <option t-att-value="nationlity_val.id" t-att-selected="nationlity_val.id == int(nationality_country_id) if nationality_country_id else nationlity_val.id == partner.nationality_country_id.id">
+			                                            <t t-esc="nationlity_val.name" />
+			                                        </option>
+				                             	</t>
+				                         	</select>
+					            			<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.nationality_country_id.name"></t></div>
+				                  		</div>
+				                     		
+			                     		<div t-attf-class="form-group #{error.get('employment_country_id') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="employment_country_id">Employment Country:</label>
+				                          	<select name="employment_country_id" t-attf-class="display_none editable_element res_emy_cntry font-large form-control #{error.get('employment_country_id') and 'is-invalid' or ''}">
+				                           		<option value="">Employment Country...</option>
+				                              	<t t-foreach="employment_countries or []" t-as="emp_country">
+			                                        <option t-att-value="emp_country.id" t-att-selected="emp_country.id == int(employment_country_id) if employment_country_id else emp_country.id == partner.employment_country_id.id">
+			                                            <t t-esc="emp_country.name" />
+			                                        </option>
+				                             	</t>
+				                         	</select>
+				                         	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.employment_country_id.name"></t></div>
+			                     		</div>
+				                     	
+							     		<div t-attf-class="form-group #{error.get('title') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="title">Title/Profession:</label>
+				                          	<select name="title" t-attf-class="display_none font-large w-50 editable_element form-control #{error.get('title') and 'is-invalid' or ''}">
+				                           		<option value="">Title...</option>
+				                              	<t t-foreach="titles or []" t-as="title_val">
+			                                        <option t-att-value="title_val.id" t-att-selected="title_val.id == int(title) if title else title_val.id == partner.title.id">
+			                                            <t t-esc="title_val.name" />
+			                                        </option>
+				                             	</t>
+				                         	</select>
+				                         	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.title.name"></t></div>
+				                     	</div>
+				                     	
+				                     	<div t-attf-class="form-group #{error.get('profession_id') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="profession_id">Profession:</label>
+				                          	<select name="profession_id" t-attf-class="display_none font-large w-50 editable_element form-control #{error.get('profession_id') and 'is-invalid' or ''}">
+				                           		<option value="">Profession...</option>
+				                              	<t t-foreach="professions or []" t-as="profession">
+			                                        <option t-att-value="profession.id" t-att-selected="profession.id == int(profession_id) if profession_id else profession.id == partner.profession_id.id">
+			                                            <t t-esc="profession.name" />
+			                                        </option>
+				                             	</t>
+				                         	</select>
+				                         	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.profession_id.name"></t></div>
+				                     	</div>
+				                     	
+			                         	<div t-attf-class="form-group #{error.get('function') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="function">Job Position:</label>
+			                                <input type="text" name="function" t-attf-class="form-control #{error.get('function') and 'is-invalid' or ''} display_none editable_element" t-att-value="function or partner.function" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.function"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('monthly_income') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="monthly_income">Monthly Income</label>
+			                                <input type="float" name="monthly_income" t-attf-class="form-control #{error.get('monthly_income') and 'is-invalid' or ''} display_none editable_element" t-att-value="monthly_income or partner.monthly_income" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.monthly_income"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('employment_status_id') and 'o_has_error' or ''}">
+				                        	<label class="col-form-label" for="employment_status_id">Employment Status:</label>
+				                          	<select name="employment_status_id" t-attf-class="display_none font-large w-50 editable_element form-control #{error.get('employment_status_id') and 'is-invalid' or ''}">
+				                           		<option value="">Employment Status...</option>
+				                              	<t t-foreach="employment_status or []" t-as="emp_status">
+			                                        <option t-att-value="emp_status.id" t-att-selected="emp_status.id == int(employment_status_id) if employment_status_id else emp_status.id == partner.employment_status_id.id">
+			                                            <t t-esc="emp_status.name" />
+			                                        </option>
+				                             	</t>
+				                         	</select>
+				                         	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.employment_status_id.name"></t></div>
+				                     	</div>
+				                     	
+							     		<div t-attf-class="form-group #{error.get('mobile2') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="mobile2">Secondary Mobile No.</label>
+			                                <input type="tel" name="mobile2" t-attf-class="form-control #{error.get('mobile2') and 'is-invalid' or ''} display_none editable_element" t-att-value="mobile2 or partner.mobile2" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.mobile2"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('website_link') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="website_link">Website Link:</label>
+			                                <input type="text" name="website_link" t-attf-class="form-control #{error.get('website_link') and 'is-invalid' or ''} display_none editable_element profile_input" t-att-value="partner.website" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.website"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('social_twitter') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="social_twitter">Twitter Account</label>
+			                                <input type="text" name="social_twitter" t-attf-class="form-control #{error.get('social_twitter') and 'is-invalid' or ''} display_none editable_element" t-att-value="social_twitter or partner.social_twitter" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.social_twitter"></t></div>
+			                         	</div>
+			                         	
+							         	<div t-attf-class="form-group #{error.get('social_facebook') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="social_facebook">Facebook Account</label>
+			                                <input type="text" name="social_facebook" t-attf-class="form-control #{error.get('social_facebook') and 'is-invalid' or ''} display_none editable_element" t-att-value="social_facebook or partner.social_facebook" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.social_facebook"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('social_github') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="social_github">GitHub Account</label>
+			                                <input type="text" name="social_github" t-attf-class="form-control #{error.get('social_github') and 'is-invalid' or ''} display_none editable_element" t-att-value="social_github or partner.social_github" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.social_github"></t></div>
+			                         	</div>
+			                         	
+			                         	<div t-attf-class="form-group #{error.get('social_linkedin') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="social_linkedin">LinkedIn Account</label>
+			                                <input type="text" name="social_linkedin" t-attf-class="form-control #{error.get('social_github') and 'is-invalid' or ''} display_none editable_element" t-att-value="social_linkedin or partner.social_linkedin" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.social_linkedin"></t></div>
+			                         	</div>
+							         	
+							         	<div t-attf-class="form-group #{error.get('social_youtube') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="social_youtube">Youtube Account</label>
+			                                <input type="text" name="social_youtube" t-attf-class="form-control #{error.get('social_youtube') and 'is-invalid' or ''} display_none editable_element" t-att-value="social_youtube or partner.social_youtube" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.social_youtube"></t></div>
+			                         	</div>
+			                         	
+							         	<div t-attf-class="form-group #{error.get('social_instagram') and 'o_has_error' or ''}">
+			                         		<label class="col-form-label" for="social_instagram">Instagram Account</label>
+			                                <input type="text" name="social_instagram" t-attf-class="form-control #{error.get('social_instagram') and 'is-invalid' or ''} display_none editable_element" t-att-value="social_instagram or partner.social_instagram" />
+			                            	<div t-if="not error_message" class="col-12 col-sm-7 display-inline-block non_editable_element"><t t-esc="partner.social_instagram"></t></div>
+			                         	</div>
+			                         	
+						     		</div>
+						     	</div>
+			               		<div class="col-lg-12">
+				                    <div t-if="error_message" class="alert alert-danger" role="alert">
+				                  		<t t-foreach="error_message" t-as="err"><t t-esc="err"/><br /></t>
+				                    </div>
+			                    </div> 
+	               				<input type="hidden" name="redirect" t-att-value="redirect"/>
+	             			</div>
+		      			<hr/>
+		       		</div>
+		       		<ul class="shortcut_icon_ul sticky-btn-bottom-0">
+						<li class="list-unstyled">
+							<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+						</li>
+						<br></br>
+						<li class="list-unstyled">
+							<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+						</li>
+						<br></br>
+						<li class="list-unstyled">
+							<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+					    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+					   		</a>	
+						</li>
+					</ul>
+	          	</div>
+	          </div>
+	      </div>
+        </xpath>
+    </template>
+</odoo>

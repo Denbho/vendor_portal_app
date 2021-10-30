@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_rfq_decline_email" model="mail.template">
+            <field name="name">RFQ Decline Email</field>
+            <field name="model_id" ref="admin_request_for_quotation.model_admin_vendor_rfq"/>
+            <field name="subject">RFQ Decline</field>
+            <field name="email_from">${('"%s" &lt;%s&gt;' % (object.company_id.name, object.company_id.email))|safe}</field>
+            <field name="email_to">${object.rfq_id.user_id.email | safe}</field>
+            <field name="body_html" type="html">
+            	<div>
+            		<p>Dear Sir/Madam,</p>
+					<br />
+            		<p>${object.partner_id.name} has declined RFQ <b>${object.rfq_id.name}</b></p>
+            	</div>
+            </field>
+        </record>
+	</data>
+</odoo>

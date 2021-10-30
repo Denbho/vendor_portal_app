@@ -1,0 +1,94 @@
+.sks_inv_form_outline {
+	padding: 0% 2% !important;
+	background-color: #fff;
+}
+
+.sks_inv_table_tds {
+	padding-left: 25%;
+}
+
+.my_inv_form_drn_acc1 {
+	padding: 0 !important;
+}
+
+.my_inv_form_header_m0 {
+	margin: 0;
+}
+
+.my_inv_form_header_p0 {
+	padding: 0;
+}
+
+.my_inv_form_header_pt15 {
+	padding: 0px 15px 0px 15px;
+}
+
+.my_inv_form_divider {
+	min-height: 0px;
+}
+
+.after_added_dr {
+	overflow-x: hidden;
+    overflow-y: auto;
+}	
+
+/* ----------MEDIA QUERY---------- */
+@media 
+only screen and (max-width: 300px),
+(min-device-width: 320px) and (max-device-width: 768px)  {
+
+	.my_inv_form_header_p0 {
+		text-align: left !important;
+	}	
+	.my_inv_form_header_pt15 {
+		padding: 15px 0px 0px 0px;
+	}
+	
+	.my_inv_form_body_dis {
+		display: none !important;
+	}
+	
+	.my_inv_form_drn_acc {
+		display: none;
+	}
+	
+	.my_inv_payment_tab_mob {
+		display: block;
+	}
+	
+	.my_invf_pr_dr_acc {
+		padding: 0;
+	}
+	
+	.my_invf_pr_dr_acc_arrow {
+		margin-left: -15% !important;
+	}
+	
+	.s_faq_collapse .accordion .card .card-header:before {
+		width: 6.567vw !important;
+	    color: #a7a7a7 !important;
+	    background-color: transparent !important;
+	}
+	
+	.my_inv_form_pay_tab {
+		overflow: scroll;
+	}
+	
+	.sks_form_sort {
+		display: inline-block !important
+	}
+	
+	.sks_form_sort_btn {
+		float: right;
+	}
+	
+	.after_added_dr {
+		overflow: scroll !important;
+		overflow-x: hidden !important;
+		padding: 0px !important;
+	}
+	
+	#si_payment_edit_popup {
+		padding: 0px;
+	}
+}

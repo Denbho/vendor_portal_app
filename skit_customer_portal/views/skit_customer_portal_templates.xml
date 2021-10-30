@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="customer_portal_assets_frontend" inherit_id="website.assets_frontend"
+		name="Customer Portal Front-end assets">
+		<xpath expr="//link[last()]" position="after">
+			<link rel="stylesheet" href="/skit_customer_portal/static/src/css/login.css" />
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+			<link rel="stylesheet" href="/skit_customer_portal/static/src/css/profile_portal.css" />
+			<link rel="stylesheet" href="/skit_customer_portal/static/src/css/property_sale_portal.css" />
+			<link rel="stylesheet" type="text/css" href="/skit_customer_portal/static/src/css/style.scss"/>
+			<link rel="stylesheet" type="text/css" href="/skit_customer_portal/static/src/scss/website_calendar.scss"/>
+			<link rel="stylesheet" type="text/scss" href="/mail/static/src/scss/systray.scss"/>
+			<link rel="stylesheet" type="text/scss" href="/mail/static/src/scss/discuss.scss"/>
+			<link rel="stylesheet" type="text/css" href="/skit_customer_portal/static/src/scss/systray.scss"/>
+			<link rel="stylesheet" type="text/css" href="/skit_customer_portal/static/src/css/document_portal.css"/>
+			<link rel="stylesheet" type="text/css" href="/skit_customer_portal/static/src/css/skit_media_query.css"/>
+		</xpath>
+		<xpath expr="//script[last()]" position="after">
+			<script type="text/javascript" src="/skit_customer_portal/static/src/js/email_otp.js"></script>
+			<script type="text/javascript" src="/skit_customer_portal/static/src/js/portal.js"></script>
+			<script type="text/javascript" src="/skit_customer_portal/static/src/js/menu.js"/>
+			<script type="text/javascript" src="/skit_customer_portal/static/src/js/website_calendar.js"/>
+			<script type="text/javascript" src="/skit_customer_portal/static/src/js/portal_chatter.js"></script>
+		</xpath>
+	</template>
+</odoo>

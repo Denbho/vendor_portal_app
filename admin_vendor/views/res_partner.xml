@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="assets_backend" name="ribbon" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/admin_vendor/static/src/css/main.css"/>
+            </xpath>
+        </template>
+
+        <record id="sequence_vendor_accreditation" model="ir.sequence">
+            <field name="name">Vendor Accreditation</field>
+            <field name="code">vendor.accreditation</field>
+            <field name="prefix">VA%(year)s/%(month)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="sequence_regular_evaluation" model="ir.sequence">
+            <field name="name">Regular Evaluation</field>
+            <field name="code">partner.regular.evaluation</field>
+            <field name="prefix">RE%(year)s/%(month)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="res_partner_admin_vendor_form" model="ir.ui.view">
+            <field name="name">res.partner.admin.vendor.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="function" position="after">
+                    <field name="department" attrs="{'invisible': [('is_company','=', True)]}"/>
+                </field>
+                <field name="category_id" position="after">
+                    <label for="vendor_account_group_id"/>
+                    <div>
+                        [<field name="vendor_account_group_code" class="oe_inline"/>]
+                        <field name="vendor_account_group_id" class="oe_inline"/>
+                    </div>
+                </field>
+                <field name="vat" position="attributes">
+                    <attribute name="string">TIN</attribute>
+                </field>
+                <field name="vat" position="after">
+                    <field name="business_name"/>
+                    <field name="business_type"/>
+                </field>
+                <field name="child_ids" position="after">
+                    <group string="Affiliated/Subsidiary Companies">
+                        <field name="affiliated_contact_ids" nolabel="1" colspan="2">
+                            <tree string="Affiliated/Subsidiary Companies" editable="Top">
+                                <field name="name"/>
+                                <field name="relationship"/>
+                                <field name="email"/>
+                                <field name="contact_partner_id"/>
+                            </tree>
+                        </field>
+                    </group>
+                </field>
+                <xpath expr="//page[@name='sales_purchases']" position="before">
+                    <page name="products_and_services" string="Products &amp; Services">
+                        <group>
+                            <group>
+                                <separator string="Product Classifications"/>
+                                <field name="product_classification_ids" nolabel="1" colspan="2"
+                                       widget="many2many_checkboxes"/>
+                            </group>
+                            <group>
+                                <separator string="Other Categories"/>
+                                <field name="has_other_category"/>
+                                <field name="other_categories" nolabel="1" colspan="2"
+                                       placeholder="Other categories ..."
+                                       attrs="{'invisible':[('has_other_category','=',False)]}"/>
+                            </group>
+                        </group>
+                        <group string="Products/Services Offered"/>
+                        <field name="product_service_offered_line" no_label="1"
+                               widget="section_and_note_one2many"
+                               mode="tree">
+                            <tree string="Products/Services Offered">
+                                <control>
+                                    <create name="add_product_control" string="Add a product/service"/>
+                                    <create name="add_section_control" string="Add a section"
+                                            context="{'default_display_type': 'line_section'}"/>
+                                    <create name="add_note_control" string="Add a note"
+                                            context="{'default_display_type': 'line_note'}"/>
+                                </control>
+                                <field name="display_type" invisible="1"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="sequence" widget="handle"/>
+                                <field name="product_service"/>
+                                <field name="name" widget="section_and_note_text"/>
+                                <field name="product_classification_id"/>
+                                <field name="price"/>
+                                <field name="uom_id"/>
+                                <button string="Link to Product" type="action" class="oe_highlight"
+                                        name="%(admin_link_vendor_item_to_product_action_wizard)d"
+                                        attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                                <button string="Open Product" name="view_product" type="object" class="oe_highlight"
+                                        attrs="{'invisible': [('product_id', '=', False)]}"/>
+                            </tree>
+                            <form string="Products/Services Offered">
+                                <header>
+                                    <button string="Link to Product" type="action" class="oe_highlight"
+                                            name="%(admin_link_vendor_item_to_product_action_wizard)d"
+                                            attrs="{'invisible': [('product_id', '!=', False)]}"/>
+                                    <button string="Open Product" name="view_product" type="object" class="oe_highlight"
+                                            attrs="{'invisible': [('product_id', '=', False)]}"/>
+                                </header>
+                                <sheet>
+                                    <field name="image_1920" widget="image" class="oe_avatar"
+                                           options="{&quot;preview_image&quot;: &quot;image_128&quot;}"/>
+                                    <group>
+                                        <field name="product_id" invisible="1"/>
+                                        <field name="product_service"/>
+                                        <field name="name"/>
+                                        <field name="product_classification_id"/>
+                                        <field name="price"/>
+                                        <field name="uom_id"/>
+                                        <field name="attachment_ids" widget="many2many_binary"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                    <page name="accreditation" string="Accreditation and Evaluation">
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_evaluate" type="object" icon="fa-handshake-o">
+                                <field string="Accreditation" name="evaluation_count" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" name="action_show_regular_evaluation" type="object"
+                                    icon="fa-pencil-square-o">
+                                <field string="Regular Evaluation" name="regular_evaluation_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group string="Accreditation Details">
+                                <field name="registration_date"/>
+                                <field name="accredited" invisible="1"/>
+                                <field name="for_accreditation" invisible="1"/>
+                                <field name="date_accredited" readonly="1" force_save="1"/>
+                                <field name="start_date" readonly="1" force_save="1"/>
+                                <field name="end_date" readonly="1" force_save="1"/>
+                            </group>
+                            <group string="Regular Evaluation Details">
+                                <field name="type_of_evaluation" readonly="1" force_save="1"/>
+                                <field name="next_evaluation_date"/>
+                                <field name="evaluation_responsible_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//sheet/div[2]/h1" position="after">
+                    <div>
+                        <field name="supplier_rank" invisible="1"/>
+                     </div>
+                     <div>
+                        <label for="vendor_code_113" class="oe_inline"
+                               attrs="{'invisible':[('supplier_rank', '&lt;=', 0),('vendor_code_113', '=', False),
+                                                    ('vendor_code_303', '=', False),('universal_vendor_code', '=', False),
+                                                    ('registration_date', '=', False),('date_accredited', '=', False)]}"/>
+                        <field name="vendor_code_113" readonly="1" class="oe_inline oe_input_align"
+                               attrs="{'invisible':[('supplier_rank', '&lt;=', 0),('vendor_code_113', '=', False),
+                                                    ('vendor_code_303', '=', False),('universal_vendor_code', '=', False),
+                                                    ('registration_date', '=', False),('date_accredited', '=', False)]}"/>
+                    </div>
+                    <div>
+                        <label for="vendor_code_303" class="oe_inline"
+                               attrs="{'invisible':[('supplier_rank', '&lt;=', 0),('vendor_code_113', '=', False),
+                                                    ('vendor_code_303', '=', False),('universal_vendor_code', '=', False),
+                                                    ('registration_date', '=', False),('date_accredited', '=', False)]}"/>
+                        <field name="vendor_code_303" readonly="1" class="oe_inline oe_input_align"
+                               attrs="{'invisible':[('supplier_rank', '&lt;=', 0),('vendor_code_113', '=', False),
+                                                    ('vendor_code_303', '=', False),('universal_vendor_code', '=', False),
+                                                    ('registration_date', '=', False),('date_accredited', '=', False)]}"/>
+                    </div>
+                    <div>
+                        <label for="universal_vendor_code" class="oe_inline"
+                               attrs="{'invisible':[('supplier_rank', '&lt;=', 0),('vendor_code_113', '=', False),
+                                                    ('vendor_code_303', '=', False),('universal_vendor_code', '=', False),
+                                                    ('registration_date', '=', False),('date_accredited', '=', False)]}"/>
+                        <field name="universal_vendor_code" readonly="1" class="oe_inline oe_input_align"
+                               attrs="{'invisible':[('supplier_rank', '&lt;=', 0),('vendor_code_113', '=', False),
+                                                    ('vendor_code_303', '=', False),('universal_vendor_code', '=', False),
+                                                    ('registration_date', '=', False),('date_accredited', '=', False)]}"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_kanban_view" model="ir.ui.view">
+            <field name="name">res.partner.kanban</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="accredited"/>
+                    <field name="for_accreditation"/>
+                    <field name="end_date"/>
+                    <field name="supplier_rank"/>
+                </field>
+                <xpath expr="//div[contains(@class, 'oe_kanban_details')]/ul" position="after">
+                    <div t-if="record.for_accreditation.raw_value and record.end_date.raw_value" class="vendor_expired_toltip float-right">Accreditation Expired
+                        <span class="vendor_expired_tooltiptext">On: <field name="end_date"/></span>
+                    </div>
+                    <div t-if="record.accredited.raw_value" class="vendor_toltip float-right">Accredited
+                        <span class="vendor_tooltiptext">From: <field name="start_date"/><br/>To: <field
+                                name="end_date"/></span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_view_search" model="ir.ui.view">
+            <field name="name">res.partner.search.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.res_partner_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='supplier']" position="replace">
+                    <filter string="Vendors" name="supplier"
+                            domain="['|','|','|','|','|',
+                                    ('supplier_rank','>',0),('vendor_code_113','!=',False),
+                                    ('vendor_code_303','!=',False),('universal_vendor_code','!=',False),
+                                    ('registration_date','!=',False),('date_accredited','!=',False),
+                                    ('type','=','contact'),
+                                    ('is_blocked','=',False)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="account.res_partner_action_supplier" model="ir.actions.act_window">
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,pivot,form</field>
+        </record>
+
+        <record id="view_partner_tree" model="ir.ui.view">
+            <field name="name">res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="display_name" position="after">
+                    <field name="universal_vendor_code"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_admin_monitoring_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.admin.monitoring.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="property_admin_monitoring.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="broker_level" position="after">
+                    <field name="purchase_org_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_property_form" model="ir.ui.view">
+            <field name="name">res.partner.property.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <group name="banks" position="before">
+                    <!-- blank group used to move vat_type on the rightside of the table -->
+                    <group name="blank">
+                    </group>
+                    <group name="vendor_tax" string="Tax">
+                        <field name="vat_type"/>
+                        <field name="is_subject_to_wh_tax"/>
+                        <field name="wh_tax_code_id" attrs="{'invisible':[('is_subject_to_wh_tax','=',False)],
+                                                             'required':[('is_subject_to_wh_tax','=',True)]}"/>
+                    </group>
+                </group>
+                <field name="bank_ids" position="attributes">
+                    <attribute name="class">oe_inline</attribute>
+                    <attribute name="colspan">2</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_vendor_accredit_wizard" model="ir.ui.view">
+            <field name="name">vendor.accredit.wizard.view</field>
+            <field name="model">vendor.accredit</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="date_accredited"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <footer>
+                        <button name="action_confirm_accredit" string="Accredit" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="partner_evaluation_form" model="ir.ui.view">
+            <field name="name">partner.evaluation.view.form</field>
+            <field name="model">partner.evaluation</field>
+            <field name="arch" type="xml">
+                <form string="Evaluation">
+                    <header>
+                        <button name="submit_request" string="Submit"
+                                class="oe_highlight" states="draft" type="object"/>
+                        <button name="confirm_request" string="Confirm"
+                                class="oe_highlight" states="submitted" type="object"/>
+                        <button name="verify_request" string="Verify"
+                                class="oe_highlight" states="confirmed" type="object"/>
+                        <button name="%(admin_select_type_of_evaluation_action_wizard)d" string="Approve"
+                                help="Final Approval"
+                                class="oe_highlight" states="verified" type="action"/>
+                        <button name="btn_reject" string="Reject"
+                                states="draft,submitted,confirmed,verified" type="object"/>
+                        <button name="%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d" string="Cancel"
+                                states="draft,submitted,confirmed,verified" type="action"/>
+                        <button name="%(admin_cancel_and_halt_reason.admin_reset_to_draft_reason_action_wizard)d" type="action"
+                                states="canceled" string="Reset to Draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_view_evaluator"
+                                    attrs="{'invisible':[('state','=','draft')]}"
+                                    context="{'create_evaluator': True}" type="object" icon="fa-edit">
+                                <field string="Evaluator" name="evaluator_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="partner_id" readonly="1" force_save="1"/>
+                            </h1>
+                            <div>
+                                <label for="name" class="oe_inline"/>
+                                <field name="name" readonly="1" force_save="1" class="oe_inline oe_input_align"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="inactive" invisible="1"/>
+                                <field name="type_of_evaluation" readonly="1" force_save="1"
+                                       attrs="{'invisible': [('state', '!=', 'approved')]}"/>
+                                <field name="accreditation_validity"/>
+                                <label for="start_date"/>
+                                <div>
+                                    <field name="start_date" class="oe_inline"/> -
+                                    <field name="end_date" class="oe_inline"/>
+                                </div>
+                                <field name="submission_deadline"/>
+                                <field name="required_document_accreditation_requirement_ids" invisible="1"
+                                       widget="many2many_checkboxes"/>
+                                <field name="document_accreditation_requirement_ids"
+                                       domain="[('id','in',required_document_accreditation_requirement_ids)]"
+                                       widget="many2many_checkboxes"/>
+                            </group>
+                            <group>
+                                <separator string="Evaluation Weight"/>
+                                <field name="technical_valuation_weight" string="Technical"/>
+                                <field name="commercial_valuation_weight" string="Commercial"/>
+                                <separator string="Evaluation Score" colspan="2"/>
+                                <label for="technical_valuation_score" string="Technical"/>
+                                <div>
+                                    <field name="technical_valuation_score" class="oe_inline"/>%
+                                </div>
+                                <label for="commercial_valuation_score" string="Commercial"/>
+                                <div>
+                                    <field name="commercial_valuation_score" class="oe_inline"/>%
+                                </div>
+                                <label for="overall_score" string="Overall"/>
+                                <div>
+                                    <field name="overall_score" class="oe_inline"/>%
+                                </div>
+                            </group>
+                        </group>
+                        <group string="Instruction">
+                            <field name="instructions" nolabel="1" colspan="2"/>
+                        </group>
+                        <notebook>
+                            <page name="evaluation" string="Evaluation">
+                                <group string="Technical Evaluation">
+                                    <field name="evaluation_line" nolabel="1" colspan="2"
+                                           widget="section_and_note_one2many"
+                                           mode="tree">
+                                        <tree editable="bottom" string="Technical Evaluation" create="false"
+                                              delete="false">
+                                            <field name="type" invisible="1"/>
+                                            <field name="display_type" invisible="1"/>
+                                            <field name="sequence" widget="handle" invisible="1"/>
+                                            <field name="criteria" readonly="1" force_save="1"/>
+                                            <field name="name" widget="section_and_note_text" readonly="1"
+                                                   force_save="1"/>
+                                            <field name="weight" readonly="1" force_save="1"/>
+                                            <field name="score" readonly="1" force_save="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Commercial Evaluation">
+                                    <field name="commercial_evaluation_line"
+                                           nolabel="1" colspan="2"
+                                           widget="section_and_note_one2many"
+                                           mode="tree">
+                                        <tree editable="bottom" string="Commercial Evaluation" create="false"
+                                              delete="false">
+                                            <field name="type" invisible="1"/>
+                                            <field name="display_type" invisible="1"/>
+                                            <field name="sequence" widget="handle" invisible="1"/>
+                                            <field name="criteria" readonly="1" force_save="1"/>
+                                            <field name="name" widget="section_and_note_text" readonly="1"
+                                                   force_save="1"/>
+                                            <field name="weight" readonly="1" force_save="1"/>
+                                            <field name="score" readonly="1" force_save="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Accreditation and Evaluation Remarks">
+                                    <field name="accreditation_remarks" nolabel="1" colspan="2"/>
+                                </group>
+                            </page>
+                            <page name="evaluators" string="Assigned Evaluator">
+                                <field name="assigned_vendor_evaluator_line" nolabel="1" class="oe_inline">
+                                    <tree string="Assigned Evaluator" editable="bottom">
+                                        <field name="user_id"/>
+                                        <field name="type"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Approvals" string="Approvals"
+                                  states="submitted,confirmed,verified,approved">
+                                <group>
+                                    <group>
+                                        <label for="submitted_by"
+                                               states="submitted,confirmed,verified,approved"/>
+                                        <div states="submitted,confirmed,verified,approved">
+                                            <field name="submitted_by" class="oe_inline"/>
+                                            <field name="submitted_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="confirmed_by"
+                                               states="confirmed,verified,approved"/>
+                                        <div states="confirmed,verified,approved">
+                                            <field name="confirmed_by" class="oe_inline"/>
+                                            <field name="confirmed_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="verified_by" states="verified,approved"/>
+                                        <div states="verified,approved">
+                                            <field name="verified_by" class="oe_inline"/>
+                                            <field name="verified_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <label for="approved_by" string="Approved (Final)" states="approved"/>
+                                        <div states="approved">
+                                            <field name="approved_by" class="oe_inline"/>
+                                            <field name="approved_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="canceled_by" states="canceled"/>
+                                        <div states="canceled">
+                                            <field name="canceled_by" class="oe_inline"/>
+                                            <field name="canceled_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_partner_evaluation_tree" model="ir.ui.view">
+            <field name="name">partner.evaluation.view.tree</field>
+            <field name="model">partner.evaluation</field>
+            <field name="arch" type="xml">
+                <tree string="Evaluation">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="partner_evaluation_action" model="ir.actions.act_window">
+            <field name="name">Vendor Accreditation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.evaluation</field>
+            <field name="view_mode">tree,pivot,form</field>
+        </record>
+
+        <record id="partner_evaluator_form" model="ir.ui.view">
+            <field name="name">partner.evaluator.view.form</field>
+            <field name="model">partner.evaluator</field>
+            <field name="arch" type="xml">
+                <form string="Evaluator" create="false" duplicate="false">
+                    <sheet>
+                        <group>
+                            <field name="evaluator_id" readonly="1" force_save="1"/>
+                            <field name="type" readonly="1" force_save="1"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <group name="evaluation_line" string="Evaluation"/>
+                        <field name="evaluation_line"
+                               no_label="1"
+                               widget="section_and_note_one2many"
+                               mode="tree"
+                               context="{'default_type': type}">
+                            <tree editable="bottom" create="false" delete="false" string="Evaluation">
+                                <field name="type" invisible="1"/>
+                                <field name="display_type" invisible="1"/>
+                                <field name="criteria" readonly="1" force_save="1"/>
+                                <field name="name" readonly="1" force_save="1" widget="section_and_note_text"/>
+                                <field name="weight" readonly="1" force_save="1" invisible="1"/>
+                                <field name="score"/>
+                                <field name="other_remark"/>
+                                <field name="evaluation_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="partner_evaluator_tree" model="ir.ui.view">
+            <field name="name">partner.evaluator.view.tree</field>
+            <field name="model">partner.evaluator</field>
+            <field name="arch" type="xml">
+                <tree string="Evaluator" create="false">
+                    <field name="evaluator_id"/>
+                    <field name="type" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="vendor_evaluator_action" model="ir.actions.act_window">
+            <field name="name">Partner Evaluator</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.evaluator</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="partner_evaluator_tree"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add evaluator.
+                </p>
+            </field>
+        </record>
+
+        <record id="partner_regular_evaluator_form" model="ir.ui.view">
+            <field name="name">partner.regular.evaluator.view.form</field>
+            <field name="model">partner.regular.evaluator</field>
+            <field name="arch" type="xml">
+                <form string="Evaluator" create="false" duplicate="false">
+                    <sheet>
+                        <group>
+                            <field name="evaluator_id" readonly="1" force_save="1"/>
+                            <field name="type" readonly="1" force_save="1"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <group name="evaluation_line" string="Evaluation"/>
+                        <field name="evaluation_line"
+                               no_label="1"
+                               widget="section_and_note_one2many"
+                               mode="tree"
+                               context="{'default_type': type}">
+                            <tree editable="bottom" create="false" delete="false" string="Evaluation">
+                                <field name="type" invisible="1"/>
+                                <field name="display_type" invisible="1"/>
+                                <field name="criteria" readonly="1" force_save="1"/>
+                                <field name="name" readonly="1" force_save="1" widget="section_and_note_text"/>
+                                <field name="weight" readonly="1" force_save="1" invisible="1"/>
+                                <field name="score"/>
+                                <field name="other_remark"/>
+                                <field name="evaluation_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="partner_regular_evaluator_tree" model="ir.ui.view">
+            <field name="name">partner.regular.evaluator.view.tree</field>
+            <field name="model">partner.regular.evaluator</field>
+            <field name="arch" type="xml">
+                <tree string="Evaluator" create="false">
+                    <field name="evaluator_id"/>
+                    <field name="type" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_vendor_for_accreditation" model="ir.actions.act_window">
+            <field name="name">For Accreditation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,pivot,form</field>
+            <field name="context">{}</field>
+            <field name="context">{'search_default_supplier': 1, 'res_partner_search_mode': 'supplier',
+                                   'default_is_company': True, 'default_supplier_rank': 1, 'default_for_accreditation': 1}</field>
+            <field name="domain">[('for_accreditation', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new supplier in your address book
+                </p><p>
+                Odoo helps you easily track all activities related to a supplier.
+            </p>
+            </field>
+        </record>
+
+        <record id="action_vendor_accredited" model="ir.actions.act_window">
+            <field name="name">Accredited</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,pivot,form</field>
+            <field name="context">{}</field>
+            <field name="context">{'search_default_supplier': 1, 'res_partner_search_mode': 'supplier',
+                                   'default_is_company': True, 'default_supplier_rank': 1}</field>
+            <field name="domain">[('accredited', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new supplier in your address book
+                </p><p>
+                Odoo helps you easily track all activities related to a supplier.
+            </p>
+            </field>
+        </record>
+
+        <record id="vendor_account_group_view_tree" model="ir.ui.view">
+            <field name="name">vendor.account.group.view.tree</field>
+            <field name="model">vendor.account.group</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Vendor Account Group">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="number_range"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="vendor_account_group_action" model="ir.actions.act_window">
+            <field name="name">Vendor Account Group</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vendor.account.group</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="vendor_account_group_view_tree"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a vendor account group.
+                </p>
+            </field>
+        </record>
+
+        <record id="partner_regular_evaluation_form" model="ir.ui.view">
+            <field name="name">partner.regular.evaluation.view.form</field>
+            <field name="model">partner.regular.evaluation</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Regular Evaluation">
+                    <header>
+                        <button name="submit_request" string="Submit"
+                                class="oe_highlight" states="draft" type="object"/>
+                        <button name="confirm_request" string="Confirm"
+                                class="oe_highlight" states="submitted" type="object"/>
+                        <button name="verify_request" string="Verify"
+                                class="oe_highlight" states="confirmed" type="object"/>
+                        <button name="approve_request" string="Approve" help="Final Approval"
+                                class="oe_highlight" states="verified" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_view_evaluator"
+                                    attrs="{'invisible':[('state','=','draft')]}"
+                                    context="{'create_evaluator': True}" type="object" icon="fa-edit">
+                                <field string="Evaluator" name="evaluator_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="partner_id" readonly="1" force_save="1"/>
+                            </h1>
+                            <div>
+                                <label for="name" class="oe_inline"/>
+                                <field name="name" readonly="1" force_save="1" class="oe_inline oe_input_align"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="evaluation_date" readonly="1" force_save="1"/>
+                                <field name="accreditation_id" readonly="1" force_save="1"/>
+                                <field name="type_of_evaluation" readonly="1" force_save="1"/>
+                            </group>
+                            <group>
+                                <separator string="Evaluation Weight"/>
+                                <field name="technical_valuation_weight" string="Technical"/>
+                                <field name="commercial_valuation_weight" string="Commercial"/>
+                                <separator string="Evaluation Score" colspan="2"/>
+                                <label for="technical_valuation_score" string="Technical"/>
+                                <div>
+                                    <field name="technical_valuation_score" class="oe_inline"/>%
+                                </div>
+                                <label for="commercial_valuation_score" string="Commercial"/>
+                                <div>
+                                    <field name="commercial_valuation_score" class="oe_inline"/>%
+                                </div>
+                                <label for="overall_score" string="Overall"/>
+                                <div>
+                                    <field name="overall_score" class="oe_inline"/>%
+                                </div>
+                            </group>
+                        </group>
+                        <group string="Evaluation Remarks">
+                            <field name="evaluation_remarks" nolabel="1" colspan="2"/>
+                        </group>
+                        <notebook>
+                            <page name="evaluation" string="Evaluation">
+                                <group string="Technical Evaluation">
+                                    <field name="evaluation_line" nolabel="1" colspan="2"
+                                           widget="section_and_note_one2many"
+                                           mode="tree">
+                                        <tree editable="bottom" string="Technical Evaluation" create="false"
+                                              delete="false">
+                                            <field name="type" invisible="1"/>
+                                            <field name="display_type" invisible="1"/>
+                                            <field name="sequence" widget="handle" invisible="1"/>
+                                            <field name="criteria" readonly="1" force_save="1"/>
+                                            <field name="name" widget="section_and_note_text" readonly="1"
+                                                   force_save="1"/>
+                                            <field name="weight" readonly="1" force_save="1"/>
+                                            <field name="score" readonly="1" force_save="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Commercial Evaluation">
+                                    <field name="commercial_evaluation_line"
+                                           nolabel="1" colspan="2"
+                                           widget="section_and_note_one2many"
+                                           mode="tree">
+                                        <tree editable="bottom" string="Commercial Evaluation" create="false"
+                                              delete="false">
+                                            <field name="type" invisible="1"/>
+                                            <field name="display_type" invisible="1"/>
+                                            <field name="sequence" widget="handle" invisible="1"/>
+                                            <field name="criteria" readonly="1" force_save="1"/>
+                                            <field name="name" widget="section_and_note_text" readonly="1"
+                                                   force_save="1"/>
+                                            <field name="weight" readonly="1" force_save="1"/>
+                                            <field name="score" readonly="1" force_save="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="evaluators" string="Assigned Evaluator">
+                                <field name="assigned_vendor_evaluator_line" nolabel="1" class="oe_inline">
+                                    <tree string="Assigned Evaluator" editable="bottom">
+                                        <field name="user_id"/>
+                                        <field name="type"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Approvals" string="Approvals"
+                                  states="submitted,confirmed,verified,approved">
+                                <group>
+                                    <group>
+                                        <label for="submitted_by"
+                                               states="submitted,confirmed,verified,approved"/>
+                                        <div states="submitted,confirmed,verified,approved">
+                                            <field name="submitted_by" class="oe_inline"/>
+                                            <field name="submitted_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="confirmed_by"
+                                               states="confirmed,verified,approved"/>
+                                        <div states="confirmed,verified,approved">
+                                            <field name="confirmed_by" class="oe_inline"/>
+                                            <field name="confirmed_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="verified_by" states="verified,approved"/>
+                                        <div states="verified,approved">
+                                            <field name="verified_by" class="oe_inline"/>
+                                            <field name="verified_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <label for="approved_by" string="Approved (Final)" states="approved"/>
+                                        <div states="approved">
+                                            <field name="approved_by" class="oe_inline"/>
+                                            <field name="approved_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="canceled_by" states="canceled"/>
+                                        <div states="canceled">
+                                            <field name="canceled_by" class="oe_inline"/>
+                                            <field name="canceled_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_partner_regular_evaluation_tree" model="ir.ui.view">
+            <field name="name">partner.regular.evaluation.view.tree</field>
+            <field name="model">partner.regular.evaluation</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Regular Evaluation">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="partner_regular_evaluation_action" model="ir.actions.act_window">
+            <field name="name">Vendor Regular Evaluation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">partner.regular.evaluation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="admin_wh_tax_code_view_tree" model="ir.ui.view">
+            <field name="name">admin.wh.tax.code.view.tree</field>
+            <field name="model">admin.wh.tax.code</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="WH Tax Code">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_wh_tax_code_action" model="ir.actions.act_window">
+            <field name="name">WH Tax Code</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.wh.tax.code</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="admin_wh_tax_code_view_tree"/>
+        </record>
+
+        <record id="admin_purchase_organization_view_tree" model="ir.ui.view">
+            <field name="name">admin.purchase.organization.tree</field>
+            <field name="model">admin.purchase.organization</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Purchase Organization">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_purchase_organization_action" model="ir.actions.act_window">
+            <field name="name">Purchase Organization</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.purchase.organization</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="admin_purchase_organization_view_tree"/>
+        </record>
+
+        <menuitem id="menu_po_admin_vendor" name="Vendors" parent="purchase.menu_purchase_root" sequence="1"/>
+        <menuitem id="menu_vendor_accreditation" action="partner_evaluation_action"
+                  parent="menu_po_admin_vendor" sequence="1"/>
+        <menuitem id="menu_po_admin_vendor_list" name="Vendor List" parent="menu_po_admin_vendor" sequence="2"/>
+        <menuitem id="menu_vendor_for_accreditation" action="action_vendor_for_accreditation"
+                  parent="menu_po_admin_vendor_list" sequence="1"/>
+        <menuitem id="menu_vendor_accredited" action="action_vendor_accredited" parent="menu_po_admin_vendor_list"
+                  sequence="2"/>
+        <menuitem id="purchase.menu_procurement_management_supplier_name" name="All" parent="menu_po_admin_vendor_list"
+                  action="account.res_partner_action_supplier" sequence="3"/>
+        <menuitem id="menu_vendor_account_group" parent="purchase.menu_purchase_config"
+                  action="vendor_account_group_action"
+                  sequence="1"/>
+        <menuitem id="menu_admin_purchase_organization" parent="purchase.menu_purchase_config"
+                  action="admin_purchase_organization_action"
+                  sequence="1"/>
+        <menuitem id="menu_admin_wh_tax_code" parent="purchase.menu_purchase_config"
+                  action="admin_wh_tax_code_action"
+                  sequence="1"/>
+    </data>
+</odoo>

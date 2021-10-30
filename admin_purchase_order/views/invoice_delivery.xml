@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="po_delivery_line_view_form" model="ir.ui.view">
+            <field name="name">po.delivery.line.form</field>
+            <field name="model">po.delivery.line</field>
+            <field name="arch" type="xml">
+                <form string="PO Delivery Form">
+                    <header>
+                        <button string="Countered" type="action" class="oe_highlight"
+                                name="%(po_delivery_line_countered_action_wizard)d"
+                                attrs="{'invisible': [('countered', '=', True)]}"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Countered" bg_color="bg-success"
+                                attrs="{'invisible': [('countered', '=', False)]}"/>
+                        <div class="oe_title">
+                            <label for="dr_no"/>
+                            <h1>
+                                <field name="dr_no"/>
+                            </h1>
+                        </div>
+                        <group>
+                          <group>
+                                <field name="dr_date"/>
+                                <field name="gr_number"/>
+                                <field name="po_reference" invisible="1"/>
+                                <field name="po_id" options="{&quot;no_create&quot;: True}"/>
+                                <field name="universal_vendor_code"/>
+                                <field name="partner_id"/>
+                                <label for="company_id"/>
+                                <div>
+                                    [<field name="company_code" class="oe_inline"/>]
+                                    <field name="company_id" groups="base.group_multi_company"
+                                           options="{'no_create': True}" class="oe_inline"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="delivered_by"/>
+                                <field name="delivery_remarks"/>
+                                <field name="received_by"/>
+                                <field name="receiving_date"/>
+                                <label for="received_original_doc"/>
+                                <div>
+                                    <field name="received_original_doc" class="oe_inline"/>
+                                    <field name="received_original_doc_date" readonly="1" force_save="1"
+                                           class="oe_inline"/>
+                                </div>
+                                <field name="countered" invisible="1"/>
+                                <field name="countered_date" readonly="1" force_save="1"
+                                        attrs="{'invisible': [('countered', '=', False)]}"/>
+                                <field name="countering_notes" readonly="1" force_save="1"
+                                        attrs="{'invisible': [('countered', '=', False)]}"/>
+                                <field name="total_amount"/>
+                            </group>
+                        </group>
+                        <field name="product_line" no_label="1" widget="one2many_list" mode="tree"
+                               context="{'default_po_id': po_id}">
+                            <tree editable="bottom" string="Product Line">
+                                <field name="sequence" widget="handle"/>
+                                <field name="product_line_id" domain="[('order_id','=',po_id)]"
+                                       context="{'show_product_qty': 1}"/>
+                                <field name="name"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="delivery_quantity"/>
+                                <field name="product_uom_code"/>
+                                <field name="product_uom"/>
+                                <field name="amount"/>
+                                <field name="product_uom_category_id" invisible="1"/>
+                                <field name="po_id" invisible="1"/>
+                            </tree>
+                            <form string="Product Line">
+                              <sheet>
+                                  <group>
+                                      <group>
+                                          <field name="product_line_id"/>
+                                          <field name="name"/>
+                                          <field name="delivery_quantity"/>
+                                          <field name="product_uom_code"/>
+                                          <field name="product_uom"/>
+                                          <field name="amount"/>
+                                      </group>
+                                  </group>
+                              </sheet>
+                            </form>
+                        </field>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="po_delivery_line_view_tree" model="ir.ui.view">
+            <field name="name">po.delivery.line.tree</field>
+            <field name="model">po.delivery.line</field>
+            <field name="arch" type="xml">
+                <tree string="PO Delivery Tree">
+                    <field name="po_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_code"/>
+                    <field name="gr_number"/>
+                    <field name="dr_no"/>
+                    <field name="dr_date"/>
+                    <field name="received_original_doc"/>
+                    <field name="countered"/>
+                    <field name="total_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_po_delivery_line_search">
+            <field name="name">po.delivery.line.search</field>
+            <field name="model">po.delivery.line</field>
+            <field name="arch" type="xml">
+                <search string="Deliveries">
+                    <field name="po_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="gr_number"/>
+                    <field name="dr_no"/>
+                    <filter string="DR Date" name="dr_date" date="dr_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="PO #" name="grp_po_id" context="{'group_by': 'po_id'}"/>
+                        <filter string="Company" name="grp_company_id" context="{'group_by': 'company_id'}"/>
+                        <filter string="GR No." name="grp_gr_number" context="{'group_by': 'gr_number'}"/>
+                        <filter string="DR No." name="grp_dr_no" context="{'group_by': 'dr_no'}"/>
+                        <filter string="DR Date" name="grp_dr_date" context="{'group_by': 'dr_date'}"/>
+                        <filter string="Received Original Docs" name="grp_received_original_doc" context="{'group_by': 'received_original_doc'}"/>
+                        <filter string="Countered" name="grp_countered" context="{'group_by': 'countered'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_po_delivery_line_open_form" model="ir.actions.act_window">
+            <field name="name">Deliveries</field>
+            <field name="res_model">po.delivery.line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,pivot,form</field>
+            <field name="context">{'default_po_id': active_id}</field>
+            <field name="domain">[('po_id', '=', active_id)]</field>
+        </record>
+
+        <record id="action_po_delivery_line_form" model="ir.actions.act_window">
+            <field name="name">Deliveries</field>
+            <field name="res_model">po.delivery.line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,pivot,form</field>
+            <field name="search_view_id" ref="view_po_delivery_line_search"/>
+        </record>
+
+        <menuitem action="action_po_delivery_line_form" id="menu_action_po_delivery_line_form"
+                  parent="purchase.menu_procurement_management" sequence="7" name="DRs/GRs"/>
+
+        <record id="admin_invoice_payment_view_form" model="ir.ui.view">
+            <field name="name">admin.invoice.payment.form</field>
+            <field name="model">admin.invoice.payment</field>
+            <field name="arch" type="xml">
+                <form string="Payment form">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box"/>
+                        <widget name="web_ribbon" title="Received Original OR" bg_color="bg-success"
+                                attrs="{'invisible': [('original_or_received', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Payment Transaction Number"/>
+                            </h1>
+                            <div>
+                                <label for="company_id"/>
+                                [<field name="company_code" class="oe_inline"/>]
+                                <field name="company_id" groups="base.group_multi_company" required="1"
+                                      class="oe_inline"  options="{'no_create': True}"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="universal_vendor_code"/>
+                                <field name="vendor_partner_id" options="{&quot;no_create&quot;: True}"/>
+                                <field name="admin_si_number"/>
+                                <field name="admin_si_id" options="{&quot;no_create&quot;: True}"/>
+                                <field name="invoice_date"/>
+                                <field name="si_amount"/>
+                                <field name="purchase_id" attrs="{'invisible': [('purchase_id', 'in', [False])]}"/>
+                            </group>
+                            <group>
+                                <field name="payment_release_date"/>
+                                <field name="amount"/>
+                                <field name="or_number"/>
+                                <field name="or_date"/>
+                                <label for="original_or_received"/>
+                                <div>
+                                    <field name="original_or_received" class="oe_inline"/>
+                                    <field name="original_or_received_date" readonly="1" force_save="1"
+                                           class="oe_inline"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group name="notes" string="Remarks">
+                            <field name="remark" nolabel="1" colspan="2"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_invoice_payment_view_tree" model="ir.ui.view">
+            <field name="name">admin.invoice.payment.tree</field>
+            <field name="model">admin.invoice.payment</field>
+            <field name="arch" type="xml">
+                <tree string="Admin Payment tree">
+                    <field name="name"/>
+                    <field name="vendor_partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_code" optional="hidden"/>
+                    <field name="admin_si_id"/>
+                    <field name="amount"/>
+                    <field name="payment_release_date"/>
+                    <field name="or_number"/>
+                    <field name="original_or_received"/>
+                    <field name="remark"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="admin_invoice_payment_pivot">
+            <field name="name">admin.invoice.payment.pivot</field>
+            <field name="model">admin.invoice.payment</field>
+            <field name="arch" type="xml">
+                <pivot string="Allocated SI">
+                    <field name="company_id" type="row"/>
+                    <field name="vendor_partner_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_admin_invoice_payment_search">
+            <field name="name">admin.invoice.payment.search</field>
+            <field name="model">admin.invoice.payment</field>
+            <field name="arch" type="xml">
+                <search string="Payment Release Search">
+                    <field name="name"/>
+                    <field name="vendor_partner_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="admin_si_id"/>
+                    <field name="or_number"/>
+                    <filter string="Payment Date" name="payment_release_date" date="payment_release_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Supplier/Vendor" name="grp_vendor_partner_id" context="{'group_by': 'vendor_partner_id'}"/>
+                        <filter string="Company" name="grp_company_id" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_admin_invoice_payment_form_open" model="ir.actions.act_window">
+            <field name="name">Payment Release</field>
+            <field name="res_model">admin.invoice.payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="search_view_id" ref="view_admin_invoice_payment_search"/>
+        </record>
+
+        <menuitem action="action_admin_invoice_payment_form_open" id="menu_action_admin_invoice_payment_form_open"
+                  parent="purchase.menu_procurement_management" sequence="9" name="Payment Release"/>
+
+        <record id="admin_sales_invoice_view_form" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.form</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="arch" type="xml">
+                <form string="SI Form" create="false">
+                    <header>
+                        <button string="Countered" type="action" class="oe_highlight"
+                                name="%(admin_sales_invoice_countered_action_wizard)d"
+                                attrs="{'invisible': [('countered', '=', True)]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="Draft,Waiting For Accounting Validation,Fully Paid"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Countered" bg_color="bg-success"
+                                attrs="{'invisible': [('countered', '=', False)]}"/>
+                        <div class="oe_title">
+                            <field name="admin_si_type" widget="radio" class="oe_edit_only"
+                                   options="{'horizontal': true}"/>
+                            <div>
+                                <label for="po_si_type" attrs="{'invisible': [('admin_si_type', '!=', 'with_po')]}"/>
+                                <field name="po_si_type" class="oe_inline" attrs="{'invisible': [('admin_si_type', '!=', 'with_po')],
+                                                                                  'required': [('admin_si_type', '=', 'with_po')]}"/>
+                            </div>
+                            <h1>
+                                <field name="vendor_si_number" default_focus="1" placeholder="Sales Invoice Number"/>
+                            </h1>
+                            <div>
+                                <label for="company_id"/>
+                                [<field name="company_code" class="oe_inline"/>]
+                                <field name="company_id" groups="base.group_multi_company" required="1"
+                                      class="oe_inline"  options="{'no_create': True}"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="universal_vendor_code"/>
+                                <field name="vendor_partner_id" required="1" options="{&quot;no_create&quot;: True}"/>
+                                <field name="po_references" attrs="{'invisible': [('admin_si_type', 'in', [False, 'with_po'])]}"/>
+                                <field name="po_reference" attrs="{'invisible': [('admin_si_type', 'in', [False, 'no_po'])]}"/>
+                                <field name="purchase_id" options="{&quot;no_create&quot;: True}"
+                                       attrs="{'invisible': [('admin_si_type', 'in', [False, 'no_po'])], 'required': [('admin_si_type', 'in', ['with_po'])]}"/>
+                                <field name="service_order_number"
+                                       attrs="{'invisible': [('admin_si_type', 'in', [False, 'with_po'])]}"/>
+                            </group>
+                            <group>
+                                <field name="document_status"/>
+                                <field name="invoice_date"/>
+                                <field name="amount"/>
+                                <field name="countered" invisible="1"/>
+                                <field name="countered_date" readonly="1" force_save="1"
+                                        attrs="{'invisible': [('countered', '=', False)]}"/>
+                                <field name="countering_notes" readonly="1" force_save="1"
+                                        attrs="{'invisible': [('countered', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group string="DR/GRs">
+                            <field name="po_delivery_ids" nolabel="1" domain="[('po_id', '=', purchase_id)]"
+                                   options="{&quot;no_create&quot;: True}"/>
+                        </group>
+                        <group name="vendor_note" string="Vendor Note">
+                            <field name="vendor_remarks" nolabel="1" colspan="2" placeholder="Vendor Notes"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_sales_invoice_view_tree" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.tree</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="arch" type="xml">
+                <tree string="SI tree" create="false">
+                    <field name="vendor_partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_code"/>
+                    <field name="admin_si_type"/>
+                    <field name="vendor_si_number"/>
+                    <field name="invoice_date"/>
+                    <field name="amount"/>
+                    <field name="countered"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="admin_sales_invoice_pivot">
+            <field name="name">admin.sales.invoice.pivot</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="arch" type="xml">
+                <pivot string="Allocated SI">
+                    <field name="company_id" type="row"/>
+                    <field name="vendor_partner_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_admin_sales_invoice_search">
+            <field name="name">admin.sales.invoice.search</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="arch" type="xml">
+                <search string="Sales Invoice Search">
+                    <field name="vendor_partner_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="admin_si_type"/>
+                    <field name="vendor_si_number"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Supplier/Vendor" name="grp_vendor_partner_id" context="{'group_by': 'vendor_partner_id'}"/>
+                        <filter string="Company" name="grp_company_id" context="{'group_by': 'company_id'}"/>
+                        <filter string="Document Type" name="grp_admin_si_type" context="{'group_by': 'admin_si_type'}"/>
+                        <filter string="Countered" name="grp_countered" context="{'group_by': 'countered'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_admin_sales_invoice_form_open" model="ir.actions.act_window">
+            <field name="name">Allocated SI</field>
+            <field name="res_model">admin.sales.invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="search_view_id" ref="view_admin_sales_invoice_search"/>
+        </record>
+
+        <record id="admin_si_multiple_po_view_form" model="ir.ui.view">
+            <field name="name">admin.si.multiple.po.form</field>
+            <field name="model">admin.si.multiple.po</field>
+            <field name="arch" type="xml">
+                <form string="Vendor SI">
+                    <header>
+                        <button string="Allocate SI Amount" type="action" class="oe_highlight"
+                                name="%(admin_si_allocate_action_wizard)d"
+                                attrs="{'invisible': ['|', ('admin_si_type', '!=', 'with_po'), ('unallocated_amount', '&#60;', 1)]}"/>
+                        <button string="Allocate SI Amount" type="object" class="oe_highlight"
+                                name="allocate_si_amount"
+                                attrs="{'invisible': ['|', ('admin_si_type', '!=', 'no_po'), ('unallocated_amount', '&#60;', 1)]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_open_admin_vendor_si" class="oe_stat_button" icon="fa-list-alt">
+                                <field name="vendor_si_count" widget="statinfo" string="Sales Invoices"/>
+                            </button>
+                            <button type="object" name="action_open_admin_si_payment" class="oe_stat_button" icon="fa-money">
+                                <field name="vendor_payment_count" widget="statinfo" string="Payment Released"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <field name="admin_si_type" widget="radio" class="oe_edit_only"
+                                   options="{'horizontal': true}"/>
+                            <div>
+                                <label for="po_si_type"/>
+                                <field name="po_si_type" class="oe_inline" attrs="{'required': [('admin_si_type', '=', 'with_po')]}"/>
+                            </div>
+                            <h1>
+                                <field name="vendor_si_number" default_focus="1" placeholder="Sales Invoice Number"/>
+                            </h1>
+                            <div>
+                                <label for="company_id"/>
+                                [<field name="company_code" class="oe_inline"/>]
+                                <field name="company_id" groups="base.group_multi_company" required="1"
+                                      class="oe_inline"  options="{'no_create': True}"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="universal_vendor_code"/>
+                                <field name="vendor_partner_id" required="1" options="{&quot;no_create&quot;: True}"/>
+                                <field name="purchase_ids" widget="many2many_tags" readonly="1" force_save="1"
+                                       attrs="{'invisible': [('admin_si_type', '=', 'no_po')]}"/>
+                                <field name="service_order_number"
+                                       attrs="{'invisible': [('admin_si_type', 'in', [False, 'with_po'])]}"/>
+                                <field name="po_references"
+                                       attrs="{'invisible': ['|', ('admin_si_type', 'in', [False, 'with_po']), ('po_si_type', '!=', 'Hauler/Delivery Charge')]}"/>
+                            </group>
+                            <group>
+                                <field name="document_status"/>
+                                <field name="invoice_date"/>
+                                <field name="amount"/>
+                                <field name="unallocated_amount"/>
+                                <field name="allocated_amount" invisible="1"/>
+                            </group>
+                        </group>
+                        <group string="DRs/GRs">
+                            <field name="po_delivery_ids" nolabel="1"
+                                   domain="[('countered_si_id', '=', False)]">
+                                <tree string="DRs/GRs">
+                                    <field name="po_id"/>
+                                    <field name="company_id"/>
+                                    <field name="company_code" optional="hide"/>
+                                    <field name="gr_number"/>
+                                    <field name="dr_no"/>
+                                    <field name="dr_date"/>
+                                    <field name="received_original_doc"/>
+                                    <field name="countered"/>
+                                    <field name="total_amount"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group name="vendor_note" string="Vendor Note">
+                            <field name="vendor_remarks" nolabel="1" colspan="2" placeholder="Vendor Notes"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_si_multiple_po_view_tree" model="ir.ui.view">
+            <field name="name">admin.si.multiple.po.tree</field>
+            <field name="model">admin.si.multiple.po</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor SI tree">
+                    <field name="vendor_partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="company_code"/>
+                    <field name="admin_si_type"/>
+                    <field name="vendor_si_number"/>
+                    <field name="invoice_date"/>
+                    <field name="amount"/>
+                    <field name="unallocated_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="admin_si_multiple_po_pivot">
+            <field name="name">admin.si.multiple.po.pivot</field>
+            <field name="model">admin.si.multiple.po</field>
+            <field name="arch" type="xml">
+                <pivot string="Vendor SI">
+                    <field name="company_id" type="row"/>
+                    <field name="vendor_partner_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                    <field name="unallocated_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_admin_si_multiple_po_search">
+            <field name="name">admin.si.multiple.po.search</field>
+            <field name="model">admin.si.multiple.po</field>
+            <field name="arch" type="xml">
+                <search string="Vendor SI Search">
+                    <field name="vendor_partner_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="admin_si_type"/>
+                    <field name="vendor_si_number"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Supplier/Vendor" name="grp_vendor_partner_id" context="{'group_by': 'vendor_partner_id'}"/>
+                        <filter string="Company" name="grp_company_id" context="{'group_by': 'company_id'}"/>
+                        <filter string="Document Type" name="grp_admin_si_type" context="{'group_by': 'admin_si_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_admin_si_multiple_po" model="ir.actions.act_window">
+            <field name="name">Vendor SI</field>
+            <field name="res_model">admin.si.multiple.po</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="search_view_id" ref="view_admin_si_multiple_po_search"/>
+        </record>
+
+        <menuitem id="menu_parent_admin_sales_invoices" parent="purchase.menu_procurement_management" sequence="8" name="Sales Invoice"/>
+        <menuitem action="action_admin_si_multiple_po" id="menu_admin_si_multiple_po"
+                  parent="menu_parent_admin_sales_invoices" sequence="1" name="Vendor SI"/>
+        <menuitem action="action_admin_sales_invoice_form_open" id="menu_action_admin_sales_invoice_open_form"
+                  parent="menu_parent_admin_sales_invoices" sequence="2" name="Allocated SI"/>
+
+    </data>
+</odoo>

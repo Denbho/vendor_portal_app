@@ -1,0 +1,37 @@
+/* Progress Wizard */
+.o_website_calendar {
+	
+	.customer_portal ul.wizard li.text-success {
+        background: #dddddd;
+    }
+   
+   .customer_portal ul.wizard li.text-primary {
+        background: #dddddd;
+    }
+   
+    .customer_portal ul.wizard li:last-child {
+        border-radius: 0;
+        border-right-width: 0;
+    }
+    .customer_portal ul.wizard li:last-child .chevron {
+        display: block;
+    }
+   
+   .customer_portal ul.wizard li.text-primary .chevron:before {
+        border-left: 10px solid #dddddd;
+    }
+
+   .o_website_calendar ul.wizard li {
+   		background: white;
+   	}
+
+	.customer_portal .text-success{
+		color:black
+	}
+
+	.portal_btn_div{
+		margin-right: 8%;
+    	margin-left: auto;
+		margin-bottom: 1%;
+	}
+}

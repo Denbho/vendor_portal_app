@@ -1,0 +1,92 @@
+/* User Profile CSS */
+.portal_container {
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+	margin: 0 auto;
+	width: 100%;
+	font-size: large;
+}
+
+.profile_container .fa {
+    font-size: large;
+}
+
+.profile_container .fa:hover {
+    color: #00A09D;
+    font-size: 22px;
+}
+
+.profile_container label{
+	width: 35%;
+	font-weight: 400;
+}
+
+.profile_container input{
+	/* display: inline-table; */
+	width: 50%;
+	font-size: large;
+}
+.res_country_dropdown,
+.res_state_dropdown,
+.res_nationality_dropdown,
+.res_emy_cntry{
+	display: inline-table;
+	width: 50%;
+}
+.profile_container address{
+	line-height: 50px;
+}
+.row-no-margin{
+	margin:0;
+}
+
+/* Profile Avatar image */
+
+.profile-avatar-image .avatar-edit {
+	position: absolute;
+    z-index: 1;
+    width: 40%;
+    top: 96%;
+    margin-left: 40%;
+}
+
+.profile-avatar-image img {
+	height: 150px;
+}
+
+/* Top Menu CSS */
+
+.right-auto{
+	right:auto;
+}
+
+.user_avatar_image img {
+	width: 50px;
+	border-radius: 50%;
+	height: 50px;
+}
+
+.display-inline-block{
+	display:inline-block;
+}
+
+.display_none{
+	display:none;
+}
+
+.display_block{
+	display:block;
+}
+
+
+
+
+/* ----------MEDIA QUERY---------- */
+@media 
+only screen and (max-width: 300px),
+(min-device-width: 320px) and (max-device-width: 768px)  {
+
+	.row-no-margin, .late_notification, .today_notification, .future_notification {
+		width: 100%;
+	}
+	
+}

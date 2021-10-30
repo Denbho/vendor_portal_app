@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+      <record id="dr_gr_by_company_rule" model="ir.rule">
+          <field name="name">DRs/GRS: multi-company</field>
+          <field ref="admin_purchase_order.model_po_delivery_line" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="vendor_si_by_company_rule" model="ir.rule">
+          <field name="name">Vendor SI: multi-company</field>
+          <field ref="admin_purchase_order.model_admin_sales_invoice" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="payment_release_by_company_rule" model="ir.rule">
+          <field name="name">Payment Release: multi-company</field>
+          <field ref="admin_purchase_order.model_admin_invoice_payment" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <!-- Allow updating on noupdate=True records -->
+      <function name="write" model="ir.model.data">
+          <function name="search" model="ir.model.data">
+              <value eval="[('module', '=', 'purchase'), ('name', 'in', ['purchase_order_comp_rule',
+                    'purchase_order_line_comp_rule','purchase_bill_union_comp_rule','purchase_order_report_comp_rule'])]" />
+          </function>
+          <value eval="{'noupdate': False}" />
+      </function>
+
+      <!-- change fields here -->
+      <record model="ir.rule" id="purchase.purchase_order_comp_rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record model="ir.rule" id="purchase.purchase_order_line_comp_rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record model="ir.rule" id="purchase.purchase_bill_union_comp_rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="purchase.purchase_order_report_comp_rule" model="ir.rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <!-- Revoke noupdate change -->
+      <function name="write" model="ir.model.data">
+          <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'purchase'), ('name', 'in', ['purchase_order_comp_rule',
+                  'purchase_order_line_comp_rule','purchase_bill_union_comp_rule','purchase_order_report_comp_rule'])]" />
+          </function>
+          <value eval="{'noupdate': True}" />
+      </function>
+
+    </data>
+</odoo>

@@ -1,0 +1,48 @@
+/* Login panel design */
+
+.login_content_portal {
+  	padding: 20px;
+}
+.login_check_portal{
+	padding: 13px;
+}
+
+/* .login_div {
+  	width: 100%;
+  	background-image: url(/skit_customer_portal/static/src/img/login_bg.jpg);
+  	background-position: 20%;
+} */
+
+.oe_login_form_portal {
+  	margin-top: 100px;
+  	max-width: 25%;
+	
+}
+
+.font-large {
+  font-size: small;
+}
+/* .login-background-image {
+  	background-repeat: no-repeat;
+  	background-size: cover;
+  	position: relative;
+  	padding-top: 10px;
+	padding-bottom: 218px;
+} */
+
+.body_bg{
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: relative;
+	background-position: center;
+}
+
+.privacy_policy_modal{
+	left: 373px;
+}
+.lg_wt{
+	width: 70%;
+}
+.lg_mr5{
+	margin-right: 5%;
+}

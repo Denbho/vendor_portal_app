@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.view.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//sheet/div[2]/h1" position="after">
+                    <div>
+                        <label for="supplier_number" class="oe_inline"/>
+                        <field name="supplier_number" class="oe_inline oe_input_align"/>
+                    </div>
+                    <div>
+                        <label for="universal_assign_number" class="oe_inline"/>
+                        <field name="universal_assign_number" class="oe_inline oe_input_align"/>
+                    </div>
+                    <div>
+                        <label for="partner_assign_number" class="oe_inline"/>
+                        <field name="partner_assign_number" class="oe_inline oe_input_align"/>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="view_res_partner_filter" model="ir.ui.view">
+           <field name="name">res.partner.search</field>
+           <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+              <field name="name" position="after">
+                  <field name="partner_assign_number"/>
+              </field>
+           </field>
+        </record>
+    </data>
+</odoo>

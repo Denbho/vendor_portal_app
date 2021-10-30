@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+      <!-- Allow updating on noupdate=True records -->
+      <function name="write" model="ir.model.data">
+          <function name="search" model="ir.model.data">
+              <value eval="[('module', '=', 'product'), ('name', 'in', ['product_comp_rule', 'product_pricelist_comp_rule',
+                            'product_pricelist_item_comp_rule','product_supplierinfo_comp_rule'])]" />
+          </function>
+          <value eval="{'noupdate': False}" />
+      </function>
+
+      <!-- change fields here -->
+      <record model="ir.rule" id="product.product_comp_rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record model="ir.rule" id="product.product_pricelist_comp_rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record model="ir.rule" id="product.product_pricelist_item_comp_rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="product.product_supplierinfo_comp_rule" model="ir.rule">
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <!-- Revoke noupdate change -->
+      <function name="write" model="ir.model.data">
+          <function name="search" model="ir.model.data">
+              <value eval="[('module', '=', 'product'), ('name', 'in', ['product_comp_rule', 'product_pricelist_comp_rule',
+                            'product_pricelist_item_comp_rule','product_supplierinfo_comp_rule'])]" />
+          </function>
+          <value eval="{'noupdate': True}" />
+      </function>
+
+    </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_edi_bid" model="mail.template">
+            <field name="name">Bid: Send RFQ</field>
+            <field name="model_id" ref="admin_purchase_requisition.model_purchase_bid"/>
+            <field name="subject">Invitation to Bid</field>
+            <field name="partner_to"></field>
+            <field name="body_html" type="html">
+              <div style="margin: 0px; padding: 0px;">
+                  <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                      Dear Vendor,
+                      <br/><br/><br/>
+                      Please find attached Invitation to Bid from Vistaland.
+                      <br/><br/>
+                      Should you have questions or clarifications, please feel free to let us know.
+                      <br/><br/><br/><br/>
+                      Regards,
+                      <br/>
+                      Vistaland Purchasing Team
+                  </p>
+              </div>
+            </field>
+            <field name="lang"></field>
+            <field name="user_signature" eval="False"/>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

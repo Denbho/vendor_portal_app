@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+      <record id="pr_by_company_rule" model="ir.rule">
+          <field name="name">Purchase Requisition: multi-company</field>
+          <field ref="admin_purchase_requisition.model_admin_purchase_requisition" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="pr_line_by_company_rule" model="ir.rule">
+          <field name="name">PR Materials: multi-company</field>
+          <field ref="admin_purchase_requisition.model_purchase_requisition_material_details" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<record id="res_config_settings_view_form" model="ir.ui.view">
+   		<field name="name">res.config.settings.view.form.inherit.customer.portal</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+     		<xpath expr="//div[@id='companies']" position='after'>
+          		<div id="customer_portal">
+                	<h2>Customer Portal Settings</h2>
+                	<div class="row mt16 o_settings_container">
+                    	<div class="col-12 col-lg-6 o_setting_box">
+                        	<div class="o_setting_right_pane">
+	                            <span class="o_form_label">Colors</span>
+	                            <span class="fa fa-lg fa-building-o" role="img"/>
+	                            <div class="text-muted">
+	                                Choose the Background color for the Login page
+	                            </div>
+                            	<div class="content-group">
+		                            <div class="o_document_layout_colors">
+		                                <field name="body_bg_color" widget="color" class="mb-4" />
+		                            </div>
+                              	</div>
+                   			</div>
+                		</div>
+                		<div class="col-12 col-lg-6 o_setting_box">
+                        	<div class="o_setting_right_pane">
+                           		<div id="website_login_bg_setting">
+                             		<label for="body_bg_image"/>
+                                    <span title="Values set here are website-specific."/>
+                                    <div class="text-muted">
+                                        Choose the Background image for the login page
+                                    </div>
+                    				<field name="body_bg_image" widget="image" class="w-25 mt-2"/>
+                            	</div>
+                       		</div>
+                     	</div>
+                     	<div class="col-12 col-lg-6 o_setting_box">
+                        	<div class="o_setting_right_pane">
+	                            <span class="o_form_label">Colors</span>
+	                            <span class="fa fa-lg fa-building-o" role="img"/>
+	                            <div class="text-muted">
+	                                Choose the Background color for the Login Panel
+	                            </div>
+                            	<div class="content-group">
+		                            <div class="o_document_layout_colors">
+		                                <field name="login_panel_bg_color" widget="color" class="mb-4" />
+		                            </div>
+                              	</div>
+                   			</div>
+                		</div>
+                  	</div>
+                   	<div class="row mt16 o_settings_container" attrs="{'invisible': [('website_id', '=', False)]}">
+                 		<div class="col-12 col-lg-12 o_setting_box">
+                     		<div class="o_setting_left_pane">
+                       			<field name="enable_privacy_policy"/>
+                   			</div>
+                            <div class="o_setting_right_pane">
+			                    <label for="enable_privacy_policy" class="oe_inline o_form_label"/>
+			                    <div class="text-muted">
+			                        Configure this website's Privacy Policy
+			                    </div>
+			                    <div class="content-group" attrs="{'invisible': [('enable_privacy_policy', '=', False)]}">
+			                        <div class="mt16 row">
+			                            <label for="privacy_policy_title" string="Title" class="col-3 col-lg-3 o_form_label"/>
+			                            <field name="privacy_policy_title"/>
+			                        </div>
+			                        <div class="mt16 row">
+			                            <label for="privacy_policy_body" string="Body" class="col-3 col-lg-3 o_form_label align-top"/>
+			                            <field name="privacy_policy_body"/>
+			                        </div>
+			                    </div>
+               	 			</div>
+                        </div>
+             		</div>
+               	</div>
+             </xpath>
+        </field>
+    </record> 
+</odoo>

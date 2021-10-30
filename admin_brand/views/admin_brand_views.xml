@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="admin_brand_tree" model="ir.ui.view">
+          <field name="name">admin.brand.tree</field>
+          <field name="model">admin.brand</field>
+          <field name="arch" type="xml">
+              <tree string="Brands" editable="bottom">
+                  <field name="name"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="admin_brand_action" model="ir.actions.act_window">
+          <field name="name">Brands</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">admin.brand</field>
+          <field name="view_mode">tree</field>
+      </record>
+
+      <menuitem action="admin_brand_action" id="menu_admin_brand" parent="base.menu_users"
+                name="Brands" sequence="4"/>
+
+    </data>
+</odoo>

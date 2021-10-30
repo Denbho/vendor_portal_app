@@ -1,0 +1,232 @@
+/* -----------------------------------------
+   Tab
+----------------------------------------- */
+/* Style the tab */
+.send_message_container .tab {
+	overflow: hidden;
+	/* background-color: #f1f1f1; */
+	width: 25%;
+}
+
+/* Style the buttons inside the tab */
+.send_message_container .tab button {
+	background-color: inherit;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	transition: 0.3s;
+	font-weight: 400;
+	padding: 6px 16px 0px 15px;
+}
+
+.send_message_container .tab button.active {
+  background-color: #f1f1f1;
+}
+
+.log_container {
+    background-color: white;
+    box-shadow: 1px solid red;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    margin: 1%;
+    padding: 2%;
+}
+
+/* Style the tab content */
+.send_message_container .tabcontent {
+	/* display: none; */
+	padding: 15px 12px;
+	border-top: none;
+	background-color: #f1f1f1;
+}
+
+.send_message_container .chatter_composer_message_section {
+	margin: 10px 10px 0px 10px;
+}
+
+.fa_icon_section {
+	width: 98%;
+	background-color: white;
+	height: 40px;
+	margin: 0px 10px 10px 10px;
+	padding: 10px;
+}
+
+.fa_attach_btn {
+	padding: 0px;
+	margin-bottom: 5px;
+}
+
+.fa_icon {
+	padding-right: 10px;
+}
+
+.doc_checklist ul.checkmark li {
+	font-size: 16px;
+	list-style-type: none;
+	padding: 0.25em 0 0 1em;
+	position: relative;
+}
+
+.doc_checklist ul.checkmark li:before {
+	content: " ";
+	display: block;
+	border-radius: .8em;
+	height: 0;
+	width: 0;
+	position: absolute;
+	left: 0em;
+	top: 40%;
+	margin-top: -0.5em;
+	font-size: 19px;
+}
+
+.doc_checklist ul.checkmark li::after {
+	content: " ";
+	display: block;
+	width: 0.6em;
+	height: 1.1em;
+	border: solid white;
+	border-top-width: medium;
+	border-right-width: medium;
+	border-bottom-width: medium;
+	border-left-width: medium;
+	border-width: 0 0.2em 0.2em 0;
+	position: absolute;
+	left: 0.7em;
+	top: 25%;
+	margin-top: -0.3em;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.tooltip_skit {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip_skit .tooltiptext_skit {
+	visibility: hidden;
+	width: 120px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+.tooltip_skit .tooltiptext_skit::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+.tooltip_skit:hover .tooltiptext_skit {
+	visibility: visible;
+	opacity: 1;
+}
+
+.doc_checked:before {
+	border: solid 0.8em #23c815;
+}
+
+.doc_unchecked:before {
+	border: solid 0.8em #e7e7e7;
+}
+
+.text-small {
+	font-size: 14px;
+}
+
+.shortcut_icon_ul {
+	position: fixed;
+	/* bottom: 0; */
+	width: 10%;
+	padding: 0;
+	text-align: center;
+}
+
+.shortcut_icon_panel{
+	padding: 0px;
+}
+
+.shortcut_icon {
+	font-size: 50px;
+	color: black;
+}
+
+.width_0{
+	width: 0%;
+}
+
+.bg_dark_gray{
+	background-color: #8e8a8a9e
+}
+.po_notification{
+	min-width: 300px;
+}
+.po_noti_txt{
+	margin-left: 4%;
+    font-weight: bold;
+}
+.po_noti_tbl{
+	width: 94%;
+    margin-left: 4%;
+    margin-top: 3%;
+}
+.po_noti_late{
+	width: 32%;
+    color: #B40F2B;
+    font-weight: 600;
+	cursor: pointer;
+}
+.po_noti_today{
+	width: 32%;
+    color: #07931B;
+    font-weight: 600;
+	cursor: pointer;
+}
+.po_noti_future{
+	width: 32%;
+    color: #F3B554;
+    font-weight: 600;
+	cursor: pointer;
+}
+.po_noti_cl{
+	color: black !important;
+	padding-right: 1rem;
+}
+.po_noti_cl::after{
+	display: none !important;
+}
+.po_noti_badge{
+	display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 50%;
+	color: white;
+	background: #B40F2B;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.navbar ul.nav > li.divider {
+    border-right: 2px solid #e9ecef;
+}

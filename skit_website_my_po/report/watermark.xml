@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            string="Purchase Order Reprint" 
+            id="watermark_report_purchase_order" 
+            model="purchase.order" 
+            report_type="qweb-pdf"
+            name="skit_website_my_po.watermark_report_purchaseorder" 
+            file="skit_website_my_po.watermark_report_purchaseorder"
+            print_report_name="
+                (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
+                'Purchase Order - %s' % (object.name))"
+        />
+     </data>
+</odoo>
+     

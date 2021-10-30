@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="payment_summary_view">
+		<div id="sod_right_grid" style="padding: 30px;">
+	 		<h3 style="padding: 20px 20px 5px 20px;">Payment Summary</h3>
+	      	<hr></hr>
+	      	<div id="myProgress">
+			  <div id="myBar"></div>
+			</div>
+      		<table style="width:96%; margin: 20px;">
+		  		<tr>
+					<td class="" style="width: 50%;padding-left: 50px;">
+						<span style="font-size: 18px;">Total Contract Price(TCP):</span>
+					</td>
+					<td style="width: 50%;text-align: right;padding-right: 75px;color: gray;">
+						<span style="font-size: 18px;">
+						<t t-esc="property_sale_id.tcp"  t-options='{"widget": "monetary","display_currency": property_sale_id.currency_id}'/>
+						</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<br></br>
+					</td>
+				</tr>
+				<tr>
+					<td class="" style="width: 50%;padding-left: 50px;">
+						<span style="font-size: 18px;">Outstanding Balance:</span>
+					</td>
+					<td style="width: 50%;text-align: right;padding-right: 75px; color: gray;">
+						<span style="font-size: 18px;">
+						<t t-esc="property_sale_id.outstanding_balance"  t-options='{"widget": "monetary","display_currency": property_sale_id.currency_id}'/>
+						</span>
+					</td>
+				</tr>
+			</table>
+            <br></br>
+            <div style="float: left; padding-left: 40px;"><h4>Payments Mode</h4></div>
+            <div><hr></hr></div>
+			<table style="width: 100%; margin-left: 20px;">
+				<tbody>
+					<tr>
+						<td>
+							<br></br>
+						</td>
+					</tr>
+					<tr>
+						<td class="" style="width: 50%;padding-left: 50px;">
+							<span style="font-size: 18px;">Total Principal Amount:</span>
+						</td>
+						<td style="width: 50%;text-align: right;padding-right: 135px;color: gray;">
+							<span style="font-size: 18px;">
+							<t t-esc="property_sale_id.total_principal_amount_paid"  t-options='{"widget": "monetary","display_currency": property_sale_id.currency_id}'/>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<br></br>
+						</td>
+					</tr>
+					<tr>
+						<td class="" style="width: 50%;padding-left: 50px;">
+							<span style="font-size: 18px;">Total Interest Amount:</span>
+						</td>
+						<td style="width: 50%;text-align: right;padding-right: 135px; color: gray;">
+							<span style="font-size: 18px;">
+							<t t-esc="property_sale_id.total_interest_amount_paid"  t-options='{"widget": "monetary","display_currency": property_sale_id.currency_id}'/>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<br></br>
+						</td>
+					</tr>
+					<tr>
+						<td class="" style="width: 50%;padding-left: 50px;">
+							<span style="font-size: 18px;">Total Penalty (Sundry):</span>
+						</td>
+						<td style="width: 50%;text-align: right;padding-right: 135px; color: gray;">
+							<span style="font-size: 18px;">
+								<t t-esc="property_sale_id.total_penalty_paid" t-options='{"widget": "monetary","display_currency": property_sale_id.currency_id}'/>
+								<!-- <hr style="width: 55%; margin-left: 50%; border-top: 3px solid rgba(0, 0, 0, 0.1);"></hr> -->
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><hr style="width: 25%; margin-left: 59%; border-top: 3px solid rgba(0, 0, 0, 0.1);"></hr>   </td>
+					</tr>
+					<tr>
+						<td class="" style="width: 50%;padding-left: 50px;">
+							<span style="font-size: 18px;">Total Amount Paid:</span>
+						</td>
+						<td style="width: 50%;text-align: right;padding-right: 135px; color: gray;">
+							<span style="font-size: 18px;">
+								<t t-esc="property_sale_id.grand_total_paid"  t-options='{"widget": "monetary","display_currency": property_sale_id.currency_id}'/>
+								<!-- <hr style="width: 55%; margin-left: 50%; border-top: 3px solid rgba(0, 0, 0, 0.1);"></hr>
+								<hr style="width: 55%; margin-left: 50%; margin-top: -10px; border-top: 3px solid rgba(0, 0, 0, 0.1);"></hr> -->
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<hr style="width: 25%; margin-left: 59%; border-top: 3px solid rgba(0, 0, 0, 0.1);"></hr>
+							<hr style="width: 25%; margin-left: 59%; margin-top: -10px; border-top: 3px solid rgba(0, 0, 0, 0.1);"></hr>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+        </div>
+    </template>	
+    
+    <template id="payment_summary_template">
+	   	<div id="so_detail" style="margin-top:-5%">
+	       <div id="sod_grid" style="display: block; grid-gap:1px">
+	            <t t-call="skit_customer_portal.payment_summary_view"></t>
+	       </div>
+	   	</div>
+    </template> 
+    
+</odoo>

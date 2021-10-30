@@ -1,0 +1,62 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="purchase.menu_purchase_root">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2b')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="admin_purchase_requisition.menu_admin_purchase_requisition">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="purchase.menu_procurement_management">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2b')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="purchase.menu_purchase_form_action">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="admin_purchase_order.menu_action_po_delivery_line_form">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="admin_purchase_order.menu_action_admin_sales_invoice_open_form">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2b')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="admin_purchase_order.menu_action_admin_invoice_payment_form_open">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+<!--        <menuitem id="menu_action_admin_sales_invoice_open_form_level3"-->
+<!--                  parent="purchase.menu_procurement_management" action="action_admin_sales_invoice_form_open_level3" sequence="3" groups="admin_vendor_portal_access.group_vendor_portal_level2b"/>-->
+
+        <record model="ir.ui.menu" id="admin_vendor.menu_po_admin_vendor">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="purchase.menu_purchase_products">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="purchase.purchase_report">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('purchase.group_purchase_user')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="purchase.menu_report_purchase">
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="purchase.menu_purchase_config">
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_manager')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level6'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="admin_purchase_bid.menu_pr_bidding">
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="admin_contracts_and_agreements.menu_contracts_and_agreements">
+            <field name="groups_id" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level7')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level5')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level4')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level3')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level2')), (4, ref('admin_vendor_portal_access.group_vendor_portal_level1'))]" />
+        </record>
+    </data>
+</odoo>

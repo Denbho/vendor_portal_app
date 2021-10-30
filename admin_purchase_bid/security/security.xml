@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+      <record id="bid_by_company_rule" model="ir.rule">
+          <field name="name">Bidding: multi-company</field>
+          <field ref="admin_purchase_bid.model_purchase_bid" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="bid_bidders_by_company_rule" model="ir.rule">
+          <field name="name">Bidders: multi-company</field>
+          <field ref="admin_purchase_bid.model_purchase_bid_vendor" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+    </data>
+</odoo>

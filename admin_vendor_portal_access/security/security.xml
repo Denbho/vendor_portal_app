@@ -1,0 +1,148 @@
+<odoo>
+    <data>
+        <!--Vendor Portal Access-->
+        <record model="ir.module.category" id="module_category_vendor_portal">
+            <field name="name">Vendor Portal</field>
+            <field name="sequence">9</field>
+        </record>
+
+        <record id="group_vendor_portal_level1" model="res.groups">
+            <field name="name">Level  1</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+        </record>
+
+        <record id="group_vendor_portal_level2" model="res.groups">
+            <field name="name">Level  2</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+            <field name="implied_ids" eval="[(3, ref('group_vendor_portal_level1'))]"/>
+        </record>
+
+        <record id="group_vendor_portal_level2b" model="res.groups">
+            <field name="name">Level  3</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+        </record>
+
+        <record id="group_vendor_portal_level3" model="res.groups">
+            <field name="name">Level  4</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+            <field name="implied_ids" eval="[(3, ref('group_vendor_portal_level2'))]"/>
+        </record>
+
+        <record id="group_vendor_portal_level4" model="res.groups">
+            <field name="name">Level  5</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+            <field name="implied_ids" eval="[(3, ref('group_vendor_portal_level3'))]"/>
+        </record>
+
+        <record id="group_vendor_portal_level5" model="res.groups">
+            <field name="name">Level  6</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+            <field name="implied_ids" eval="[(3, ref('group_vendor_portal_level4'))]"/>
+        </record>
+
+        <record id="group_vendor_portal_level6" model="res.groups">
+            <field name="name">Level  7</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+            <field name="implied_ids" eval="[(3, ref('group_vendor_portal_level5'))]"/>
+        </record>
+
+        <record id="group_vendor_portal_level7" model="res.groups">
+            <field name="name">Level  8</field>
+            <field name="category_id" ref="module_category_vendor_portal"/>
+            <field name="implied_ids" eval="[(3, ref('group_vendor_portal_level6'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record model="ir.rule" id="admin_vendor_si_level3">
+            <field name="name">Vendor SI: Only Without PO</field>
+            <field ref="admin_purchase_order.model_admin_sales_invoice" name="model_id"/>
+            <field name="domain_force">[('admin_si_type', '=', 'no_po')]</field>
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level2b'))]"/>
+        </record>
+
+        <record id="admin_purchase_bid.bid_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_purchase_bid.bid_bidders_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_purchase_order.dr_gr_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_purchase_order.vendor_si_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_purchase_order.payment_release_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_purchase_requisition.pr_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_purchase_requisition.pr_line_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_request_for_information.rfi_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_request_for_information.rfi_line_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_request_for_proposal.rfp_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_request_for_proposal.rfp_line_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_request_for_quotation.rfq_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="admin_request_for_quotation.rfq_mails_by_company_rule" model="ir.rule">
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+<!--        Do not reflect if upgrade only on installed.-->
+        <record model="ir.rule" id="purchase.purchase_order_comp_rule">
+            <field name="global" eval="False"/>
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record model="ir.rule" id="purchase.purchase_order_line_comp_rule">
+            <field name="global" eval="False"/>
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record model="ir.rule" id="purchase.purchase_bill_union_comp_rule">
+            <field name="global" eval="False"/>
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record id="purchase.purchase_order_report_comp_rule" model="ir.rule">
+            <field name="global" eval="False"/>
+            <field name="groups" eval="[(4, ref('admin_vendor_portal_access.group_vendor_portal_level1')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level2')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level3')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level4')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level5')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level6')),(4, ref('admin_vendor_portal_access.group_vendor_portal_level7'))]"/>
+        </record>
+
+        <record model="ir.rule" id="base.res_partner_portal_public_rule">
+            <field name="name">res_partner: portal/public: read access on my commercial partner</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[('id', 'child_of', user.commercial_partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_portal')), (4, ref('base.group_public'))]"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

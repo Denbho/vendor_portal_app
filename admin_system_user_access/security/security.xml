@@ -1,0 +1,311 @@
+<odoo>
+    <data>
+        <!--Property Admin Access-->
+        <record model="ir.module.category" id="property_admin_monitoring.module_category_property">
+            <field name="name">Property Admin</field>
+        </record>
+
+        <record id="property_admin_monitoring.group_property_user" model="res.groups">
+            <field name="name">Level 1</field>
+            <field name="category_id" ref="property_admin_monitoring.module_category_property"/>
+        </record>
+
+        <record id="group_admin_account_officer_staff" model="res.groups">
+            <field name="name">Level 2</field>
+            <field name="category_id" ref="property_admin_monitoring.module_category_property"/>
+<!--            <field name="implied_ids" eval="[(4, ref('property_admin_monitoring.group_property_user'))]"/>-->
+        </record>
+
+        <record id="group_admin_account_officer_leader" model="res.groups">
+            <field name="name">Level 3</field>
+            <field name="category_id" ref="property_admin_monitoring.module_category_property"/>
+<!--            <field name="implied_ids" eval="[(4, ref('group_admin_account_officer_staff'))]"/>-->
+        </record>
+
+        <record id="property_admin_monitoring.group_property_supervisor" model="res.groups">
+            <field name="name">Level 4</field>
+            <field name="category_id" ref="property_admin_monitoring.module_category_property"/>
+            <field name="implied_ids" eval="[(3, ref('property_admin_monitoring.group_property_user'))]"/>
+<!--            <field name="implied_ids" eval="[(4, ref('group_admin_account_officer_leader'))]"/>-->
+        </record>
+
+        <record id="property_admin_monitoring.group_property_admin" model="res.groups">
+            <field name="name">Level 5</field>
+            <field name="category_id" ref="property_admin_monitoring.module_category_property"/>
+            <field name="implied_ids" eval="[(3, ref('property_admin_monitoring.group_property_supervisor'))]"/>
+<!--            <field name="implied_ids" eval="[(4, ref('property_admin_monitoring.group_property_supervisor'))]"/>-->
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record model="ir.module.category" id="module_category_property_credit_officer">
+            <field name="name">Property Admin (Collection Officer)</field>
+            <field name="sequence">8</field>
+        </record>
+
+        <record id="property_credit_officer_level2" model="res.groups">
+            <field name="name">Level 2</field>
+            <field name="category_id" ref="admin_system_user_access.module_category_property_credit_officer"/>
+        </record>
+
+        <record id="property_credit_officer_level3" model="res.groups">
+            <field name="name">Level 3</field>
+            <field name="category_id" ref="admin_system_user_access.module_category_property_credit_officer"/>
+        </record>
+
+        <!--Technical Groups-->
+        <record id="group_approved_credit_committee_approval" model="res.groups">
+            <field name="name">Approved Credit Committee Approval</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <record id="group_confirm_validate_docs" model="res.groups">
+            <field name="name">Confirm and Validate Submitted Documents</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <!--Property Admin Sale Rule-->
+        <record model="ir.rule" id="property_admin_monitoring.property_sale_rule">
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="property_admin_sale_level1_rule">
+            <field name="name">Property Admin Sale Level 1 Rule</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="model_id" ref="property_admin_monitoring.model_property_admin_sale"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_user'))]"/>
+            <field name="domain_force">['|','|',('partner_id', '=', user.partner_id.id),('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_admin_sale_level2AND3_rule" model="ir.rule">
+            <field name="name">Property Admin Sale Level 2 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_admin_sale"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('group_admin_account_officer_staff')), (4, ref('property_credit_officer_level2'))]"/>
+            <field name="domain_force">['|',('collection_officer_user_id','=',user.id),('account_officer_user_id','=',user.id)]</field>
+        </record>
+
+        <record id="property_admin_sale_level4_rule" model="ir.rule">
+            <field name="name">Property Admin Sale Level4 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_admin_sale"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_supervisor')), (4, ref('group_admin_account_officer_leader'))]"/>
+            <field name="domain_force">['|','|',('partner_id', '=', user.partner_id.id),('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_admin_sale_level5_rule" model="ir.rule">
+            <field name="name">Property Admin Sale Level5 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_admin_sale"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_admin'))]"/>
+            <field name="domain_force">['|','|',('partner_id', '=', user.partner_id.id),('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="property_admin_sale_multi_company_rule">
+            <field name="name">Property Admin Sale: Multi Company Readonly</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_admin_sale"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|','|',('partner_id', '=', user.partner_id.id),('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!--Property Submitted Documents Rule-->
+        <record id="property_document_submission_line_level23AND4_rule" model="ir.rule">
+            <field name="name">Property Document Submission Level 234 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_document_submission_line"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_credit_officer_level2')), (4, ref('property_credit_officer_level3')), (4, ref('group_admin_account_officer_staff')), (4, ref('group_admin_account_officer_leader')), (4, ref('property_admin_monitoring.group_property_supervisor'))]"/>
+            <field name="domain_force">['|',('property_sale_id.collection_officer_user_id','=',user.id),('property_sale_id.account_officer_user_id','=',user.id)]</field>
+        </record>
+
+        <record id="property_document_submission_line_level4_rule" model="ir.rule">
+            <field name="name">Property Document Submission Level 4 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_document_submission_line"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_admin'))]"/>
+            <field name="domain_force">['|','|',('property_sale_id.partner_id', '=', user.partner_id.id),('property_sale_id.company_id','=',False),('property_sale_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!--Credit Committee Approval Rule-->
+        <record id="property_sale_credit_committee_approval_level24_rule" model="ir.rule">
+            <field name="name">Credit Committee Approval Level 24 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_credit_committee_approval"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_credit_officer_level2')), (4, ref('group_admin_account_officer_staff')), (4, ref('property_admin_monitoring.group_property_supervisor'))]"/>
+            <field name="domain_force">['|',('property_sale_id.collection_officer_user_id','=',user.id), ('property_sale_id.account_officer_user_id','=',user.id)]</field>
+        </record>
+
+        <record id="property_sale_credit_committee_approval_level3_rule" model="ir.rule">
+            <field name="name">Credit Committee Approval Level 3 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_credit_committee_approval"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('group_admin_account_officer_leader')), (4, ref('property_credit_officer_level3')),]"/>
+            <field name="domain_force">['|','|',('property_sale_id.partner_id', '=', user.partner_id.id),('property_sale_id.company_id','=',False),('property_sale_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_sale_credit_committee_approval_level5_rule" model="ir.rule">
+            <field name="name">Credit Committee Approval Level 5 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_credit_committee_approval"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_admin'))]"/>
+        </record>
+
+        <!--Bank Loan Application Rule-->
+        <record id="property_sale_bank_loan_application_level23_rule" model="ir.rule">
+            <field name="name">Bank Loan Application Level 23 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_bank_loan_application"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_credit_officer_level2')), (4, ref('property_credit_officer_level3')), (4, ref('group_admin_account_officer_staff')), (4, ref('group_admin_account_officer_leader'))]"/>
+            <field name="domain_force">['|',('property_sale_id.collection_officer_user_id','=',user.id),('property_sale_id.account_officer_user_id','=',user.id)]</field>
+        </record>
+
+        <record id="property_sale_bank_loan_application_level4_rule" model="ir.rule">
+            <field name="name">Bank Loan Application Level 4 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_bank_loan_application"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_supervisor'))]"/>
+            <field name="domain_force">['|','|',('property_sale_id.partner_id', '=', user.partner_id.id),('property_sale_id.company_id','=',False),('property_sale_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_sale_bank_loan_application_level5_rule" model="ir.rule">
+            <field name="name">Bank Loan Application Level 5 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_bank_loan_application"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_admin'))]"/>
+        </record>
+
+        <!--Statement of Account Rule-->
+        <record model="ir.rule" id="property_admin_monitoring.property_soa_rule">
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="property_sale_statement_of_account_level1_rule">
+            <field name="name">Statement of Account Level 1 Rule</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_statement_of_account"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_user'))]"/>
+            <field name="domain_force">['|','|',('partner_id', '=', user.partner_id.id),('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_sale_statement_of_account_level23_rule" model="ir.rule">
+            <field name="name">Statement of Account Level 23 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_statement_of_account"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_credit_officer_level2')), (4, ref('property_credit_officer_level3')), (4, ref('group_admin_account_officer_staff')), (4, ref('group_admin_account_officer_leader'))]"/>
+            <field name="domain_force">['|',('property_sale_id.collection_officer_user_id','=',user.id),('property_sale_id.account_officer_user_id','=',user.id)]</field>
+        </record>
+
+        <record id="property_sale_statement_of_account_level4_rule" model="ir.rule">
+            <field name="name">Statement of Account Level 4 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_statement_of_account"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_supervisor'))]"/>
+            <field name="domain_force">['|','|',('property_sale_id.partner_id', '=', user.partner_id.id),('property_sale_id.company_id','=',False),('property_sale_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_sale_statement_of_account_level5_rule" model="ir.rule">
+            <field name="name">Statement of Account Level 5 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_sale_statement_of_account"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_admin'))]"/>
+        </record>
+
+        <!--Payment Rule-->
+        <record model="ir.rule" id="property_admin_monitoring.property_payment_rule">
+            <field name="active" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="property_ledger_payment_item_level1_rule">
+            <field name="name">Sales Payments Level 1 Rule</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="model_id" ref="property_admin_monitoring.model_property_ledger_payment_item"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_user'))]"/>
+            <field name="domain_force">['|','|',('partner_id', '=', user.partner_id.id),('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_ledger_payment_item_level23_rule" model="ir.rule">
+            <field name="name">Sales Payments Level23 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_ledger_payment_item"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_credit_officer_level2')), (4, ref('property_credit_officer_level3')), (4, ref('group_admin_account_officer_staff')), (4, ref('group_admin_account_officer_leader'))]"/>
+            <field name="domain_force">['|',('property_sale_id.collection_officer_user_id','=',user.id),('property_sale_id.account_officer_user_id','=',user.id)]</field>
+        </record>
+
+        <record id="property_ledger_payment_item_level4_rule" model="ir.rule">
+            <field name="name">Sales Payment Level 4 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_ledger_payment_item"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_supervisor'))]"/>
+            <field name="domain_force">['|','|',('property_sale_id.partner_id', '=', user.partner_id.id),('property_sale_id.company_id','=',False),('property_sale_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="property_ledger_payment_item_level5_rule" model="ir.rule">
+            <field name="name">Sales Payment Level 5 Rule</field>
+            <field name="model_id" ref="property_admin_monitoring.model_property_ledger_payment_item"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="groups" eval="[(4, ref('property_admin_monitoring.group_property_admin'))]"/>
+        </record>
+    </data>
+</odoo>

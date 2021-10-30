@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="vendor_portal_assets_frontend" inherit_id="website.assets_frontend"
+		name="Vendor Portal Front-end assets">
+		<xpath expr="//link[last()]" position="after">
+			<link rel="stylesheet" href="/skit_vendor_portal/static/src/css/registration.css" />
+			<link rel="stylesheet" href="/skit_vendor_portal/static/src/css/dashboard.css" />
+			<link rel="stylesheet" href="/skit_website_popup/static/src/css/alertify.min.css" />
+			<link rel="stylesheet" href="/skit_vendor_portal/static/src/css/view_full_profile.css" />
+		</xpath>
+		<xpath expr="//script[last()]" position="after">
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/jszip.js"></script>
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/xlsx.js"></script>
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/vendor_registration.js"></script>
+			<script type="text/javascript" src="/skit_website_popup/static/src/js/alertify.min.js"></script>
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/vendor_dashboard.js"></script>
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/view_full_profile.js"></script>
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/view_full_profile_form.js"></script>
+			<script type="text/javascript" src="/skit_vendor_portal/static/src/js/portal_signature.js"></script>
+		</xpath>
+	</template>
+</odoo>

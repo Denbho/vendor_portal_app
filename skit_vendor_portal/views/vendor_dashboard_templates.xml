@@ -1,0 +1,2824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="my_dashboard_link" name="Link to Dashboard portal" inherit_id="portal.frontend_layout">
+        <xpath expr="//a[@id='o_logout']" position="before">
+            <a href="/my/dashboard" role="menuitem" class="dropdown-item">My Dashboard</a>
+        </xpath>
+        <xpath expr="//a[@href='/my/home']" position="replace">
+        </xpath>
+    </template>
+    <template id="vendor_portal_rfi" name="Portal My Home : vendor portal RFI" inherit_id="portal.portal_my_home" priority="40">
+    	<xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+	        <t t-call="portal.portal_docs_entry">
+	       		<t t-set="title">My RFIs</t>
+	          	<t t-set="url" t-value="'/my/rfi'"/>
+	            <t t-set="count" t-value="rfi_count"/>
+	        </t>
+    	</xpath>
+  	</template>
+    <template id="vendor_portal_rfp" name="Portal My Home : vendor portal RFP" inherit_id="portal.portal_my_home" priority="50">
+    	<xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+	        <t t-call="portal.portal_docs_entry">
+	       		<t t-set="title">My RFPs</t>
+	          	<t t-set="url" t-value="'/my/rfp'"/>
+	            <t t-set="count" t-value="rfp_count"/>
+	        </t>
+    	</xpath>
+  	</template>
+
+    <template id="portal_layout" name="Portal layout: RFQ menu entry" inherit_id="portal.portal_breadcrumbs" priority="40">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'rfq'" t-attf-class="breadcrumb-item #{'active ' if not order else ''}">
+                <a t-if="order" t-attf-href="/my/rfq?{{ keep_query() }}">My RFQs</a>
+                <t t-else="">My RFQs</t>
+            </li>
+            <li t-if="page_name == 'rfp'" t-attf-class="breadcrumb-item #{'active ' if not order else ''}">
+                <a t-if="order" t-attf-href="/my/rfp?{{ keep_query() }}">My RFPs</a>
+                <t t-else="">My RFPs</t>
+            </li>
+            <li t-if="page_name == 'pr'" t-attf-class="breadcrumb-item #{'active ' if not order else ''}">
+                <a t-if="order" t-attf-href="/my/payment?{{ keep_query() }}">My Payment</a>
+                <t t-else="">My Payment</t>
+            </li>
+            <li t-if="page_name == 'pr' and order" class="breadcrumb-item active">
+               <t t-esc="order.name"/>
+               <button type="button" id="payment_edit" btn_type="edit_or" class="btn btn-primary btn-dashboard border-none payment_edit_orbtn edit_or">Edit OR</button>
+            </li>
+            <li t-if="page_name == 'rfp' and order" class="breadcrumb-item active">
+                <t t-esc="order.rfp_id.name"/>
+            </li>
+            <li t-if="page_name == 'rfq' and order" class="breadcrumb-item active">
+                <t t-esc="order.rfq_id.name"/>
+            </li>
+            <li t-if="page_name == 'accreditation_view'" class="breadcrumb-item active">
+            	<span>Accreditation</span>
+            </li>
+            <li t-if="page_name == 'performance_view'" class="breadcrumb-item active">
+            	<span>Performance</span>
+            </li>
+            <li t-if="page_name == 'bid'" t-attf-class="breadcrumb-item #{'active ' if not order else ''}">
+            	<a t-if="order" t-attf-href="/my/bid?{{ keep_query() }}">My Bids</a>
+                <t t-else="">My Bids</t>
+            </li>
+            <li t-if="page_name == 'bid' and order" class="breadcrumb-item active">
+               <t t-esc="order.bid_id.name"/>
+            </li>
+            <li t-if="page_name == 'rfi'" t-attf-class="breadcrumb-item #{'active ' if not order else ''}">
+                <a t-if="order" t-attf-href="/my/rfi?{{ keep_query() }}">My RFIs</a>
+                <t t-else="">My RFIs</t>
+            </li>
+            <li t-if="page_name == 'rfi' and order" class="breadcrumb-item active">
+                <t t-esc="order.rfi_id.name"/>
+            </li>
+        </xpath>
+    </template>
+
+	<template id="rfq_container">
+		<a t-att-href="'/my/rfq'" t-att-title="'RFQ'"
+			class="dashboard-box list-group-item list-group-item-action align-items-center justify-content-between sks_d_res" style="border-radius:0px">
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Request for Quotation(RFQ)</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="rfq_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="rfq_state_wise" t-as="state">
+						<t t-if="rfq_state_wise[state] > 0">
+							<td>
+								<a t-attf-href="/my/rfq/#{state}?#{keep_query()}">
+									<t t-esc="state"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="rfq_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+	<template id="rfi_container">
+		<a t-att-href="'/my/rfi'" t-att-title="'RFI'"
+			class="dashboard-box list-group-item list-group-item-action align-items-center justify-content-between sks_d_res" style="border-radius:0px">
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Request for Information(RFI)</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="rfi_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="rfi_state_wise" t-as="state">
+						<t t-if="rfi_state_wise[state] > 0">
+							<td>
+								<a t-attf-href="/my/rfi/#{state}?#{keep_query()}">
+									<t t-esc="state"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="rfi_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+	<template id="rfp_container">
+		<a t-att-href="'/my/rfp'" t-att-title="'RFP'"
+			class="dashboard-box list-group-item list-group-item-action align-items-center justify-content-between sks_d_res" style="border-radius:0px" >
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Request for Proposal(RFP)</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="rfp_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="rfp_state_wise" t-as="state">
+						<t t-if="rfp_state_wise[state] > 0">
+							<td><a t-attf-href="/my/rfp/#{state}?#{keep_query()}"><t t-esc="state"></t></a></td>
+							<td class="text-right"><t t-esc="rfp_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+	<template id="bid_container">
+		<a t-att-href="'/my/bid'" t-att-title="'BID'"
+			class="dashboard-box list-group-item list-group-item-action align-items-center justify-content-between sks_d_res" style="border-radius:0px">
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Bid</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="bid_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="bid_state_wise" t-as="state">
+						<t t-if="bid_state_wise[state] > 0">
+							<td>
+								<a t-attf-href="/my/bid/#{state}?#{keep_query()}">
+									<t t-esc="state"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="bid_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+	<template id="po_container">
+		<a t-att-href="'/my/purchase'" t-att-title="'PO'"
+			class="dashboard-box dashboard-box1 list-group-item list-group-item-action align-items-center justify-content-between sks_d_res sks_d_res_mar_l" style="margin-left: 80px;border-radius:0px">
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Purchase Order(PO)</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="purchase_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="po_state_wise" t-as="state">
+						<t t-if="po_state_wise[state] > 0">
+							<td>
+								<a t-attf-href="/my/purchase/#{state}?#{keep_query()}">
+									<t t-esc="state"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="po_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+	<template id="payment_container">
+		<a t-att-href="'/my/payment'" t-att-title="'Payment'"
+			class="dashboard-box dashboard-box1 list-group-item list-group-item-action align-items-center justify-content-between sks_d_res" style="margin-bottom: 6px;border-radius:0px">
+    		<table style="width:100%">
+    			<thead>
+	       			<tr>
+	        			<th>Payment</th>
+	        			<th class="text-right">
+							<h3>
+								<t t-esc="payment_count"></t>
+							</h3>
+						</th>
+	        		</tr>
+        		</thead>
+        		<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="payment_state_wise" t-as="state">
+						<t t-if="payment_state_wise[state] > 0">
+							<td>
+								<a t-attf-href="/my/payment/#{state}?#{keep_query()}">
+									<t t-esc="state"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="payment_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+       		</table>
+    	</a>
+	</template>
+
+	<template id="sales_invoice_container">
+		<a t-att-href="'/my/myinvoices'" t-att-title="'Sales Invoice'"
+			class="dashboard-box dashboard-box1 list-group-item list-group-item-action align-items-center justify-content-between sks_d_res" style="border-radius:0px">
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Sales Invoice(SI)</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="si_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="si_state_wise" t-as="state">
+						<t t-if="si_state_wise[state] > 0">
+							<td>
+								<a t-attf-href="/my/myinvoices/#{state}?#{keep_query()}">
+									<t t-esc="state"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="si_state_wise[state]"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+	<template id="my_account_details">
+		<div class="card">
+			<div class="dashboard-header">My Account
+				<a href="/vendor/view_full_profile"><i style="margin-left: 70%; color: black" class="fa fa-pencil-square-o"></i></a>
+			</div>
+			<div class="dashboard-body text-primary">
+				<div class="row justify-content-between">
+					<div id="o_my_sidebar" class="col-12 col-md o_my_sidebar">
+						<div class="o_my_contact" t-if="sales_user">
+							<t t-call="portal.portal_contact" />
+						</div>
+						<div class="o_portal_my_details" style="color:black">
+							<h5>Profile</h5>
+							<h6>
+								<t t-esc="user_id.partner_id.name"></t>
+							</h6>
+							<div class="vp_prof_w100">
+								<div class="vp_prof_w20"><i class="fa fa-user" /></div>
+								<div class="vp_prof_w80"><t t-esc="user_id.partner_id.name"></t></div>
+							</div>
+							<div class="vp_prof_w100">
+								<div class="vp_prof_w20"><i class="fa fa-envelope" /></div>
+								<div class="vp_prof_w80"><t t-esc="user_id.partner_id.email"></t></div>
+							</div>
+							<div class="vp_prof_w100">
+								<t t-if="user_id.partner_id.street or user_id.partner_id.street2 or user_id.partner_id.city_id or user_id.partner_id.state_id or user_id.partner_id.zip or user_id.partner_id.country_id">
+										<div class="vp_prof_w100">
+											<div class="vp_prof_w20"><i class="fa fa-map-marker fa-fw"></i></div>
+											<t t-if="user_id.partner_id.street">
+												<div class="vp_prof_w80"><t t-esc="user_id.partner_id.street"></t></div>
+											</t>
+											<t t-if="user_id.partner_id.street2">
+												<div class="vp_prof_w80"><t t-esc="user_id.partner_id.street2"></t></div>
+											</t>
+											<t t-if="user_id.partner_id.city_id">
+												<t t-set="city" t-value="request.env['res.country.city'].sudo().search([('id', '=', user_id.partner_id.city_id.id)])" />
+												<div class="vp_prof_w80"><t t-esc="city.name"/></div>
+											</t>
+											<t t-if="user_id.partner_id.state_id">
+												<t t-set="state" t-value="request.env['res.country.state'].sudo().search([('id', '=', user_id.partner_id.state_id.id)])" />
+												<div class="vp_prof_w80"><t t-esc="state.name"/></div>
+											</t>
+											<t t-if="user_id.partner_id.zip">
+												<div class="vp_prof_w80"><t t-esc="user_id.partner_id.zip"/></div>
+											</t>
+											<t t-if="user_id.partner_id.country_id">
+												<div class="vp_prof_w80"><t t-esc="user_id.partner_id.country_id.name"/></div>
+											</t>
+										</div>
+								</t>
+								<t t-if="user_id.partner_id.phone">
+									<div class="vp_prof_w100">
+										<div class="vp_prof_w20"><i class="fa fa-phone fa-fw" /></div>
+										<div class="vp_prof_w80"><t t-esc="user_id.partner_id.phone"></t></div>
+									</div>
+								</t>
+								<t t-if="user_id.partner_id.mobile">
+									<div class="vp_prof_w100">
+										<div class="vp_prof_w20"><i class="fa fa-mobile fa-fw" /></div>
+										<div class="vp_prof_w80"><t t-esc="user_id.partner_id.mobile"></t></div>
+									</div>
+								</t>
+							</div>
+							<t t-set="today_date" t-value="datetime.datetime.now().date()"></t>
+							<t t-set="end_date" t-value="user_id.partner_id.end_date"></t>
+							<t t-set="vendorstatus" t-value=""/>
+							<t t-if="end_date">
+								<t t-if="end_date>=today_date"><t t-set="vendorstatus" t-value="'Accredited'"/></t>
+								<t t-elif="end_date &lt; today_date"><t t-set="vendorstatus" t-value="'Expired'"/></t></t>
+							<t t-else=""><t t-set="vendorstatus" t-value="'Processing'"/></t>
+							<span>Vendor Status:   <t t-esc="vendorstatus"></t></span>
+							<br></br><br></br>
+							<h5 style="margin-top: 4%;">Vendor Management</h5>
+							<a class="accreditation" href="/accreditation" title="Accreditation">
+            					Accreditation
+        					</a>
+							<br></br>
+							<a class="performance" href="/performance" title="Performance" >
+            					Performance
+        					</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<template id="portal_accreditation" name="My Accreditation">
+        <t t-call="portal.portal_layout">
+			<!--  Navbar breadcrumb or title  -->
+			<div class="accreditation_portal" style="background:#ffffff;">
+			    <t t-if="breadcrumbs_searchbar">
+			        <t t-call="portal.portal_breadcrumbs"/>
+			    </t>
+			    <t t-if="accreditation">
+			      	<div class="sks_form_outline">
+			      		<div class="col">
+			      			<div class="col-3 sks_acc_form_status" style="margin-left: auto;margin-right: 0;display: -webkit-box;">
+				    			<span class="status_span">Status</span>
+				    			<t t-set="today_date" t-value="datetime.datetime.now().date()"></t>
+								<t t-set="end_date" t-value="vendor.end_date"></t>
+								<t t-set="vendorstatus" t-value=""/>
+								<t t-if="end_date">
+									<t t-if="end_date>=today_date"><t t-set="vendorstatus" t-value="'Accredited'"/></t>
+									<t t-elif="end_date &lt; today_date"><t t-set="vendorstatus" t-value="'Expired'"/></t></t>
+								<t t-else=""><t t-set="vendorstatus" t-value="'Processing'"/></t>
+								<span class="h6 status_span text-center" style="background:#c8e1cc;padding: 2%;"><t t-esc="vendorstatus"/></span>
+				    		</div>
+				    	</div>
+			          	<div t-if="accreditation.state == 'approved'" class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+			          		<div class="col">
+			          			<h4 class="accreditation_head">Accreditation Results</h4>
+			          			<div class="mb-3" style="background:#dbf5e0;padding: 2%;">
+			          					<p class="vp_accr_result">Your application for accreditation is successful. Our Purchasing Team will reach out to you for next steps.</p>
+			          					<p class="vp_accr_result">Thank you!</p>
+			          			</div>
+			          		</div>
+			          	</div>
+			          	<br/>
+			          	<div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+			          		<div style="display: inline-flex;">
+			          			<h4 class="accreditation_head col-lg-8">Accreditation Requirements</h4>
+			          			<h5 class="accreditation_head col-lg-4">Deadline of Submission:<![CDATA[&nbsp;]]><span style="color: red;" t-field="accreditation.submission_deadline" t-options='{"widget": "date"}' /></h5>
+			          		</div>
+			          		<div style="display: inline-flex;">
+			          			<div class="col-lg-4">
+				          			<h5>Requirements</h5>
+				          			<t t-foreach="default_eval_tmpl_ids" t-as="eval_tmpl_ids">
+				          				<t t-if="eval_tmpl_ids.id in accreditation_docs_ids.ids">
+				          					<input class="rqmt_checkbox accred_req_doc attach_fcur" t-att-id="eval_tmpl_ids.id" checked="checked" type="checkbox"  />
+				          				</t>
+				          				<t t-else="">
+				          					<input class="rqmt_checkbox accred_req_doc attach_fcur" t-att-id="eval_tmpl_ids.id" type="checkbox"  />
+				          				</t>
+				          				<t t-esc="eval_tmpl_ids.name"/><br/>
+				          			</t>
+			          			</div>
+			          			<div class="col-lg-4">
+			          				<h5>Instructions</h5>
+			          				<span><t t-raw="accreditation.instructions"/></span>
+			          			</div>
+			          			<div class="col-lg-4">
+			          				<h5></h5>
+			          			</div>
+			          		</div>
+			          		<div class="mb-3 mt-3 text-center">
+			          			<button class="requirement_submit" t-att-acc_id="accreditation.id">Upload</button>
+			          		</div>
+			          		<div class="form-group col-md-12 col-sm-12">
+			              		<t t-if="file_attached">
+			              			<div class="dl_attachments">
+				              			<input type="file" t-att-acc_id="accreditation.id" id="dl_file_input" class="dl_file_input d-none" multiple="multiple"/>
+				              			<ul id="dl_attach_fileList" class="dl_attach_fileList">
+				              				<t t-foreach="file_attachments" t-as="attachment">
+				              					<t t-if="attachment['mimetype'] == 'application/pdf'">
+													<li t-att-id="attachment['id']"  t-att-data="attachment['pfile_name']" action="/show/product_document" t-attf-file_data="data:#{attachment['type']};base64,#{attachment['pfile_content']}"><t t-esc="attachment['pfile_name']" />
+														<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+														<span class="accre_file_view accre_attach" ><i class="fa fa-eye" style="font-size:18px"></i> View</span>
+														<span class="remove-list" t-att-id="attachment['id']"><i class="fa fa-trash span_icon"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]></span>
+													</li>
+												</t>
+												<t t-else="">
+													<a class="al_txt_none" >
+														<li t-att-id="attachment['id']" t-att-data="attachment['pfile_name']" t-attf-file_data="data:#{attachment['type']};base64,#{attachment['pfile_content']}"><t t-esc="attachment['pfile_name']" />
+															<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+															<a class="accre_attach" t-att-href="'/attachment/download?attachment_id=%i' % attachment['id']"><i class="fa fa-download" style="font-size:20px"></i> <span style="visibility:hidden;">View</span></a>
+															<span class="remove-list" t-att-id="attachment['id']"><i class="fa fa-trash span_icon"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]></span>
+														</li>
+													</a>
+												</t>
+				              				</t>
+				              			</ul>
+				              			<p class="pro_attach_p d-none">Click the upload button to add a file</p>
+				              		</div>
+			              		</t>
+			              		<t t-if="not file_attached">
+				              		<div class="dl_attachments">
+				              			<input type="file" id="dl_file_input" t-att-acc_id="accreditation.id" class="dl_file_input d-none" multiple="multiple"/>
+				              			<ul id="dl_attach_fileList" class="dl_attach_fileList"></ul>
+				              			<p class="pro_attach_p">Click the upload icon to add documents</p>
+				              		</div>
+			              		</t>
+			              	</div>
+			          		<div class="col-lg-12">
+				          		<div class="o_portal_messages_container mt32">
+						        	<h4>Send Message</h4>
+							        <t t-call="portal.message_thread">
+							        	<t t-set="object" t-value="accreditation"/>
+							            <t t-set="pid" t-value="pid"/>
+							            <t t-set="hash" t-value="hash"/>
+							         </t>
+		        				</div>
+	        				</div>
+			          	</div>
+			        </div>
+		        </t>
+		        <t t-else="">
+		        	<div class="sks_form_outline">
+				        <div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+				        	<h4>Accreditation</h4>
+				        </div>
+				    </div>
+		        </t>
+	        </div>
+        </t>
+    </template>
+
+    <template id="portal_performance" name="My Performance">
+        <t t-call="portal.portal_layout">
+        	<div class="" style="background:#ffffff;">
+		    	<!--  Navbar breadcrumb or title  -->
+		        <t t-if="breadcrumbs_searchbar">
+		        	<t t-call="portal.portal_breadcrumbs"/>
+		        </t>
+		        <div class="sks_form_outline">
+			    	<div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+			        	<div class="col">
+			            	<h4 class="performance_head">Performance Assessment Results</h4>
+			            	<div class="row col-12 mb-2">
+				            	<div class="font-weight-bold col-6">Assessment Period</div>
+				            	<div class="font-weight-bold col-6">Overall Assessment</div>
+			            	</div>
+			            	<div class="row col-12">
+			            		<t t-foreach="partner_eval" t-as="val">
+				            		<div class="col-6 mb-2">
+				            			<!-- <t t-esc="val.evaluation_date"/> -->
+				            			<span t-field="val.evaluation_date" t-options="{'widget': 'date'}"/>
+				            		</div>
+				            		<div class="col-6 mb-2"><t t-esc="val.overall_score"/></div>
+				            	</t>
+			            	</div>
+			            </div>
+			        </div>
+		        </div>
+		    </div>
+        </t>
+    </template>
+
+    <template id="portal_my_dashboard" name="My Dashboard">
+        <t t-call="portal.portal_layout">
+            <div class="row mb16 dashboard">
+	   			<div class="col-md-8">
+	   				<div class="card">
+                   		<div class="dashboard-header">Dashboard</div>
+                   		<div class="dashboard-body text-primary">
+                      		<div class="row">
+                      			<t t-if="is_customer_vendor">
+                      				<t t-if="int(pro_sale_count) > 0" t-call="skit_vendor_portal.property_sale_container"></t>
+                      			</t>
+	                      		<t t-if="int(rfq_count) > 0" t-call="skit_vendor_portal.rfq_container"></t>
+	                      		<t t-if="int(rfp_count) > 0" t-call="skit_vendor_portal.rfp_container"></t>
+	                      		<t t-if="int(rfi_count) > 0" t-call="skit_vendor_portal.rfi_container"></t>
+	                      		<t t-if="int(bid_count) > 0" t-call="skit_vendor_portal.bid_container"></t>
+                      			<t t-if="int(purchase_count) > 0" t-call="skit_vendor_portal.po_container"></t>
+                      			<t t-call="skit_vendor_portal.sales_invoice_container"></t>
+                      			<t t-if="int(payment_count) > 0" t-call="skit_vendor_portal.payment_container"></t>
+                      		</div>
+                   		</div>
+               		</div>
+	   			</div>
+			   	<div class="col-md-4">
+		   			<t t-call="skit_vendor_portal.my_account_details"></t>
+			   	</div>
+	   		</div>
+   		</t>
+	</template>
+
+	<template id="property_sale_container">
+		<a t-att-href="'/my/property_sales'" t-att-title="'Property Sale'"
+			class="dashboard-box list-group-item list-group-item-action align-items-center justify-content-between" style="border-radius:0px">
+			<table style="width:100%">
+				<thead>
+					<tr>
+						<th>Property Sale</th>
+						<th class="text-right">
+							<h3>
+								<t t-esc="pro_sale_count"></t>
+							</h3>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr t-foreach="ps_state_wise" t-as="state">
+						<t t-set="ps_state" t-value="ps_state_wise[state]"/>
+						<t t-if="ps_state['ps_count'] > 0">
+							 <td>
+								<a t-attf-href="/my/property_sales/#{ps_state['stage_id']}">
+									<t t-esc="ps_state['state']"></t>
+								</a>
+							</td>
+							<td class="text-right"><t t-esc="ps_state['ps_count']"></t></td>
+						</t>
+					</tr>
+				</tbody>
+			</table>
+		</a>
+	</template>
+
+    <template id="portal_my_rfq_orders" name="Portal: My RFQ Orders">
+		<t t-call="portal.portal_layout">
+			<t t-call="portal.portal_searchbar">
+				<t t-set="title">RFQ Orders</t>
+			</t>
+			<div class="sks_form_outline">
+				<div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+					<t t-if="orders" t-call="portal.portal_table">
+						<thead>
+							<tr class="active">
+								<th>RFQ No.</th>
+								<th>Date of Request</th>
+								<th>Opening Date</th>
+								<th>Closing Date</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<t t-foreach="orders" t-as="order">
+								<t t-if="order.state == 'waiting_for_acceptance'">
+									<t t-if="order.rfq_id.close_date">
+										<t t-if="(order.rfq_id.close_date >= today_date)" t-call="skit_vendor_portal.rfq_order_data_template" />
+									</t>
+									<t t-else="">
+										<t t-call="skit_vendor_portal.rfq_order_data_template" />
+									</t>
+								</t>
+								<t t-else="" >
+									<t t-call="skit_vendor_portal.rfq_order_data_template" />
+								</t>
+							</t>
+						</tbody>
+					</t>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="rfq_order_data_template">
+		<tr>
+			<td>
+				<a t-attf-href="/my/rfq/#{order.id}?#{keep_query()}">
+					<t t-esc="order.rfq_id.name" />
+				</a>
+			</td>
+			<td>
+				<span t-field="order.rfq_id.create_date" t-options="{'widget': 'date'}"/>
+			</td>
+			<td>
+				<span t-field="order.rfq_id.open_date" />
+			</td>
+			<td>
+				<span t-field="order.rfq_id.close_date" />
+			</td>
+			<td>
+				<span t-field="order.state" />
+			</td>
+		</tr>
+	</template>
+
+	<template id="portal_my_rfq_order" name="Portal: My RFQ Order">
+		<t t-call="portal.portal_layout">
+			<div class="container">
+				<div class="sks_form_outline po_form_details">
+					<div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+						<form id="view_rfq_mail_line_form" action="/save/rfq/" method="post" class="s_website_form_vendor_profile rfq_order_portal view_rfq_mail" enctype="multipart/form-data" data-model_name="admin.vendor.rfq">
+						   	<div class="card-header" style="background: #fff;">
+								<div class="row">
+									<div class="col-lg-9">
+										<h4>
+											<span t-esc="order.rfq_id.name" />
+										</h4>
+									</div>
+									<div class="col-lg-3">
+											<label class="po_status_label">Status </label>
+											<t t-if="order.state == 'waiting_for_acceptance'">
+												<span class="po_status_head po_pending" t-field="order.state"/>
+											</t>
+											<t t-elif="order.state == 'accepted'">
+												<span class="po_status_head po_pending" t-field="order.state"/>
+											</t>
+											<t t-elif="order.state == 'declined'">
+												<span class="po_status_head po_declined" t-field="order.state"/>
+											</t>
+											<t t-elif="order.state == 'cancelled'">
+												<span class="po_status_head" t-field="order.state" style="background: lightgray;float:right;"/>
+											</t>
+											<t t-else="">
+												<span class="po_status_head po_accepted" t-field="order.state"/>
+											</t>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="scrollit">
+									<div id="optional_col_list" class="dropdown-menu o_optional_columns_dropdown dropdown-menu-right" style="display:none; top:30%" role="menu">
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_currency" class="custom-control-input" name="currency"></input>
+												<label for="checkbox_currency" class="custom-control-label">Currency</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_unit_price" class="custom-control-input" name="unit_price"></input>
+												<label for="checkbox_unit_price" class="custom-control-label">Unit Price</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_gross_price" class="custom-control-input" name="gross_price"></input>
+												<label for="checkbox_gross_price" class="custom-control-label">Gross Price</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_delivery_lead_time" class="custom-control-input" name="delivery_lead_time"></input>
+												<label for="checkbox_delivery_lead_time" class="custom-control-label">Delivery Lead Time</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_delivery_cost" class="custom-control-input" name="delivery_cost"></input>
+												<label for="checkbox_delivery_cost" class="custom-control-label">Delivery Cost</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_warrenty" class="custom-control-input" name="warrenty"></input>
+												<label for="checkbox_warrenty" class="custom-control-label">Warranty</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_min_order_quantity" class="custom-control-input" name="min_order_quantity"></input>
+												<label for="checkbox_min_order_quantity" class="custom-control-label">Min. Order Quantity</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_payment_terms" class="custom-control-input" name="payment_terms"></input>
+												<label for="checkbox_payment_terms" class="custom-control-label">Payment Terms</label>
+											</div>
+										</div>
+										<div class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" id="checkbox_validity_of_quote" class="custom-control-input" name="validity_of_quote"></input>
+												<label for="checkbox_validity_of_quote" class="custom-control-label">Validity of Quote</label>
+											</div>
+										</div>
+									</div>
+									<table class="table table_rfq" id="myRrqTable">
+								        <thead class="table-borderless">
+								      		<tr>
+							               		<th class="td_min_width_25">
+							                        Product
+							                    </th>
+							                    <th class="td_min_width_25">
+							                        Description
+							                    </th>
+							                    <th class="td_min_width_10">
+							                        UoM
+							                    </th>
+							                    <th class="td_min_width_10">
+							                        Qty
+							                    </th>
+							            		<th class="td_min_width_15">
+							                        Delivery Date
+							            		</th>
+							                   	<th class="td_min_width_25">
+							                        Delivery Location
+							                    </th>
+							                    <th class="td_min_width_25 checkbox_currency_th d-none" >
+							                        Currency
+							                    </th>
+								              	<th class="td_min_width_10 checkbox_unit_price_th d-none" t-att-name="'price'">
+								             		Unit Price
+								              	</th>
+							                   	<th class="td_min_width_10 checkbox_gross_total_th d-none" t-att-name="'gross_total'">
+							                        Gross Price
+							                    </th>
+							                    <th class="td_min_width_25 checkbox_delivery_lead_time_th d-none" t-att-name="'delivery_lead_time'">
+							                        Delivery Lead Time
+							                    </th>
+							                    <th class="td_min_width_15 checkbox_delivery_cost_th d-none" t-att-name="'delivery_cost'">
+							                        Delivery Cost
+							                    </th>
+							                    <th class="td_min_width_30 checkbox_warrenty_th d-none" t-att-name="'warranty'">
+							                        Warranty
+							                    </th>
+							                    <th class="td_min_width_15 checkbox_min_order_quantity_th d-none" t-att-name="'minimum_order_qty'">
+							                        Min. Order Qty.
+							                    </th>
+							                    <th class="td_min_width_30 checkbox_payment_terms_th d-none" t-att-name="'terms'">
+							                        Payment Terms
+							                    </th>
+							                    <th class="td_min_width_30 checkbox_validity_of_quote_th d-none" >
+							                        Validity of Quote
+							                    </th>
+							                    <th class="custom_td_th o_optional_columns_dropdown_toggle"><i class="fa fa-ellipsis-v"/></th>
+							                    <th class="display_none" t-att-name="'id'">id</th>
+							                    <th class="display_none" t-att-name="'validity_from'">from</th>
+							                    <th class="display_none" t-att-name="'validity_to'">to</th>
+								            </tr>
+								        </thead>
+								        <tbody class="table-bordered">
+								        	<tr t-att-currency_symbol="line.rfq_line_id.rfq_id.company_id.currency_id.symbol" t-att-id="line.id" t-foreach="order.rfq_line_ids" t-as="line">
+								               	<t t-set='validity_from'><t t-options='{"widget": "date"}' t-esc="line.validity_from"/></t>
+								              	<t t-set='validity_to'><t t-options='{"widget": "date"}' t-esc="line.validity_to"/></t>
+								                <t t-if="not line.validity_from">
+								                	<t t-set="validity_from" t-value="''"></t>
+								                </t>
+								                <t t-if="not line.validity_to">
+								                	<t t-set="validity_to" t-value="''"></t>
+								                </t>
+								             	<t t-set="validity_of_quote" t-value="str(validity_from)+' - '+str(validity_to)"/>
+								               	<td class="td_min_width_25"><t t-esc="line.product_id.name"></t></td>
+								                <td class="td_min_width_25"><t t-esc="line.product_description"></t></td>
+								                <td class="td_min_width_10"><t t-esc="line.product_uom.name"></t></td>
+								                <td class="td_min_width_10"><t t-esc="line.prod_qty" t-options='{"widget": "float", "precision": 2}'></t></td>
+								                <td class="td_min_width_15"><t t-esc="line.rfq_line_id.rfq_id.est_del_date" t-options="{'widget': 'date'}"></t></td>
+								               	<td class="td_min_width_25"><t t-esc="line.rfq_line_id.stock_location_id.name"></t></td>
+								                <td class="td_min_width_25 checkbox_currency_td d-none"><t t-esc="line.rfq_line_id.rfq_id.company_id.currency_id.name"></t></td>
+								                <td class="td_min_width_10 checkbox_unit_price_td d-none price" ><span class="unit_price"><t t-esc="line.price" t-options='{"widget": "monetary", "display_currency": line.rfq_line_id.rfq_id.company_id.currency_id}'></t></span></td>
+								                <td class="td_min_width_10 checkbox_gross_total_td d-none price"><span class="gross_total"><t t-esc="line.gross_total" t-options='{"widget": "monetary", "display_currency": line.rfq_line_id.rfq_id.company_id.currency_id}'></t></span></td>
+								                <td class="td_min_width_25 checkbox_delivery_lead_time_td d-none"><span class="delivery_lead_time"><t t-esc="line.delivery_lead_time"></t></span></td>
+								                <td class="td_min_width_15 checkbox_delivery_cost_td d-none price"><span class="delivery_cost"><t t-esc="line.delivery_cost" t-options='{"widget": "monetary", "display_currency": line.rfq_line_id.rfq_id.company_id.currency_id}'></t></span></td>
+								                <td class="td_min_width_30 checkbox_warrenty_td d-none"><span class="warranty"><t t-esc="line.warranty"></t></span></td>
+								                <td class="td_min_width_15 checkbox_min_order_quantity_td d-none"><span class="minimum_order_qty"><t t-esc="line.minimum_order_qty" t-options='{"widget": "float", "precision": 2}'></t></span></td>
+								                <td class="td_min_width_30 checkbox_payment_terms_td d-none"><span class="terms"><t t-esc="line.terms"></t></span></td>
+								                <td class="td_min_width_30 checkbox_validity_of_quote_td d-none"><span class="validity_of_quote"><t t-esc="validity_of_quote"></t></span></td>
+								                <td class="custom_td_th">
+						                      		<t t-if="(order.state == 'accepted')">
+						                   				<span t-att-id="line.id" class="rfq_line_edit_view"><i class="fa fa-pencil-square-o span_icon"></i></span>
+						                       		</t>
+								                </td>
+								                <td class="display_none"><span class="id"><t t-esc="line.id"></t></span></td>
+								                <td class="display_none"><span class="validity_from"><t t-esc="line.validity_from" t-options="{'widget': 'date'}"></t></span></td>
+								                <td class="display_none"><span class="validity_to"><t t-esc="line.validity_to" t-options="{'widget': 'date'}"></t></span></td>
+								        	</tr>
+						                </tbody>
+			                		</table>
+		                		</div>
+		                		<br></br>
+		                		<lable>Other Information:</lable>
+		                		<t t-if="(order.state == 'accepted')">
+		                			<textarea rows="3" name="other_info" class="form-control"><t t-esc="order.other_information"></t></textarea>
+	                       		</t>
+	                       		<t t-else="">
+	                       			<textarea rows="3" disabled="true" name="other_info" class="form-control"> <t t-esc="order.other_information"></t></textarea>
+	                       		</t>
+	                       		<br></br>
+		                		<lable>Attachments:</lable>
+		                		<div class="vp_rfq_att100">
+		                			<div class="vp_rfq_att10"><span class="span_view vp_fw400"><i class="fa fa-paperclip vp_rfq_paperclip" /></span></div>
+		                			<div class="vp_rfq_att88">
+		                				<div class="form-group col-md-12 col-sm-12">
+								        	<t t-if="len(attachments) > 0">
+								            	<div class="vp_rfq_attachments vp_rfq_mt2">
+									            	<input type="file" t-att-rfq_id="order.id" id="vp_rfq_file_input" class="vp_rfq_file_input d-none" multiple="multiple"/>
+									              	<ul id="vp_rfq_attach_fileList" class="vp_rfq_attach_fileList">
+									              		<t t-foreach="attachments" t-as="attachment">
+									              			<li t-att-id="attachment.id"  t-att-data="attachment.name" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}">
+									                			<span><t t-esc="attachment.name"></t></span>
+									                			<t t-if="attachment.mimetype == 'application/pdf'">
+																	<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+																	<span class="accre_file_view accre_attach show_vp_rfq_attach_pdf" action="/show_product/attachment" t-att-att_id="attachment.id"><i class="fa fa-eye" style="font-size:18px"></i> View</span>
+																	<span class="remove-list" t-att-id="attachment.id"><i class="fa fa-trash span_icon"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]></span>
+																</t>
+																<t t-else="">
+																	<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+																	<a class="accre_attach" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id"><i class="fa fa-download" style="font-size:20px"></i> <span style="visibility:hidden;">View</span></a>
+																	<span class="remove-list" t-att-id="attachment.id"><i class="fa fa-trash span_icon"></i><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]></span>
+																</t>
+																</li>
+									              			</t>
+									              		</ul>
+									              		<p class="pro_attach_p d-none">Click the attach icon to add a documents</p>
+									         	</div>
+								             </t>
+								             <t t-else="">
+									              <div class="vp_rfq_attachments">
+									              		<input type="file" id="vp_rfq_file_input" t-att-rfq_id="order.id" class="vp_rfq_file_input d-none" multiple="multiple"/>
+									              		<ul id="vp_rfq_attach_fileList" class="vp_rfq_attach_fileList"></ul>
+									              		<p class="pro_attach_p">Click the attach icon to add documents</p>
+									              </div>
+								              </t>
+								    	</div>
+		                			</div>
+		                		</div>
+								<div class="row justify-content-center">
+				                	<t t-if="(order.state == 'waiting_for_acceptance')">
+				                		<button id="decline" t-att-rfq_id="order.id" type="button" class="decline_rfq_mail pull-left a-submit btn btn-primary btn-dashboard btn-decline border-radius-unset border-none">Decline</button>
+										<button t-att-id="order.id" type="button" class="accept_rfq_mail pull-left a-submit btn btn-primary btn-dashboard btn-submit border-radius-unset border-none">Accept</button>
+									</t>
+									<t t-if="(order.state == 'accepted') ">
+										<button id="save_rfq_draft" type="button" class="save_draft pull-left a-submit btn btn-primary btn-dashboard btn-draft border-radius-unset border-none">Save as Draft</button>
+										<button id="submit" type="button" class="pull-left a-submit btn btn-primary btn-dashboard btn-submit submit_quote border-radius-unset border-none">Submit Quote</button>
+									</t>
+								</div>
+							</div>
+						</form>
+					</div>
+				 </div>
+			 </div>
+			<div class="container rfq_decline_panel">
+			</div>
+		    <div class="o_portal_messages_container mt32">
+	          <h4>Send Message</h4>
+	          <t t-call="portal.message_thread">
+	              <t t-set="object" t-value="order"/>
+	              <t t-set="pid" t-value="pid"/>
+	              <t t-set="hash" t-value="hash"/>
+	          </t>
+        	</div>
+        	<div id="vp_page_loading">
+				<div id="vp_loading-image">
+					<img src="/web/static/src/img/spin.png" style="animation: fa-spin 1s infinite steps(12);"></img>
+					<br></br><br></br>
+					<span id="loading-text">Please wait..</span>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="rfq_decline_popup" name="RFQ Decline Popup">
+        <div role="dialog" id="rfq_decline_status" class="modal rfq_decline_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Decline RFQ</h4>
+                            <button type="button" id="rfq_decline_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+	                            <div class="form-group col-md-4 col-sm-4">
+						            <span class="dspan_label">RFQ Status</span>
+						        </div>
+						        <div class="form-group col-md-8 col-sm-8">
+						            <span id="po_status">Declined</span>
+						        </div>
+						        <div class="form-group col-md-4 col-sm-4">
+						            <span class="dspan_label">Decline Reason/s Type</span>
+						        </div>
+						        <div class="form-group col-md-8 col-sm-8">
+						            <select id="declined_reason_id" name="declined_reason_id" t-attf-class="form-control">
+										<option value=""></option>
+										<t t-foreach="decline_reason" t-as="dr">
+											<option t-att-value="dr.id" placeholder="Decline Reason">
+												<t t-esc="dr.name" />
+											</option>
+										</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12">
+			                    	<span class="dspan_label">Decline Remarks</span>
+						            <textarea rows="3" id="declined_note" class="form-control mt-2 declined_note" t-attf-name="declined_note"></textarea>
+						        </div>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="s_btn pt8 col-lg-6 text-right" style="width: 50%;">
+                            	<button type="button" id="decline_confirm" class="btn btn-success js_goto_event">Decline</button>
+                        	</div>
+                        	<div class="s_btn pt8 col-lg-6 text-left" style="width: 50%;">
+                            	<button type="button" id="decline_cancel" class="btn btn-decline js_goto_event">Cancel</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+
+	<template id="view_rfq_line_popup" name="RFQ Line Ppopup">
+   		<!-- modal relative to the actions edit RFQ line details -->
+        <div role="dialog" class="modal" id="modal_rfq_line" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog rfi-modal-dialog">
+                <form method="POST" class="modal-content">
+                    <header class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                    </header>
+                    <main class="modal-body" style="width: inherit;">
+						<t t-call="skit_vendor_portal.rfq_line_details_readonly"></t>
+						<t t-call="skit_vendor_portal.edit_rfq_line_details"></t>
+                    </main>
+                </form>
+            </div>
+        </div>
+	</template>
+
+	<template id="edit_rfq_line_details">
+		<div class="row col-lg-12" style="margin: 0; padding: 0;">
+        	<div class="col-lg-3">
+           		<div t-attf-class="form-group form-field o_website_form_required">
+            		<label for="unit_price">Unit Price</label><span class="required_span">*</span>
+                   	<input type="float" id="unit_price" name="price" required="1" t-attf-class="form-control o_website_form_input decimal_field border_radius_unset unit_price_cls"  t-att-value="price if price else line.price"/>
+              	</div>
+              	<div t-attf-class="form-group form-field display_none">
+            		<label for="rfq_mail_id">RFQ Mail id</label><span class="required_span">*</span>
+                   	<input type="float" id="rfq_mail_id" name="rfq_mail_id" t-attf-class="form-control o_website_form_input border_radius_unset"  t-att-value="line.id"/>
+              	</div>
+			</div>
+     		<div class="col-lg-3">
+	     		<div t-attf-class="form-group form-field">
+           			<label for="gross_total">Gross Price</label>
+                  	<input type="float" id="gross_total" readonly="true" name="gross_total" t-attf-class="form-control o_website_form_input border_radius_unset"  t-att-value="gross_total if gross_total else line.gross_total"/>
+           		</div>
+     		</div>
+     		<div class="col-lg-3">
+            	<div t-attf-class="form-group form-field o_website_form_required">
+                    <label for="delivery_lead_time">Delivery Lead Time</label> <span class="required_span">*</span>
+                    <input type="Integer" id="delivery_lead_time" name="delivery_lead_time" required="1" t-attf-class="form-control o_website_form_input number_field border_radius_unset"  t-att-value="delivery_lead_time if delivery_lead_time else line.delivery_lead_time"/>
+               	</div>
+     		</div>
+     		<div class="col-lg-3">
+	     		<div t-attf-class="form-group form-field">
+              		<label for="delivery_cost">Delivery Cost</label>
+                     <input type="float" id="delivery_cost" name="delivery_cost" t-attf-class="form-control o_website_form_input decimal_field border_radius_unset delivery_cost_cls" t-att-value="delivery_cost if delivery_cost else line.delivery_cost"/>
+              	</div>
+     		</div>
+		</div>
+		<div class="row  col-lg-12"  style="margin: 0; padding: 0;">
+     		<div class="col-lg-6">
+	     		<div t-attf-class="form-group form-field">
+             		<label for="warranty">Warranty</label>
+                    <input type="text" id="warranty" name="warranty" t-attf-class="form-control o_website_form_input border_radius_unset" t-att-value="warranty if warranty else line.warranty"/>
+             	</div>
+     		</div>
+     		<div class="col-lg-6">
+             	<div t-attf-class="form-group form-field">
+                    <label for="terms">Payment Terms</label>
+                    <input type="text" id="terms" name="terms" t-attf-class="form-control o_website_form_input border_radius_unset" t-att-value="terms if terms else line.terms"/>
+               	</div>
+     		</div>
+		</div>
+     	<div class="row  col-lg-12"  style="margin: 0; padding: 0;">
+
+     		<div class="col-lg-3 profile_col">
+	        	<div t-attf-class="form-group form-field">
+	                <label for="validity_of_quote_from">Validity of Quote From</label>
+	           		<div class="o_website_form_date input-group date validity_from_cls" data-target-input="nearest">
+                    	<t t-set='validity_from_formatted'><t t-options='{"widget": "date"}' t-esc="validity_from if validity_from else line.validity_from"/></t>
+				     	<input type="text" class="form-control datetimepicker-input o_website_form_input form-control mt-2 validity_quote_from_cls" data-target=".validity_from_cls" name="validity_from" t-att-value="validity_from_formatted"/>
+				    	<div class="input-group-append" data-target=".validity_from_cls" data-toggle="datetimepicker">
+				     		<div class="input-group-text form-control mt-2">
+				        		<i class="fa fa-calendar"></i>
+				        	</div>
+				   		</div>
+					</div>
+	           	</div>
+     		</div>
+     		<div class="col-lg-3 profile_col">
+	     		<div t-attf-class="form-group form-field">
+             		<label for="validity_of_quote_to">Validity of Quote To</label>
+ 					<div class="o_website_form_date input-group date validity_to_cls" data-target-input="nearest">
+                  		<t t-set='validity_to_formatted'><t t-options='{"widget": "date"}' t-esc="validity_to if validity_to else line.validity_to"/></t>
+		            	<input type="text" class="form-control datetimepicker-input o_website_form_input form-control mt-2 validity_quote_to_cls" data-target=".validity_to_cls" name="validity_to" t-att-value="validity_to_formatted"/>
+		            	<div class="input-group-append" data-target=".validity_to_cls" data-toggle="datetimepicker">
+		              		<div class="input-group-text form-control mt-2">
+		                		<i class="fa fa-calendar"></i>
+		              		</div>
+		            	</div>
+		         	</div>
+ 				</div>
+     		</div>
+     		<div class="col-lg-3">
+	        	<div t-attf-class="form-group form-field">
+	                <label for="minimum_order_qty">Min. Order Quantity</label>
+	                 <input type="float" id="minimum_order_qty" name="minimum_order_qty" t-attf-class="form-control o_website_form_input decimal_field border_radius_unset mt-2" t-att-value="minimum_order_qty if minimum_order_qty else line.minimum_order_qty"/>
+	           	</div>
+     		</div>
+     		<div class="col-lg-3">
+     		</div>
+		</div>
+
+	   	<div class="row justify-content-center" style="margin-bottom: 15%;margin-top: 5%;">
+			<button t-att-id="line.id" type="button" class="btn btn-primary btn-dashboard bg-blue save_rfq_line border-radius-unset border-none">Save</button>
+		</div>
+	</template>
+
+	<template id="rfq_line_details_readonly">
+		<div class="row col-lg-12" style="margin: 0; padding: 0;">
+      		<div class="col-lg-3">
+           		<div>
+                    <label for="email">Product Name</label>
+               	</div>
+			</div>
+     		<div class="col-lg-9">
+            	<div>
+                    <label class="font-weight-unset"><t t-esc="line.product_id.name"></t></label>
+               	</div>
+     		</div>
+		</div>
+		<div class="row col-lg-12"  style="margin: 0; padding: 0;">
+      		<div class="col-lg-3">
+            	<div>
+                    <label for="email">Description</label>
+               	</div>
+     		</div>
+     		<div class="col-lg-9">
+             	<div>
+                    <label class="font-weight-unset"><t t-esc="line.product_description"></t></label>
+               	</div>
+     		</div>
+     	</div>
+		<div class="row col-lg-12"  style="margin: 0; padding: 0;">
+       		<div class="col-lg-3">
+             	<div>
+                    <label for="email">Unit of Measure</label>
+               	</div>
+     		</div>
+     		<div class="col-lg-9">
+            	<div>
+                    <label class="font-weight-unset"><t t-esc="line.product_uom.name"></t></label>
+               	</div>
+     		</div>
+     	</div>
+		<div class="row col-lg-12"  style="margin: 0; padding: 0;">
+         	<div class="col-lg-3">
+            	<div>
+                    <label for="qty">Quantity</label>
+               	</div>
+     		</div>
+     		<div class="col-lg-9">
+            	<div>
+                    <label class="font-weight-unset prod_qty"><t t-esc="line.prod_qty"></t></label>
+               	</div>
+     		</div>
+     	</div>
+    	<div class="row col-lg-12"  style="margin: 0; padding: 0;">
+        	<div class="col-lg-3">
+            	<div>
+                    <label for="email">Delivery Date</label>
+               	</div>
+    		</div>
+    		<div class="col-lg-9">
+            	<div>
+                     <label class="font-weight-unset"><t t-esc="line.rfq_line_id.rfq_id.est_del_date" t-options="{'widget': 'date'}"></t></label>
+                </div>
+    		</div>
+    	</div>
+		<div class="row col-lg-12"  style="margin: 0; padding: 0;">
+        	<div class="col-lg-3" >
+	        	<div>
+	                <label for="email">Delivery Location</label>
+	           	</div>
+     		</div>
+     		<div class="col-lg-9">
+	        	<div>
+	                <label class="font-weight-unset"><t t-esc="line.rfq_line_id.stock_location_id.name"></t></label>
+	           	</div>
+     		</div>
+     	</div>
+	</template>
+
+	<template id="portal_my_rfi_orders" name="Portal: My RFI Orders">
+		<t t-call="portal.portal_layout">
+			<t t-call="portal.portal_searchbar">
+				<t t-set="title">RFI Orders</t>
+			</t>
+			<div class="sks_form_outline">
+			<div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+			<t t-if="orders" t-call="portal.portal_table">
+				<thead>
+					<tr class="active">
+						<th>RFI No.</th>
+						<th>Date of Request</th>
+						<th>Opening Date</th>
+						<th>Closing Date</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<t t-foreach="orders" t-as="order">
+						<t t-if="order.state == 'waiting_for_acceptance'">
+							<t t-if="order.rfi_id.close_date">
+								<t t-if="(order.rfi_id.close_date >= today_date)" t-call="skit_vendor_portal.rfi_order_data_templates" />
+							</t>
+							<t t-else="">
+								<t t-call="skit_vendor_portal.rfi_order_data_templates" />
+							</t>
+						</t>
+						<t t-else="" >
+							<t t-call="skit_vendor_portal.rfi_order_data_templates" />
+						</t>
+					</t>
+				</tbody>
+			</t>
+			</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="rfi_order_data_templates" >
+		<tr>
+			<td>
+				<a t-attf-href="/my/rfi/#{order.id}?#{keep_query()}">
+					<t t-esc="order.rfi_id.name" />
+				</a>
+			</td>
+			<td>
+				<span t-field="order.rfi_id.create_date" t-options='{"widget": "date"}'/>
+			</td>
+			<td><span t-field="order.rfi_id.open_date" t-options='{"widget": "date"}'/></td>
+			<td><span t-field="order.rfi_id.close_date" t-options='{"widget": "date"}'/></td>
+			<td>
+				<span t-field="order.state" />
+			</td>
+		</tr>
+	</template>
+	<!-- RFI Template Design -->
+	<template id="portal_my_rfi_order" name="Portal: My RFI Order">
+		<t t-call="portal.portal_layout">
+			<div id="optional_placeholder"></div>
+			<div class="container" style="padding: 2%; background-color: #fff;">
+				<div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+					<div class="card-header">
+						<div class="row">
+							<div class="col-lg-12 rfi_header_12" style="padding: 0;">
+
+								<div class="col-lg-12 rfi_header_12" style="display: inline-flex; padding: 0;">
+									<div class="col-lg-4">
+										<h4 class="sks_my_rfi_form_header"><span t-esc="order.rfi_id.name" /></h4>
+									</div>
+									<div class="col-lg-8 rfi_header_8"  style="display: inline-flex;">
+										<div class="col-lg-4"  style="display: inline-flex;">
+											<div class="col-lg-6" style="padding: 0;">
+												<span><strong>Opening Date:</strong></span>
+											</div>
+											<div class="col-lg-6 sks_my_rfi_form_float" style="padding: 0;">
+												<span t-field="order.rfi_id.open_date" t-options='{"widget": "date"}' />
+											</div>
+										</div>
+										<div class="col-lg-4"  style="display: inline-flex;">
+											<div class="col-lg-6" style="padding: 0;">
+												<span><strong>Closing Date:</strong></span>
+											</div>
+											<div class="col-lg-6 sks_my_rfi_form_float" style="padding: 0;">
+												<span t-field="order.rfi_id.close_date" t-options='{"widget": "date"}' />
+											</div>
+										</div>
+										<div class="col-lg-4 sks_my_rfi_form_status"  style="display: inline-flex;">
+											<div class="col-lg-6" style="padding: 0;">
+												<span><strong>Status</strong></span>
+											</div>
+											<div class="col-lg-6" style="padding: 0;">
+												<t t-if="order_line.state == 'waiting_for_acceptance'">
+			    									<span class="rfi_status_head rfi_accepted" style="display: inline-block;">Waiting for Acceptance</span>
+								    			</t>
+								    			<t t-elif="order_line.state == 'submitted'">
+								    				<span class="rfi_status_head rfi_accepted">Submitted</span>
+								    			</t>
+								    			<t t-elif="order_line.state == 'accepted'">
+								    				<span class="rfi_status_head rfi_accepted">Accepted</span>
+								    			</t>
+								    			<t t-elif="order_line.state == 'done'">
+								    				<span class="rfi_status_head rfi_accepted">Done</span>
+								    			</t>
+								    			<t t-elif="order_line.state == 'declined'">
+								    				<span class="rfi_status_head rfi_declined">Declined</span>
+								    			</t>
+								    			<t t-else="">
+								    				<span class="rfi_status_head rfi_cancelled">Canceled</span>
+								    			</t>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="oe_structure">
+							<div>
+								<span class="exla_icon"><i class="fa fa-exclamation-circle rfi_mr" />Deadline to confirm for this RFI is on <span class="rfi_fw" t-esc="website.date_by_adding_business_days(order.rfi_id.open_date, 3)"  /> </span>
+							</div>
+							<br></br>
+							<div><strong>Subject<![CDATA[&nbsp;]]></strong><span><t t-esc="order.rfi_id.subject"/></span></div>
+							<br></br>
+							<div><span t-raw="order.rfi_id.body_html"></span></div>
+							<section  t-if="order_line.state == 'waiting_for_acceptance'" class="s_call_to_action">
+					        	<div class="container rfi_decline_panel">
+					         		<div class="row">
+					            		<div class="s_btn pt8 col-lg-6 text-right" style="width: 50%;">
+							            	<button type="button" t-att-rfiid="order.rfi_id.id" id="rfi_decline" class="btn btn-decline rfi_decline">Decline</button>
+							            </div>
+							            <div class="s_btn pt8 col-lg-6 text-left" style="width: 50%;">
+							            	<button type="button" t-att-rfiid="order.rfi_id.id" id="rfi_accept" class="btn btn-secondary btn-success rfi_accept">Accept</button>
+							            </div>
+					          		</div>
+					        	</div>
+					      	</section>
+						</div>
+						</div>
+						<hr />
+					</div>
+			</div>
+			<div class="o_portal_messages_container mt32">
+	          <h4>Send Message</h4>
+	          <t t-call="portal.message_thread">
+	              <t t-set="object" t-value="order_line"/>
+	              <t t-set="pid" t-value="pid"/>
+	              <t t-set="hash" t-value="hash"/>
+	          </t>
+        </div>
+			<div class="oe_structure mb32" />
+		</t>
+	</template>
+
+	<template id="portal_my_rfp_orders" name="Portal: My RFP Orders">
+		<t t-call="portal.portal_layout">
+			<t t-call="portal.portal_searchbar">
+				<t t-set="title">RFP Orders</t>
+			</t>
+			<div class="sks_form_outline">
+			<div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+			<t t-if="orders" t-call="portal.portal_table">
+				<thead>
+					<tr class="active">
+						<th>RFP No.</th>
+						<th>Date of Request</th>
+						<th>Opening Date</th>
+						<th>Closing Date</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<t t-foreach="orders" t-as="order">
+						<t t-if="((order.state == 'waiting_for_acceptance') or (order.state == 'no_response'))">
+							<t t-if="order.rfp_id.close_date">
+								<t t-if="(order.rfp_id.close_date >= today_date)" t-call="skit_vendor_portal.rfp_order_data_template" />
+							</t>
+							<t t-else="">
+								<t t-call="skit_vendor_portal.rfp_order_data_template" />
+							</t>
+						</t>
+						<t t-else="" >
+							<t t-call="skit_vendor_portal.rfp_order_data_template" />
+						</t>
+					</t>
+				</tbody>
+			</t>
+			</div>
+			</div>
+		</t>
+	</template>
+	<template id="rfp_order_data_template">
+		<tr>
+			<td>
+				<a t-attf-href="/my/rfp/#{order.id}?#{keep_query()}">
+					<t t-esc="order.rfp_id.name" />
+				</a>
+			</td>
+			<td>
+				<span t-field="order.create_date" t-options="{'widget': 'date'}" />
+			</td>
+			<td>
+				<span t-field="order.rfp_id.open_date" t-options="{'widget': 'date'}"/>
+			</td>
+			<td>
+				<span t-field="order.rfp_id.close_date" t-options="{'widget': 'date'}"/>
+			</td>
+			<td>
+				<span t-field="order.state" />
+			</td>
+		</tr>
+	</template>
+<!-- RFP Template Design -->
+	<template id="portal_my_rfp_order" name="Portal: My RFP Order">
+		<t t-call="portal.portal_layout">
+			<div id="optional_placeholder"></div>
+			<div class="container">
+			<div class="sks_form_outline po_form_details">
+				<div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+				   <form id="view_rfp_mail_line_form" action="/save/rfp/" method="post" class="s_website_form_vendor_profile rfp_order_portal view_rfp_mail" enctype="multipart/form-data" data-model_name="admin.request.for.proposals">
+					<div class="card-header">
+						<div class="row">
+							<div class="col-lg-3">
+							   <h4 class="po_status_label"><span t-esc="order.rfp_id.name" /></h4>
+							</div>
+							<div class="col-lg-3">
+								<label class="po_status_label">Opening Date:</label>
+								<span t-field="order.rfp_id.open_date" t-options='{"format": "MM/dd/yyyy"}' />
+							 </div>
+							 <div class="col-lg-3">
+								<label class="po_status_label">Closed Date:</label>
+							    <span t-field="order.rfp_id.close_date" t-options='{"format": "MM/dd/yyyy"}' />
+							 </div>
+							 <div class="col-lg-3">
+									<label class="po_status_label">Status </label>
+									<t t-if="rfp_mail.state == 'waiting_for_acceptance'">
+										<span class="po_status_head po_pending" t-field="rfp_mail.state"/>
+									</t>
+									<t t-elif="rfp_mail.state == 'accepted'">
+										<span class="po_status_head po_pending" t-field="rfp_mail.state"/>
+									</t>
+									<t t-elif="rfp_mail.state == 'declined'">
+										<span class="po_status_head po_declined" t-field="rfp_mail.state"/>
+									</t>
+									<t t-elif="rfp_mail.state == 'cancelled'">
+										<span class="po_status_head" t-field="rfp_mail.state" style="background: lightgray;float:right;"/>
+									</t>
+									<t t-else="">
+										<span class="po_status_head po_accepted" t-field="rfp_mail.state"/>
+									</t>
+
+							 </div>
+						</div>
+					</div>
+					<div class="container">
+					<div class="card-body">
+					<div>
+					 <span class="exla_icon"><i class="fa fa-exclamation-circle bid_mr" />Deadline to confirm for this RFP is on <span class="rfp_fw" t-esc="website.date_by_adding_business_days(order.rfp_id.open_date, 3)" />.</span>
+					 </div>
+					 <br></br>
+					   <div><strong>Subject<![CDATA[&nbsp;]]></strong><span><t t-esc="order.rfp_id.subject"/></span></div>
+					<br></br>
+					 <div>
+					    <t t-raw="order.rfp_id.body_html" />
+					 </div>
+					 <hr />
+					 <div>
+					 <h4>Materials and Services:</h4>
+					 <div class="rdp_mat_ser_table">
+					  <table class="table vendor_rfp_table" id="myrfp_tables">
+					      <thead>
+							<th t-att-name="'product_name'">Product/services</th>
+							<th t-att-name="'name'">Description</th>
+							<th t-att-name="'unit_name'">UoM</th>
+							<th t-att-name="'qty'">Qty</th>
+							<th t-att-name="'price'">Unit Price</th>
+							<th>Gross Price</th>
+						</thead>
+
+				        <tbody>
+						<tr class="rfp_exist_record" t-att-id="line.id" t-foreach="rfp_mail.proposal_line_ids" t-as="line">
+							<t t-if="line.display_type == 'line_section' or line.display_type == 'line_note'" >
+								<td colspan="6" class="description"><t t-esc="line.name"></t></td>
+								<td class="edit_delete" align="center">
+								     <t t-if="(rfp_mail.state == 'accepted')">
+					                     <span t-att-id="line.id" class="rfp_edit_view"><i class="fa fa-pencil-square-o span_icon isite_edit"></i></span>
+									     <span t-att-id="line.id" class="rfp_delete"><i class="fa fa-trash span_icon isite_delete"></i></span>
+					                  </t>
+								</td>
+							</t>
+							<t t-else="">
+							 	<td class="product"><t t-esc="line.product_name"></t></td>
+								<td class="description"><t t-esc="line.name"></t></td>
+								<td class="uom"><t t-esc="line.unit_name"></t></td>
+								<td class="qty text-right"><t t-esc="line.qty" t-options='{"widget": "float", "precision": 2}'></t></td>
+								<td class="unitprice price text-right"><span t-field="line.price" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/></td>
+								<td class="grossprice price text-right"><span t-field="line.total" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/></td>
+								<td class="edit_delete" align="center">
+								     <t t-if="(rfp_mail.state == 'accepted')">
+								         <span t-att-id="line.id" class="rfp_edit_view"><i class="fa fa-pencil-square-o span_icon isite_edit"></i></span>
+									     <span t-att-id="line.id" class="rfp_delete"><i class="fa fa-trash span_icon isite_delete"></i></span>
+					                  </t>
+								</td>
+							 </t>
+						</tr>
+	                </tbody>
+		          </table>
+
+
+
+		          </div>
+		          	<div class="col-lg-12 rfi_header_12">
+		          		<div class="col-lg-3" >
+		          			<span t-if="(rfp_mail.state == 'accepted')" t-att-rfp_id="rfp_mail.id" class="rfp_add_section" style="color:skyblue; cursor:pointer;">Add a section+</span>
+		          		</div>
+		          		<div class="col-lg-3" >
+		          			<span t-if="(rfp_mail.state == 'accepted')" t-att-rfp_id="rfp_mail.id" class="rfp_add_note" style="color:skyblue; cursor:pointer;">Add a note+</span>
+		          		</div>
+		          		<div class="col-lg-3" >
+		          			<span t-if="(rfp_mail.state == 'accepted')" t-att-rfp_id="rfp_mail.id" class="rfp_add_product" style="color:skyblue; cursor:pointer;">Add a product+</span>
+		          		</div>
+		          		<div class="col-lg-3" style="margin-left: 98px;">
+		          			<span class="text-right">Total <span class="total" t-field="rfp_mail.total" t-options='{"widget": "float", "decimal_precision": "Product Price"}' id="grand_total" /> </span>
+		          		</div>
+					</div>
+
+		          <div class="row col-lg-12">
+			     	<div class="col-lg-12 profile_col">
+			     		<div t-attf-class="form-group">
+		             		<label class="col-form-label" for="other_info">Other Information</label>
+		             		<t t-if="(rfp_mail.state == 'accepted')">
+		             			<div contenteditable="true" class="form-control rfp_other_info">
+		             				<t t-raw="rfp_mail.other_term_warranty" />
+		             			</div>
+		             		</t>
+		             		<t t-else="">
+		             			<div class="form-control rfp_other_info" t-field="rfp_mail.other_term_warranty" />
+		             		</t>
+		             	</div>
+		     		</div>
+     	        </div>
+				<div class="row justify-content-center">
+
+                	<t t-if="(rfp_mail.state == 'waiting_for_acceptance')">
+                		<button id="decline" t-att-rfp_id="order.rfp_id.id" type="button" class="decline_rfp_mail pull-left a-submit btn btn-primary btn-dashboard btn-decline border-radius-unset border-none">Decline</button>
+						<button t-att-id="order.rfp_id.id" type="button" class="accept_rfp_mail pull-left a-submit btn btn-primary btn-dashboard btn-submit border-radius-unset border-none">Accept</button>
+					</t>
+
+					<t t-if="(rfp_mail.state == 'accepted')">
+						<button id="save_rfp_draft" t-att-rfp_id="rfp_mail.id" type="button" class="save_draft save_rfp_draft pull-left a-submit btn btn-primary btn-dashboard btn-draft border-radius-unset border-none">Save as Draft</button>
+						<button id="submit" t-att-rfp_id="rfp_mail.id" type="button" class="pull-left a-submit btn btn-primary btn-dashboard btn-submit submit_proposal border-radius-unset border-none">Submit Proposal</button>
+					</t>
+			    </div>
+			    <div class="container rfp_decline_panel">
+
+				</div>
+				</div>
+				</div>
+
+				</div>
+				</form>
+			</div>
+			</div>
+			</div>
+			<div class="oe_structure mb32" />
+			<div class="o_portal_messages_container mt32">
+	          <h4>Send Message</h4>
+	          <t t-call="portal.message_thread">
+	              <t t-set="object" t-value="rfp_mail"/>
+	              <t t-set="pid" t-value="pid"/>
+	              <t t-set="hash" t-value="hash"/>
+	          </t>
+            </div>
+		</t>
+	</template>
+	<template id="edit_rfp_line_details" name="Edit RFP Line Details">
+	    <div role="dialog" class="modal" id="modal_rfP_line" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog rfi-modal-dialog adaskldfhl">
+               <form method="POST" class="modal-content rfq_popup_form">
+                        <header class="modal-header">
+                            <h4 class="modal-title">RFP</h4>
+                            <button type="button" id="site_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<t t-if="line.display_type == 'line_section' or line.display_type == 'line_note'">
+                        		<div class="form-group col-md-12 col-sm-12">
+							      <div t-attf-class="form-group form-field o_website_form_required">
+				            		<label for="name">Description</label><span class="required_span">*</span>
+				                   	<input type="text" id="name" name="name" required="1" t-attf-class="form-control o_website_form_input"  t-att-value="product_name"/>
+						           </div>
+							    </div>
+                        	</t>
+                        	<t t-else="">
+	                        	<div class="row row-no-margin">
+		                            <div class="form-group col-md-6 col-sm-6">
+		                               <div t-attf-class="form-group form-field o_website_form_required">
+						            		<label for="product_name">Product/Service Name</label><span class="required_span">*</span>
+						                   	<input type="text" id="product_name" name="product_name" required="1" t-attf-class="form-control o_website_form_input"  t-att-value="product_name if product_name else line.product_name"/>
+						              	</div>
+
+							        </div>
+				                    <div class="form-group col-md-6 col-sm-6">
+				                       <div t-attf-class="form-group form-field o_website_form_required">
+						            		<label for="unit_name">Unit of Measure</label><span class="required_span">*</span>
+						                   	<input type="float" id="unit_name" name="unit_name" required="1" t-attf-class="form-control o_website_form_input"  t-att-value="unit_name if unit_name else line.unit_name"/>
+						              	</div>
+							       </div>
+							   <div class="form-group col-md-12 col-sm-12">
+							      <div t-attf-class="form-group form-field o_website_form_required">
+				            		<label for="name">Description</label><span class="required_span">*</span>
+				                   	<input type="text" id="name" name="name" required="1" t-attf-class="form-control o_website_form_input"  t-att-value="name if name else line.name"/>
+						           </div>
+							    </div>
+							        <div class="form-group col-md-4 col-sm-4">
+								        <div t-attf-class="form-group form-field o_website_form_required">
+						            		<label for="qty">Quantity</label><span class="required_span">*</span>
+						                   	<input type="number" id="qty" name="qty" step="any" required="1" t-attf-class="form-control o_website_form_input"  t-att-value="qty if qty else line.qty"/>
+							           </div>
+							        </div>
+							        <div class="form-group col-md-4 col-sm-4">
+							            <div t-attf-class="form-group form-field o_website_form_required">
+						            		<label for="qty">Unit Price</label><span class="required_span">*</span>
+						                   	<input type="float" id="unit_price" step="any" name="unit_price" required="1" t-attf-class="form-control o_website_form_input"  t-att-value="price if price else line.price"/>
+							           </div>
+							        </div>
+							        <div class="form-group col-md-4 col-sm-4">
+							           <div t-attf-class="form-group form-field">
+						           			<label for="gross_total">Gross Price</label>
+						                  	<span class="form-control" id="gross_total" name="gross_total" style="background: lightgray;" t-field="line.total" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/>
+						           		</div>
+							        </div>
+						        </div>
+					        </t>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="row row-no-margin">
+					        	<span id="o_website_mail_form_result"></span>
+					        </div>
+                        	<div class="col-md-12 col-sm-12 popup_footer_div">
+                        		<button type="button" t-att-id="line.id" class="btn btn-primary save_rfp_line popup_save popup_save_btn">Save</button>
+							</div>
+                        </footer>
+                </form>
+        </div>
+        </div>
+	</template>
+
+	<template id="rfp_decline_popup" name="RFP Decline">
+        <div role="dialog" id="rfp_decline_status" class="modal rfp_decline_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Decline RFP</h4>
+                            <button type="button" id="rfP_decline_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+	                            <div class="form-group col-md-4 col-sm-4">
+						            <span class="dspan_label">RFP Status</span>
+						        </div>
+						        <div class="form-group col-md-8 col-sm-8">
+						            <span id="po_status">Declined</span>
+						        </div>
+						        <div class="form-group col-md-4 col-sm-4">
+						            <span class="dspan_label">Decline Reason/s Type</span>
+						        </div>
+						        <div class="form-group col-md-8 col-sm-8">
+						            <select id="declined_reason_id" name="declined_reason_id" t-attf-class="form-control">
+											<option value=""></option>
+											<t t-foreach="decline_reason" t-as="dr">
+												<option t-att-value="dr.id" placeholder="Decline Reason">
+													<t t-esc="dr.name" />
+												</option>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12">
+			                    	<span class="dspan_label">Decline Remarks</span>
+						            <textarea rows="3" id="declined_note" class="form-control mt-2 declined_note" t-attf-name="declined_note"></textarea>
+						        </div>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="s_btn pt8 pb24 col-lg-6 text-right">
+                            	<button type="button" id="decline_confirm" class="btn btn-success js_goto_event">Decline</button>
+                        	</div>
+                        	<div class="s_btn pt8 pb24 col-lg-6 text-left">
+                            	<button type="button" id="decline_cancel" class="btn btn-decline js_goto_event">Cancel</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+
+  	<template id="portal_my_bid_orders" name="Portal: My BID Orders">
+		<t t-call="portal.portal_layout">
+			<t t-call="portal.portal_searchbar">
+				<t t-set="title">BID Orders</t>
+			</t>
+			<div class="sks_form_outline">
+			<div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+			<t t-if="orders" t-call="portal.portal_table">
+				<thead>
+					<tr class="active">
+						<th>BID Ref. No.</th>
+						<th>Scope of work</th>
+						<th>Date of Request</th>
+						<th>Open Date</th>
+						<th>Close Date</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<t t-foreach="orders" t-as="order">
+						<t t-if="order.state == 'waiting_for_acceptance'">
+							<t t-if="order.bid_id.bid_closing_date">
+								<t t-if="(order.bid_id.bid_closing_date >= today_date)" t-call="skit_vendor_portal.bid_order_data_template" />
+							</t>
+							<t t-else="">
+								<t t-call="skit_vendor_portal.bid_order_data_template" />
+							</t>
+						</t>
+						<t t-else="" >
+							<t t-call="skit_vendor_portal.bid_order_data_template" />
+						</t>
+					</t>
+				</tbody>
+			</t>
+			</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="bid_order_data_template">
+		<tr>
+			<td>
+				<a t-attf-href="/my/bid/#{order.id}?#{keep_query()}">
+					<t t-esc="order.bid_id.name" />
+				</a>
+			</td>
+			<td>
+				<span t-field="order.scope_of_work" />
+			</td>
+			<td>
+				<span t-field="order.create_date" t-options="{'widget': 'date'}"/>
+			</td>
+			<td><span t-field="order.bid_opening_date" t-options="{'widget': 'date'}"/></td>
+			<td><span t-field="order.bid_closing_date" t-options="{'widget': 'date'}"/></td>
+			<td>
+				<span t-field="order.state" />
+			</td>
+		</tr>
+	</template>
+	<template id="portal_my_bid_order" name="Portal: My BID Order">
+		<t t-call="portal.portal_layout">
+			<div id="optional_placeholder"></div>
+			<div class="container bid_order_portal">
+				<div class="card">
+					<div class="card-header">
+						<div class="row">
+							<div class="col-lg-8" style="display: none;">
+								<h4><span t-esc="order.bid_id.name" /></h4>
+							</div>
+							<div class="col-lg-4" style="display: none;">
+			                	<span class="po_status_head bid_status" style="background: lightgray;float:right;">
+			                		<t t-if="order.state == 'draft'">Draft</t>
+			                		<t t-if="order.state == 'waiting_for_acceptance'">Waiting For Acceptance</t>
+			                		<t t-if="order.state == 'bidding_in_progress'">Bidding In-Progress</t>
+			                		<t t-if="order.state == 'bidding_halt'">Bidding Halted</t>
+			                		<t t-if="order.state == 'bidding_cancel'">Bidding Cancelled</t>
+			                		<t t-if="order.state == 'done'">Done</t>
+			                		<t t-if="order.state == 'decline'">Declined</t>
+			                		<t t-if="order.state == 'cancel'">Canceled</t>
+			                	</span>
+			                	<label class="po_status_label" style="float:right;">Status </label>
+			                </div>
+
+							<div class="col-lg-12 rfi_header_12" style="padding: 0;">
+								<div class="col-lg-8 rfi_header_8">
+									<h4><span t-esc="order.bid_id.name"/></h4>
+								</div>
+								<div class="col-lg-4 rfi_header_8" style="display: inline-flex !important;">
+									<div class="col-lg-6 text-right my_bid_status_lab" style="line-height: 37px;">
+										<span><strong>Status</strong></span>
+									</div>
+									<div class="col-lg-6 text-right" style="display: inline-flex; padding: 0;">
+										<span class="po_status_head bid_status" style="background: lightgray;float:right;">
+					                		<t t-if="order.state == 'draft'">Draft</t>
+					                		<t t-if="order.state == 'waiting_for_acceptance'">Waiting For Acceptance</t>
+					                		<t t-if="order.state == 'bidding_in_progress'">Bidding In-Progress</t>
+					                		<t t-if="order.state == 'bidding_halt'">Bidding Halted</t>
+					                		<t t-if="order.state == 'bidding_cancel'">Bidding Cancelled</t>
+					                		<t t-if="order.state == 'done'">Done</t>
+					                		<t t-if="order.state == 'decline'">Declined</t>
+					                		<t t-if="order.state == 'cancel'">Canceled</t>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="bid_waiting_for_acceptance" t-if="bidder.state =='draft' or bidder.state =='waiting_for_acceptance'">
+							<span class="exla_icon"><i class="fa fa-exclamation-circle bid_mr" />Deadline to confirm for this bid is on <span class="bid_fw" t-esc="website.date_by_adding_business_days(order.bid_id.bid_opening_date, 3)" /> at <span class="bid_fw" t-field="order.bid_id.bid_closing_date" t-options='{"format": "h:mm a"}' />.Failure to respond will mean disqualification.</span>
+							<table class="col-lg-12" style="line-height: 2em;margin-top:2%; display: none;">
+								<thead>
+									<tr><td></td><td></td><td></td><td></td></tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><span><b>Project Name</b></span></td>
+										<td><span><t t-esc="order.bid_id.project_name" /></span></td>
+										<td><span><b>Bid Opening Date</b></span></td>
+										<td><span t-field="order.bid_id.bid_opening_date" t-options="{'widget': 'date'}"/></td>
+									</tr>
+									<tr>
+										<td><span><b>Project Location</b></span></td>
+										<td><span><t t-esc="order.bid_id.project_location" /></span></td>
+										<td><span><b>Bid Closing Date</b></span></td>
+										<td><span t-field="order.bid_id.bid_closing_date" t-options="{'widget': 'date'}"/></td>
+									</tr>
+									<tr>
+										<td><span><b>Purchasing Officer</b></span></td>
+										<td><span><t t-esc="order.bid_id.purchasing_officer.name" /></span></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><span><b>Scope of Work</b></span></td>
+										<td><span><t t-esc="order.bid_id.scope_of_work" /></span></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+
+						      <section class="s_text_image pt8 pb32" data-name="Text - Image">
+						        <div class="container col-lg-12">
+						          <div class="row align-items-center">
+						            <div class="col-lg-6 pt16 d-inline-flex">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b>Project Name</b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span><t t-esc="order.bid_id.project_name" /></span>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b>Bid Opening Date</b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span t-field="order.bid_id.bid_opening_date" t-options="{'widget': 'date'}"/>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b>Project Location</b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span><t t-esc="order.bid_id.project_location" /></span>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b>Bid Closing Date</b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						              	<span t-field="order.bid_id.bid_closing_date" t-options="{'widget': 'date'}"/>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b>Purchasing Officer</b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span><t t-esc="order.bid_id.purchasing_officer.name" /></span>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex my_po_form_empty_fld">
+						              <div class="col-lg-6">
+						                <span><b></b></span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span></span>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b>Scope of Work</b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span><t t-esc="order.bid_id.scope_of_work" /></span>
+						              </div>
+						            </div>
+						            <div class="col-lg-6 pt16 d-inline-flex my_po_form_empty_fld">
+						              <div class="col-lg-6">
+						                <span>
+						                  <b></b>
+						                </span>
+						              </div>
+						              <div class="col-lg-6">
+						                <span></span>
+						              </div>
+						            </div>
+						          </div>
+						        </div>
+						      </section>
+						</div>
+						<div t-att-class="'bid_pre_bidding' if(bidder.state != 'draft' and bidder.state != 'waiting_for_acceptance') else 'bid_pre_bidding ws_bid_dn'">
+							<div class="ws_pb_shaw">
+								<div class="ws_pb_header">
+									<h5>Bid Result</h5>
+									<hr></hr>
+									<div class="ws_pre_div">
+										<table class="col-lg-12" style="line-height: 2em;margin-top:2%;">
+											<thead>
+												<tr><td></td><td></td><td></td><td></td></tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td><span><b>Bid</b></span></td>
+													<td><span><t t-esc="order.bid_id.name" /></span></td>
+													<td><span><b>Scope of Work</b></span></td>
+													<td><span><t t-esc="order.bid_id.scope_of_work" /></span></td>
+												</tr>
+												<tr>
+													<td><span><b>Project Name</b></span></td>
+													<td><span><t t-esc="bidder.project_name" /></span></td>
+													<td><span><b>Contract Price</b></span></td>
+													<td><span t-field="bidder.negotiated_amount" t-options='{"widget": "float", "precision": 2}'/></td>
+												</tr>
+												<tr>
+													<td><span><b>Project Location</b></span></td>
+													<td><span><t t-esc="bidder.project_location" /></span></td>
+													<td><span t-if="show_contract"><b>Contract Duration</b></span></td>
+													<!-- <t t-set="bidding_detail" t-value="request.env['purchase.bid'].search([('bid_id', '=', order.id)])"/> -->
+													<td><span t-if="show_contract and order.bid_id.start_date"><t t-esc="order.bid_id.start_date" /> - <t t-esc="order.bid_id.end_date" /></span></td>
+ 												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="ws_pb_summary_details">
+								<div class="ws_pb_sm_left">
+									<div class="ws_pb_requir">
+										<span class="ws_pb_tag">Deadline of Submission : <span class="ws_pb_color"><span t-field="bidder.deadline_of_submission" t-options="{'widget': 'date'}"/> </span></span>
+										<br></br>
+										<span class="ws_pb_tag">Pre-bid Requirements</span>
+										<ul class="ws_pb_ul">
+											<li><i class="fa fa-check ws_hard_copy"></i><label style="padding-left: 1%;">Hardcopy of Signed Non-disclosure Agreement(NDA)</label></li>
+											<t t-foreach="bidder.document_requirement_available_id" t-as="document">
+												<t t-if="document.id in (bidder.document_requirement_id.ids)" >
+													<li class="checked_b_data" t-att-doc_id="document.id" ><i class="fa fa-check ws_hard_copy"></i><label style="padding-left: 1%;"><t t-esc="document.name" /></label></li>
+												</t>
+												<t t-else="">
+													<li><input type="checkbox" class="bid_vendor_requirement attach_fcur" t-att-value="document.id" /><label style="padding-left: 1%;"><t t-esc="document.name" /></label></li>
+												</t>
+											</t>
+										</ul>
+										<section class="s_call_to_action">
+								        	<div class="container">
+								         		<div class="row">
+								            		<div class="s_btn pt8 pb24 col-lg-6 text-right">
+										            	<button type="button"  t-att-bidder_id="bidder.id" class="btn btn-secondary requirement_submit" data-toggle="modal" data-target="#modal_requirement_submit" style="background:#337AB7 !important;border:#337AB7 !important;">Upload</button>
+										            </div>
+								          		</div>
+								        	</div>
+								      </section>
+									</div>
+									<hr></hr>
+									<div class="ws_pb_summary">
+										<span class="ws_pb_tag">Bid Summary</span><br></br>
+										<div class="ws_disc_tag">Description</div>
+										<table class="col-lg-12" style="line-height: 2em;margin-top:2%;">
+											<thead>
+												<tr>
+													<td><span><b>Bid Description</b></span></td>
+													<td class="ws_r_txt"><span><b>Amount</b></span></td>
+												</tr>
+											</thead>
+											<tbody>
+												<t t-set="count" t-value="1" />
+												<t t-foreach="bidder.bid_summary_line" t-as="s_line">
+													<tr t-att-class="'' if (count % 2 == 0) else 'ws_pb_odd'">
+														<td><t t-esc="s_line.name" /></td>
+														<td class="ws_r_txt"><span t-field="s_line.amount" t-options='{"widget": "float", "precision": 2}'/> </td>
+													</tr>
+													<t t-set="count" t-value="count + 1" />
+												</t>
+											</tbody>
+										</table>
+										<div class="ws_pb_nego">
+											<table class="col-lg-6" style="line-height: 2em;margin-top:2%;">
+												<tbody>
+													<tr><td><span><b>Negotiated Amount (Gross)</b></span></td><td>P<span t-field="bidder.negotiated_amount" t-options='{"widget": "float", "precision": 2}'/></td></tr>
+													<tr><td><span><b>Lead Time</b></span></td><td><span t-field="bidder.lead_time" /> </td></tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="ws_pb_pay">
+											<span style="font-size: 17px;">Terms of Payments</span>
+											<t t-set="total_pay" t-value="0" />
+											<table class="col-lg-12" style="line-height: 2em;">
+												<thead>
+													<tr>
+														<td><span><b>Description</b></span></td>
+														<td class="ws_r_txt"><span><b>%</b></span></td>
+													</tr>
+												</thead>
+												<tbody>
+													<t t-set="count" t-value="1" />
+													<t t-foreach="bidder.terms_of_payment_line" t-as="payment">
+														<tr t-att-class="'' if (count % 2 == 0) else 'ws_pb_odd'">
+															<td><t t-esc="payment.name" /></td>
+															<td class="ws_r_txt"><t t-esc="payment.payment_percent"/></td>
+														</tr>
+														<t t-set="total_pay" t-value="total_pay + payment.payment_percent"/>
+														<t t-set="count" t-value="count + 1" />
+													</t>
+												</tbody>
+											</table>
+											<table class="col-lg-12" style="line-height: 2em;margin-top: 2%;border-top: 1px solid lightgray;">
+												<thead><tr><td></td><td></td></tr></thead>
+												<tbody>
+													<td colspan="2" class="ws_r_txt"><span><b><t t-esc="total_pay"/></b></span></td>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="ws_pb_sm_right">
+									<div class="ws_event_meet">Meeting Schedule and Confirmation</div>
+									<t t-foreach="events" t-as="event">
+										<article class="card border-0 shadow-sm" style="padding-left: 2%;" itemscope="itemscope" itemtype="http://schema.org/Event">
+											<div class="row no-gutters">
+												<header class="overflow-hidden bg-secondary col-12 rounded-top ws_event_header">
+													<a t-attf-href="/my/bid/event/#{ slug(event) }/register" class="d-block h-100 w-100">
+														 <t t-call="website.record_cover">
+														 	<t t-set="_record" t-value="event"/>
+															<div class="ws_event_date bg-white shadow-sm">
+								                                <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'format': 'LLL'}" class="ws_pb_month"/>
+								                                <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'format': 'dd'}" class="ws_pb_day"/>
+								                            </div>
+														 </t>
+													</a>
+												</header>
+												<div class="col-12">
+													<main style="padding-bottom: 1.25rem;">
+														<h5 class="card-title mt-2 mb-0 text-truncate" style="color: #337AB7;">
+															<a t-attf-href="/my/bid/event/#{ slug(event) }/register" class="text-reset text-decoration-none" itemprop="url">
+								                                <span t-field="event.name" itemprop="name"/>
+								                            </a>
+														</h5>
+														<time itemprop="startDate" t-att-datetime="event.date_begin">
+								                            <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'date_only': 'true', 'format': 'long'}"/> -
+								                            <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'time_only': 'true', 'format': 'short'}"/> to
+								                            <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'time_only': 'true', 'format': 'short'}"/>
+								                        </time>
+													</main>
+												</div>
+											</div>
+										</article>
+									</t>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br></br><br></br>
+					<div class="oe_structure mb32">
+						<section class="s_call_to_action bidder_state" t-if="bidder.state =='draft' or bidder.state =='waiting_for_acceptance'">
+				        	<div class="container">
+				         		<div class="row">
+				            		<div class="s_btn pt8 col-lg-6 text-right" style="width: 50%;">
+						            	<button type="button" t-att-id="bidder.id" action="/bid/decline" class="btn btn-secondary bid_decline">Decline</button>
+						            </div>
+						            <div class="s_btn pt8 col-lg-6 text-left" style="width: 50%;">
+						            	<button type="button" t-att-id="bidder.id" action="/bid/accept" class="btn btn-secondary btn-success bid_accept">Accept</button>
+						            </div>
+				          		</div>
+				        	</div>
+				      </section>
+					</div>
+				</div>
+				<div class="o_portal_messages_container mt32">
+			    	<h4>Send Message</h4>
+			        <t t-call="portal.message_thread">
+			        	<t t-set="object" t-value="order"/>
+			            <t t-set="pid" t-value="pid"/>
+			            <t t-set="hash" t-value="hash"/>
+			    	</t>
+		        </div>
+		        <div class="o_portal_messages_container mt32">
+		        	<t t-foreach="messages" t-as="message">
+		        		<div class="ws_message_seperator"><span class="ws_message_date"><t t-esc="website.get_date(message.date)" /></span></div>
+		        		<div class="ws_mail_div">
+		        			<div class="ws_mail_sidebar">
+		        				<div class="ws_mail_sidebarimage">
+		        					<img alt="" class="ws_mail_avatar" t-attf-src="/web/image/res.partner/#{message.author_id.id}/image_128" />
+		        				</div>
+		        			</div>
+		        			<div class="ws_mail_core">
+		        				<p class="o_mail_info text-muted" style="color:black !important">
+		        					<strong><t t-esc="message.author_id.name" /></strong>
+		        					-<small t-att-title="message.date"><t t-esc="message.date" /></small>
+		        					<br></br><t t-esc="message.subject" />
+		        				</p>
+		        				<div>
+		        					<t t-raw="message.body"/>
+		        				</div>
+		        			</div>
+		        		</div>
+		        	</t>
+		        </div>
+			</div>
+            <div role="dialog" class="modal" id="modalaccept" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            	<div class="modal-dialog" >
+                	<form id="accept" method="POST" t-att-data-task-id="order.id" t-att-data-token="order.bid_id.access_token" class="js_accept_json modal-content js_website_submit_form">
+                    	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <header class="modal-header">
+                            <h4 class="modal-title">Non-disclosure Agreement (NDA) Signing</h4>
+                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                        </header>
+                        <main class="modal-body" id="sign-dialog">
+                            <t t-call="portal.signature_form">
+                                  <t t-if="bidder" t-set="call_url" t-value="order.get_portal_url(suffix='/worksheet/sign/%s' % source)"/>
+                                  <t t-set="default_name" t-value="order.partner_id.name"/>
+                                  <t t-set="send_label" t-value="'Sign'"/>
+                            </t>
+                       </main>
+                   </form>
+            	</div>
+            </div>
+            <div role="dialog" class="modal" id="modal_requirement_submit" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            	<div class="modal-dialog">
+                	<div class="modal-content">
+	                    <header class="modal-header">
+		               		<button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+		                </header>
+	                    <main class="modal-body">
+	                    	<div class="o_portal_messages_container">
+		                    	<t t-call="portal.message_thread">
+						        	<t t-set="object" t-value="order"/>
+						            <t t-set="pid" t-value="pid"/>
+						            <t t-set="hash" t-value="hash"/>
+						    	</t>
+					    	</div>
+	                    </main>
+                    </div>
+                </div>
+           	</div>
+			<div class="oe_structure mb32" />
+		</t>
+	</template>
+
+
+	<template id="portal_my_bid_event" name="Portal: My BID Event">
+		<t t-call="portal.portal_layout">
+			<div id="optional_placeholder"></div>
+			<div class="container bid_event_portal">
+				<div class="card o_wevent_event">
+					<div name="event" itemscope="itemscope" itemtype="http://schema.org/Event">
+			            <t t-call="website.record_cover">
+			                <t t-set="_record" t-value="event"/>
+			                <t t-set="use_filters" t-value="True"/>
+			                <t t-set="use_size" t-value="True"/>
+			                <t t-set="use_text_size" t-value="True"/>
+			                <t t-set="use_text_align" t-value="True"/>
+
+			                <div class="container d-flex flex-column flex-grow-1 justify-content-around">
+			                    <div class="ws_event_title">
+			                        <span t-if="event.is_participating" class="badge badge-success o_wevent_badge"><i class="fa fa-check mr-2"/>Registered</span>
+			                        <h2 t-field="event.name" class="ws_event_name" itemprop="name" placeholder="Event Title"/>
+			                        <time itemprop="startDate" t-att-datetime="event.date_begin">
+								         <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'date_only': 'true', 'format': 'long'}"/> -
+								         <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'time_only': 'true', 'format': 'short'}"/> to
+								         <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'time_only': 'true', 'format': 'short'}"/>
+								    </time>
+			                    </div>
+			                </div>
+			                <div class="container mt-5">
+			                    <t t-call="website_event.registration_template"/>
+			                </div>
+			            </t>
+			            <t t-raw="0"/>
+			            <section class="bg-200">
+				            <div class="container">
+				                <div class="row no-gutters mt-n5 pb-5">
+				                    <!-- Description -->
+				                    <div id="o_wevent_event_main_col" class="col-lg-8 bg-white p-5 shadow-sm">
+				                        <span t-field="event.description" itemprop="description"/>
+				                    </div>
+				                    <div class="col-lg-4 bg-light rounded-right shadow-sm d-print-none">
+				                        <!-- Date & Time -->
+				                        <div class="o_wevent_sidebar_block">
+				                            <h6 class="o_wevent_sidebar_title ws_wevent_sidebar_title">Date &amp; Time</h6>
+				                            <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'date_only': 'true', 'format': 'EEEE'}"/>
+				                            <h4 class="my-1" t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'date_only': 'true', 'format': 'long'}" itemprop="startDate" t-att-datetime="event.date_begin"/>
+				                            <t t-if="not event.is_one_day">Start -</t>
+				                            <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'time_only': 'true', 'format': 'short'}"/>
+				                            <t t-if="event.is_one_day">
+				                                <i class="fa fa-long-arrow-right mx-1"/>
+				                                <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'time_only': 'true', 'format': 'short'}"/>
+				                            </t>
+				                            <t t-else="">
+				                                <i class="fa fa-long-arrow-down d-block text-muted mx-3 my-2" style="font-size: 1.5rem"/>
+				                                <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'date_only': 'true', 'format': 'EEEE'}"/>
+				                                <h4 class="my-1" t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'date_only': 'true', 'format': 'long'}"/>
+				                                <t t-if="not event.is_one_day">End -</t>
+				                                <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'time_only': 'true', 'format': 'short'}"/>
+				                            </t>
+				                            <!-- Timezone -->
+				                            <small t-esc="event.date_tz" class="d-block my-3 text-muted"/>
+
+				                            <div class="dropdown">
+				                                <i class="fa fa-calendar mr-1"/>
+				                                <a href="#" role="button" data-toggle="dropdown">Add to Calendar</a>
+				                                <div class="dropdown-menu">
+				                                    <a t-att-href="iCal_url" class="dropdown-item">iCal/Outlook</a>
+				                                    <a t-att-href="google_url" class="dropdown-item" target="_blank">Google</a>
+				                                </div>
+				                            </div>
+				                        </div>
+				                        <!-- Location -->
+				                        <t t-if="not event.is_online">
+				                            <div t-if="event.address_id" class="o_wevent_sidebar_block">
+				                                <h6 class="o_wevent_sidebar_title ws_wevent_sidebar_title">Location</h6>
+				                                <h4 t-field="event.address_id" class="" t-options='{
+				                                    "widget": "contact",
+				                                    "fields": ["name"]
+				                                }'/>
+				                                <div itemprop="location" class="mb-2" t-field="event.address_id" t-options='{
+				                                    "widget": "contact",
+				                                    "fields": ["address"],
+				                                    "no_marker": True
+				                                }'/>
+				                                <div class="mb-3" t-field="event.address_id" t-options='{
+				                                    "widget": "contact",
+				                                    "fields": ["phone", "mobile", "email"]
+				                                }'/>
+				                                <i class="fa fa-map-marker fa-fw" role="img"/>
+				                                <a t-att-href="event.google_map_link()" target="_blank">Get the direction</a>
+				                            </div>
+				                        </t>
+				                        <!-- Organizer -->
+				                        <div t-if="event.organizer_id" class="o_wevent_sidebar_block">
+				                            <h6 class="o_wevent_sidebar_title ws_wevent_sidebar_title">Organizer</h6>
+				                            <h4 t-field="event.organizer_id"/>
+				                            <div itemprop="location" t-field="event.organizer_id" t-options="{'widget': 'contact', 'fields': ['phone', 'mobile', 'email']}"/>
+				                        </div>
+				                        <!-- Social -->
+				                        <div class="o_wevent_sidebar_block">
+				                            <h6 class="o_wevent_sidebar_title ws_wevent_sidebar_title">SHARE</h6>
+				                            <p class="mb-2">Find out what people see and say about this event, and join the conversation.</p>
+				                            <p t-if="event.twitter_hashtag" class="font-weight-bold">Hashtag: <a t-att-href="'http://twitter.com/search?q=%23'+event.twitter_hashtag" target="_blank">#<span t-field="event.twitter_hashtag"/></a></p>
+				                            <t t-call="website.s_share">
+				                                <t t-set="_no_title" t-value="True"/>
+				                                <t t-set="_classes">o_wevent_sidebar_social mx-n1</t>
+				                                <t t-set="_link_classes">o_wevent_social_link</t>
+				                            </t>
+				                        </div>
+				                    </div>
+				                </div>
+				                <ul class="list-unstyled" id="comment">
+				                    <li t-foreach="event.website_message_ids" t-as="comment" class="media mt-3">
+				                        <div class="media-body">
+				                            <t t-call="website.publish_management">
+				                                <t t-set="object" t-value="comment"/>
+				                                <t t-set="publish_edit" t-value="True"/>
+				                            </t>
+				                            <t t-raw="comment.body"/>
+				                            <small class="float-right muted text-right">
+				                                <div t-field="comment.author_id"/>
+				                                <div t-field="comment.date" t-options='{"hide_seconds":"True"}'/>
+				                            </small>
+				                        </div>
+				                    </li>
+				                </ul>
+				            </div>
+				        </section>
+			        </div>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="bid_vendor_event_registration" name="Bid Event Registration" inherit_id="website_event.registration_template">
+		<xpath expr="//div[@id='o_wevent_tickets']" position="attributes">
+	    	<attribute name="t-att-class">'bg-white shadow-sm' if is_bid_event else 'bg-white rounded shadow-sm'</attribute>
+	    </xpath>
+	    <xpath expr="//form[@id='registration_form']" position="attributes">
+	    	<attribute name="t-attf-action">#{'/my/bid/event/%s/registration/new' %(slug(event)) if is_bid_event else '/event/%s/registration/new' %(slug(event))}</attribute>
+	    </xpath>
+	</template>
+
+	<template id="bid_vendor_event_ticket" name="Bid Event Ticket" inherit_id="website_event.ticket">
+        <xpath expr="//div[@class='ml-auto']" position="replace">
+            <t t-if="is_bid_event">
+            	<div class="ml-auto">
+	                <t t-if="tickets_available">
+	                    <span class="font-weight-bold align-middle pr-2">No.of attendees</span>
+	                    <link itemprop="availability" content="http://schema.org/InStock"/>
+	                    <t t-raw="quantity"/>
+	                </t>
+	                <t t-else="">
+	                    <span itemprop="availability" content="http://schema.org/SoldOut" class="text-danger">
+	                        <i class="fa fa-ban mr-2"/>Sold Out
+	                    </span>
+	                </t>
+	            </div>
+            </t>
+            <t t-else="">
+            	<div class="ml-auto">
+	                <t t-if="tickets_available">
+	                    <span class="font-weight-bold align-middle pr-2">Qty</span>
+	                    <link itemprop="availability" content="http://schema.org/InStock"/>
+	                    <t t-raw="quantity"/>
+	                </t>
+	                <t t-else="">
+	                    <span itemprop="availability" content="http://schema.org/SoldOut" class="text-danger">
+	                        <i class="fa fa-ban mr-2"/>Sold Out
+	                    </span>
+	                </t>
+	            </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="bid_vendor_ticket_attendees" name="Bid Event Ticket Attendee" inherit_id="website_event.registration_attendee_details">
+    	<xpath expr="//form" position="replace">
+    		<t t-if="is_bid_event">
+    			<form id="attendee_registration" t-attf-action="/bid/event/#{slug(event)}/registration/confirm" method="post" class="js_website_submit_form">
+	                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+	                <t t-call="skit_vendor_portal.bid_ticket_attendee_template" />
+	            </form>
+    		</t>
+    		<t t-else="">
+    			<form id="attendee_registration" t-attf-action="/event/#{slug(event)}/registration/confirm" method="post" class="js_website_submit_form">
+	                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+	                <t t-call="skit_vendor_portal.bid_ticket_attendee_template" />
+	            </form>
+    		</t>
+    	</xpath>
+    </template>
+
+    <template id="bid_ticket_attendee_template">
+    	<div class="modal-content">
+        	<div class="modal-header align-items-center">
+            	<h4 class="modal-title">Attendees</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&amp;times;</span></button>
+            </div>
+            <t t-set="counter_type" t-value="1"/>
+            <t t-set="counter" t-value="0"/>
+            <t t-foreach="tickets" t-as="ticket" t-if="availability_check">
+            	<t t-foreach="range(1, ticket['quantity'] + 1)" t-as="att_counter" name="attendee_loop">
+                	<t t-set="counter" t-value="counter + 1"/>
+                    <div class="modal-body bg-light border-bottom">
+                    	<h5 class="mt-1 pb-2 border-bottom">Ticket #<span t-esc="counter"/> <small class="text-muted">- <span t-esc="ticket['name']"/></small></h5>
+                        <div class="row">
+                        	<div class="col-lg my-2">
+                            	<label>Name</label>
+                               	<input class="form-control" type="text" t-attf-name="#{counter}-name" required="This field is required"/>
+                            </div>
+                            <div class="col-lg my-2">
+                               	<label>Email</label>
+                                <input class="form-control" type="email" t-attf-name="#{counter}-email" required="This field is required"/>
+                            </div>
+                            <div class="col-lg my-2">
+                                <label>Phone <small>(Optional)</small></label>
+                                <input class="form-control" type="tel" t-attf-name="#{counter}-phone"/>
+                            </div>
+                            <input class="d-none" type="text" t-attf-name="#{counter}-ticket_id" t-attf-value="#{ticket['id']}"/>
+                        </div>
+                    </div>
+                 </t>
+            	<t t-set="counter_type" t-value="counter_type + 1"/>
+            </t>
+            <t t-if="not availability_check">
+                 <strong> You ordered more tickets than available seats</strong>
+            </t>
+            <div class="modal-footer border-0 justify-content-between">
+            	<button type="button" class="btn btn-secondary js_goto_event" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" t-if="availability_check">Continue</button>
+        	</div>
+    	</div>
+    </template>
+
+    <template id="portal_my_bid_event_confirmation" name="Portal: My BID Event">
+		<t t-call="portal.portal_layout">
+			<div id="optional_placeholder"></div>
+			<div class="container bid_event_portal_confirmation">
+				<div class="card o_wevent_event">
+					<div name="event" itemscope="itemscope" itemtype="http://schema.org/Event">
+			            <t t-call="website.record_cover">
+			                <t t-set="_record" t-value="event"/>
+			                <t t-set="use_filters" t-value="True"/>
+			                <t t-set="use_size" t-value="True"/>
+			                <t t-set="use_text_size" t-value="True"/>
+			                <t t-set="use_text_align" t-value="True"/>
+
+			                <div class="container d-flex flex-column flex-grow-1 justify-content-around">
+			                    <div class="ws_event_title">
+			                        <span t-if="event.is_participating" class="badge badge-success o_wevent_badge"><i class="fa fa-check mr-2"/>Registered</span>
+			                        <h2 t-field="event.name" class="ws_event_name" itemprop="name" placeholder="Event Title"/>
+			                        <time itemprop="startDate" t-att-datetime="event.date_begin">
+								         <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'date_only': 'true', 'format': 'long'}"/> -
+								         <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'time_only': 'true', 'format': 'short'}"/> to
+								         <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'time_only': 'true', 'format': 'short'}"/>
+								    </time>
+			                    </div>
+			                </div>
+
+			            </t>
+			            <t t-raw="0"/>
+			            <section style="padding: 0% 2%;">
+			            	<div class="container my-5">
+					            <div class="row">
+					                <div class="col-12">
+					                    <h2>Registration confirmed!</h2>
+					                    <h6><t t-esc="event.name"/>(
+					                    <time itemprop="startDate" t-att-datetime="event.date_begin">
+									         <span t-field="event.date_begin" t-options="{'widget': 'date'}"/> -
+									         <span t-field="event.with_context(tz=event.date_tz).date_begin" t-options="{'time_only': 'true', 'format': 'short'}"/> to
+									         <span t-field="event.with_context(tz=event.date_tz).date_end" t-options="{'time_only': 'true', 'format': 'short'}"/>
+									    </time>
+					                    )</h6>
+					                    <table class="table table-striped my-4">
+					                        <thead class="bg-secondary">
+					                            <tr>
+					                                <th>Name</th>
+					                                <th>E-mail</th>
+					                                <th>Phone</th>
+					                                <th>Reference</th>
+					                            </tr>
+					                        </thead>
+					                        <tbody>
+					                            <t t-foreach="attendees" t-as="attendee">
+					                                <tr>
+					                                    <td><t t-if="attendee.name" t-esc="attendee.name"/><t t-else="">N/A</t></td>
+					                                    <td><t t-if="attendee.email" t-esc="attendee.email"/><t t-else="">N/A</t></td>
+					                                    <td><t t-if="attendee.phone" t-esc="attendee.phone"/><t t-else="">N/A</t></td>
+					                                    <td><t t-esc="attendee.id"/></td>
+					                                </tr>
+					                            </t>
+					                        </tbody>
+					                    </table>
+					                </div>
+					                <div class="col-lg-12" style="text-align: center;margin-top: 2%;">
+					                    <div id="add_to_calendar" class="mt-4">
+					                        <a role="button" class="btn btn-primary" t-att-href="iCal_url">
+					                            <i class="fa fa-fw fa-calendar"/> Add to iCal/Outlook
+					                        </a>
+					                        <a role="button" class="btn btn-primary" t-att-href="google_url" target='_blank'>
+					                            <i class="fa fa-fw fa-calendar"/> Add to Google Calendar
+					                        </a>
+					                    </div>
+					                </div>
+
+					            </div>
+					        </div>
+			            </section>
+			    	</div>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	 <!-- RFI Decline Popup  -->
+  	<template id="rfi_decline_popup" name="RFI Decline">
+        <div role="dialog" id="rfi_decline_status" class="modal rfi_decline_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Decline RFI</h4>
+                            <button type="button" id="rfi_decline_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+	                            <div class="form-group col-md-4 col-sm-4">
+						            <span class="dspan_label">RFI Status</span>
+						        </div>
+						        <div class="form-group col-md-8 col-sm-8">
+						            <span id="po_status">Declined</span>
+						        </div>
+						        <div class="form-group col-md-4 col-sm-4">
+						            <span class="dspan_label">Decline Reason/s Type</span>
+						        </div>
+						        <div class="form-group col-md-8 col-sm-8">
+						            <select id="declined_reason_id" name="declined_reason_id" t-attf-class="form-control">
+											<option value=""></option>
+											<t t-foreach="decline_reason" t-as="dr">
+												<option t-att-value="dr.id" placeholder="Decline Reason">
+													<t t-esc="dr.name" />
+												</option>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12">
+			                    	<span class="dspan_label">Decline Remarks</span>
+						            <textarea rows="3" id="declined_note" class="form-control mt-2 declined_note" t-attf-name="declined_note"></textarea>
+						        </div>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="s_btn pt8 col-lg-6 text-right">
+                            	<button type="button" id="decline_confirm" class="btn btn-success js_goto_event">Decline</button>
+                        	</div>
+                        	<div class="s_btn pt8 col-lg-6 text-left">
+                            	<button type="button" id="decline_cancel" class="btn btn-decline js_goto_event">Cancel</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+
+	<template id="bid_nda_popup" name="NDA Popup">
+        <div role="dialog" id="bid_nda_popup_modal" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <button type="button" class="close close_nda" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body po_pd">
+                        	<h5 class="ws_txt_center">NON-DISCLOSURE AGREEMENT (NDA)</h5>
+                        	<div class="ws_nda_div">
+                        		<p class="ws_txt_center"><t t-esc="nda_title" /></p>
+                        		<t t-raw="nda_body" />
+                        	</div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" t-att-id="bidder.id" class="btn btn-secondary js_goto_event popup_save nda_accept k_btn_my_bid_form_popup">I Accept</button>
+                        	</div>
+                        </footer>
+                	</div>
+            	</form>
+        	</div>
+    	</div>
+	</template>
+	<template id="portal_my_payments" name="Portal: My Payments">
+		<t t-call="portal.portal_layout">
+			<t t-call="portal.portal_searchbar">
+				<t t-set="title">Payments</t>
+			</t>
+			<div class="sks_form_outline">
+			<div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+			<t t-if="orders" t-call="portal.portal_table">
+				<thead>
+					<tr class="active">
+						<th>Sales Invoice Number</th>
+						<th>Payment Transaction No.</th>
+						<th>Released Date</th>
+						<th>Released Amount</th>
+						<th>OR No.</th>
+                        <th>OR Date</th>
+                        <th>OR Amount</th>
+                        <th>OR Copy Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<t t-foreach="orders" t-as="order">
+						<tr>
+							<td>
+									<t t-esc="order.admin_si_number" />
+							</td>
+							<td>
+							   <a t-attf-href="/my/payment/#{order.id}?#{keep_query()}">
+								<span t-field="order.name" />
+								</a>
+							</td>
+							<td>
+								<span t-field="order.payment_release_date" t-options='{"widget": "date"}' />
+							</td>
+							<td>
+								<span t-field="order.amount" />
+							</td>
+							<td>
+								<span t-field="order.or_number" />
+							</td>
+							<td>
+								<span t-field="order.or_date" t-options='{"widget": "date"}' />
+							</td>
+							<td>
+								<span t-field="order.amount" />
+							</td>
+							<td>
+							  <span>
+								  <t t-if="not order.original_or_received">Awaiting Original</t>
+					              <t t-if="order.original_or_received">Received</t>
+							  </span>
+							</td>
+						</tr>
+					</t>
+				</tbody>
+			</t>
+			</div>
+			</div>
+		</t>
+	</template>
+	<template id="portal_my_payment" name="Portal: My Payment Order">
+		<t t-call="portal.portal_layout">
+			<div id="optional_placeholder"></div>
+			<div class="container">
+			<div class="sks_form_outline po_form_details">
+				<div class="card" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; border: none;">
+				<form id="edit_payment_form" action="/edit/payment/" method="post" class="s_website_form_vendor_profile payment_portal" enctype="multipart/form-data" data-model_name="admin.invoice.payment">
+					<div class="card-header payment_id_details" t-att-paymentid="order.id">
+						<div class="row">
+							<div class="col-lg-8">
+							   <h4><span t-esc="order.name" /></h4>
+							</div>
+                            <div class="col-lg-4 rfi_header_8" style="display: inline-flex !important;">
+									<div class="col-lg-6 text-right my_bid_status_lab" style="line-height: 37px;">
+										<span><strong>OR Copy Status</strong></span>
+									</div>
+									<div class="col-lg-6 text-right" style="display: inline-flex; padding: 0;">
+										<span class="po_status_head bid_status" style="background: lightgray;float:right;">
+					                		<t t-if="not order.original_or_received">Awaiting Original</t>
+					                		<t t-if="order.original_or_received">Received</t>
+
+										</span>
+									</div>
+								</div>
+						</div>
+					</div>
+					<div class="container">
+					<div class="card-body">
+
+				      <section class="s_text_image pt8 pb8" data-name="Text - Image">
+				        <div class="container col-lg-12">
+				          <div id="my_payment" class="my_payment_form row align-items-center">
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>Sales Invoice (SI) Number</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span><t t-esc="order.admin_si_number" /></span>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex my_po_form_empty_fld">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b></b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span></span>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>Official Receipt (OR) No</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span class="pedit_span"><t t-esc="order.or_number" /></span>
+				                <input class="form-control pedit_input or_number d-none" type="text" name="or_number" t-att-value="order.or_number" id="or_number"></input>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>Payment Transaction No.</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				              	<div id="payment_no">
+				              		<span id="p_no" t-att-value="order.id"><t t-esc="order.name" /></span>
+				              	</div>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>OR Date</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span class="pedit_span" t-field="order.or_date" t-options='{"widget": "date"}' />
+				                <div class="o_website_form_date pedit_input d-none input-group date" id="or_date" data-target-input="nearest">
+				                	<t t-set='or_date_formatted'><t t-options='{"widget": "date"}' t-esc="order.or_date"/></t>
+							        <input type="text" class="form-control datetimepicker-input o_website_form_input or_date" data-target="#or_date" name="or_date" t-att-value="or_date_formatted"/>
+							        <div class="input-group-append" data-target="#or_date" data-toggle="datetimepicker">
+							            <div class="input-group-text or_date">
+							                <i class="fa fa-calendar"></i>
+							            </div>
+							        </div>
+							    </div>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span><b>Released Date</b></span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span t-field="order.payment_release_date" t-options='{"widget": "date"}' />
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>OR Amount</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span class="pedit_span" t-field="order.amount"/>
+				                <input class="form-control pedit_input amount d-none" type="number" name="amount" t-att-value="order.amount" id="amount"></input>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>Released Amount</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span t-field="order.amount"/>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span>
+				                  <b>OR Copy</b>
+				                </span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span>
+								    <div class="upload_file_payment_div" style="color:#448ee4;">
+				              			<span class="upload_file"> <i id="pay_file_upload" class="fa fa-upload pay_file_upload">  Upload</i></span>
+				              		</div>
+				              		<div class="d-none payment_uploaddiv form-group col-md-12 col-sm-12">
+					             		<div class="payment_attachments">
+				              				<input type="file" id="payment_attach_input" class="payment_attach_input d-none" multiple="multiple"/>
+				              				<ul id="payment_attach_fileList" class="payment_attach_fileList"></ul>
+				              			</div>
+			                        </div>
+				                </span>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex my_po_form_empty_fld">
+				              <div class="col-lg-6">
+				                <span><b></b></span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span></span>
+				              </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex">
+				              <div class="col-lg-6">
+				                <span><b>Attachments</b></span>
+				              </div>
+				              <div class="col-lg-6">
+				                	<t t-if="attachments">
+				                		<ul class="payment_attachment_ul">
+				                			<t t-foreach="attachments" t-as="attachment">
+				                				<li>
+				                					<span><t t-esc="attachment.name"></t></span>
+					                				<a class="al_txt_none" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id">
+														<span class="span_view vp_fw400"><i class="fa fa-download span_eye_icon"></i> </span>
+													</a>
+												</li>
+				                			</t>
+				                		</ul>
+				                	</t>
+				                	<t t-else="">
+				                		<span class="" >No attachments</span>
+				                	</t>
+				                </div>
+				            </div>
+				            <div class="col-lg-6 pt16 d-inline-flex my_po_form_empty_fld">
+				              <div class="col-lg-6">
+				                <span><b></b></span>
+				              </div>
+				              <div class="col-lg-6">
+				                <span></span>
+				              </div>
+				            </div>
+				          </div>
+				        </div>
+				      </section>
+
+					  <br/><br/>
+					  <lable><h4>Notes:</h4></lable>
+					  <span class="pedit_span" style="width:100%"><t t-esc="order.remark"></t></span>
+					  <textarea rows="3" id="premark" class="form-control pedit_input mt-2 pay_remark d-none" name="remark"><t t-esc="order.remark"/></textarea>
+				</div>
+			</div>
+			</form>
+	      </div>
+	     </div>
+	   </div>
+	   <div class="o_portal_messages_container mt32">
+	          <h4>Send Message</h4>
+	          <t t-call="portal.message_thread">
+	              <t t-set="object" t-value="order"/>
+	              <t t-set="pid" t-value="pid"/>
+	              <t t-set="hash" t-value="hash"/>
+	          </t>
+            </div>
+	 </t>
+
+	</template>
+
+<template id="view_message_notification_email" inherit_id="mail.message_notification_email">
+    <xpath expr="//table" position="replace">
+      <table cellspacing="0" cellpadding="0" border="0" style="width: 600px; margin-top: 5px;">
+	    <tbody><tr>
+	    <td valign="center">
+	        <a t-if="has_button_access"
+	                t-att-href="button_access['url']"
+	                style="padding: 8px 12px; font-size: 12px; color: #FFFFFF; text-decoration: none !important; font-weight: 400; background-color: #875A7B; border: 0px solid #875A7B; border-radius:3px">
+	            <t t-esc="button_access['title']"/>
+	        </a>
+	        <t t-if="actions">
+	            <t t-foreach="actions" t-as="action">
+	                |
+	                <a t-att-href="action['url']" style="color: #875A7B; text-decoration:none !important;">
+	                    <t t-esc="action['title']"/>
+	                </a>
+	            </t>
+	        </t>
+	    </td>
+	    <td valign="center" align="right">
+	        <img t-att-src="'/logo.png?company=%s' % (company.id or 0)" style="padding: 0px; margin: 0px; height: auto; max-width: 200px; max-height: 36px;" t-att-alt="'%s' % company.name"/>
+	    </td>
+	    </tr>
+	    </tbody>
+    </table>
+    </xpath>
+</template>
+
+</odoo>

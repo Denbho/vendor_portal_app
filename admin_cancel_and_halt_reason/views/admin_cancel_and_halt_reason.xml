@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="admin_cancel_and_halt_view_tree" model="ir.ui.view">
+            <field name="name">admin.cancel.and.halt.reason.view.tree</field>
+            <field name="model">admin.cancel.and.halt.reason</field>
+            <field name="arch" type="xml">
+                <tree string="Cancel and Halt Reasons Tree">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_cancel_and_halt_view_form" model="ir.ui.view">
+            <field name="name">admin.cancel.and.halt.reason.view.form</field>
+            <field name="model">admin.cancel.and.halt.reason</field>
+            <field name="arch" type="xml">
+                <form string="Cancel and Halt Reasons Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <separator string="Description"/>
+                        <field name="description" no_label="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_cancel_and_halt_action" model="ir.actions.act_window">
+            <field name="name">Cancel and Halt Reasons</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.cancel.and.halt.reason</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="admin_cancel_and_halt_view_tree"/>
+        </record>
+
+        <menuitem id="menu_reasons" parent="purchase.menu_purchase_config"
+                  name="Reasons" sequence="31"/>
+
+        <menuitem id="menu_admin_cancel_and_halt" parent="menu_reasons"
+                  action="admin_cancel_and_halt_action" sequence="2"/>
+
+    </data>
+</odoo>

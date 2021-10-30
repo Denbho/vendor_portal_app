@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sequence_admin_vendor_rfi" model="ir.sequence">
+            <field name="name">Vendor RFI</field>
+            <field name="code">vendor.request.for.information</field>
+            <field name="prefix">RFI</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <menuitem id="admin_request_for_information_menu" name="Request For Information"
+                  parent="admin_purchase_requisition.menu_admin_purchase_requisition" sequence="5"/>
+
+        <record id="admin_request_for_information_view_line_tree" model="ir.ui.view">
+            <field name="name">admin.request.for.information.line.tree</field>
+            <field name="model">admin.request.for.information.line</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Request for product information Tree" create="false" edit="false" delete="false">
+                    <field name="rfi_id"/>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                    <field name="declined_reason_id" optional="hidden"/>
+                    <field name="declined_note" widget="html" optional="hidden"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_line_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.information.line.form</field>
+            <field name="model">admin.request.for.information.line</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Request for product information Form" create="false" delete="false">
+                    <header>
+                        <button name="btn_accept" string="Accept" type="object" class="oe_highlight"
+                                states="waiting_for_acceptance"/>
+                        <button string="Decline" name="%(admin_reason_to_decline_rfi_action_wizard)d"
+                                states="waiting_for_acceptance" type="action"/>
+                        <button name="btn_submit" string="Submit" type="object" class="oe_highlight"
+                                states="accepted"/>
+                        <field name="state" widget="statusbar" statusbar_visible="waiting_for_acceptance,accepted,submitted,done" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="rfi_id" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                          <field name="declined_reason_id" attrs="{
+                                 'invisible': [('state', '!=', 'declined')],
+                                 'readonly': [('state', 'not in', ['waiting_for_acceptance','accepted'])]}"/>
+                          <field name="declined_note" widget="html" attrs="{
+                                 'invisible': [('state', '!=', 'declined')],
+                                 'readonly': [('state', 'not in', ['waiting_for_acceptance','accepted'])]}"/>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1" colspan="2"
+                               attrs="{'readonly': [('state', 'not in', ['waiting_for_acceptance','accepted'])]}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_rfi_line_search">
+            <field name="name">admin.request.for.information.line.search</field>
+            <field name="model">admin.request.for.information.line</field>
+            <field name="arch" type="xml">
+                <search string="Vendor RFI Mail">
+                    <field name="rfi_id"/>
+                    <field name="partner_id"/>
+                    <field name="company_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="RFI" name="grp_rfi_id" context="{'group_by': 'rfi_id'}"/>
+                        <filter string="Vendor" name="grp_partner_id" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Company" name="grp_company_id" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_line_menu_action" model="ir.actions.act_window">
+            <field name="name">Vendor RFI Mail</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.request.for.information.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_rfi_line_search"/>
+        </record>
+
+        <menuitem id="admin_request_for_information_line_action_menu" name="RFI Mails"
+                  parent="admin_request_for_information_menu" action="admin_request_for_information_line_menu_action"
+                  sequence="2"/>
+
+        <record id="admin_request_for_information_line_action" model="ir.actions.act_window">
+            <field name="name">Vendor RFI Mail</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.request.for.information.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('rfi_id', '=', active_id)]</field>
+        </record>
+
+        <record id="admin_request_for_information_view_tree" model="ir.ui.view">
+            <field name="name">admin.request.for.information.tree</field>
+            <field name="model">admin.request.for.information</field>
+            <field name="arch" type="xml">
+                <tree string="Request for product information Tree">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code" optional="hidden"/>
+                    <field name="create_date"/>
+                    <field name="due_date"/>
+                    <field name="subject"/>
+                    <field name="vendor_ids" widget="many2many_tags"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_view_form" model="ir.ui.view">
+            <field name="name">admin.request.for.information.form</field>
+            <field name="model">admin.request.for.information</field>
+            <field name="arch" type="xml">
+                <form string="Request for product information Form">
+                    <header>
+                        <button name="submit_request" string="Submit"
+                                class="oe_highlight" states="draft" type="object"/>
+                        <button name="confirm_request" string="Confirm"
+                                class="oe_highlight" states="submitted" type="object"/>
+                        <button name="verify_request" string="Verify"
+                                class="oe_highlight" states="confirmed" type="object"/>
+                        <button name="approve_request" string="Approve" help="Final Approval"
+                                class="oe_highlight" states="verified" type="object"/>
+                        <button string="Send RFI" type="object" attrs="{'invisible': ['|', ('sent_rfi', '=', True)]}"
+                                name="send_rfi_email" class="oe_highlight" icon="fa-paper-plane" states="approved"/>
+                        <button string="Set to Done" type="object" attrs="{'invisible': ['|' ,('sent_rfi', '=', False), ('state', '!=', 'approved')]}"
+                                name="set_to_done" class="oe_link" icon="fa-check-square"/>
+                        <button name="send_email_to_vendors" string="Send Email to Vendors" type="object" class="oe_link" icon="fa-paper-plane"
+                                attrs="{'invisible': ['|' ,('sent_rfi', '=', False), ('state', '!=', 'approved')]}"/>
+                        <button name="%(admin_cancel_and_halt_reason.admin_reset_to_draft_reason_action_wizard)d" type="action"
+                                states="submitted,confirmed,verified" string="Reset to Draft"/>
+                        <button name="%(admin_cancel_and_halt_reason.admin_cancel_reason_action_wizard)d" string="Cancel"
+                                states="draft,submitted,confirmed,verified,approved" type="action"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <div name="button_box">
+                            <button class="oe_stat_button" type="action" attrs="{'invisible': [('sent_rfi', '=', False)]}"
+                                    name="%(admin_request_for_information_line_action)d"
+                                    icon="fa-envelope ">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Vendor RFI Mail</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id"/>
+                                <label for="company_id"/>
+                                <div>
+                                    [<field name="company_code" class="oe_inline"/>]
+                                    <field name="company_id" groups="base.group_multi_company"
+                                            class="oe_inline" required="1"/>
+                                </div>
+                                <field name="sent_rfi" invisible="1"/>
+                                <field name="vendor_ids" widget="many2many_tags"
+                                       attrs="{'invisible': [('sent_rfi', '=', True)]}"
+                                       domain="[('type','=','contact'),('is_blocked','=',False)]"
+                                       context="{'search_default_supplier': 1}"/>
+                            </group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="open_date"/>
+                                <field name="close_date"/>
+                                <field name="due_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Email Content" name="email_content">
+                                <label for="subject"/>
+                                <h2 style="display: inline-block;"><field name="subject" placeholder="Subject (placeholders may be used here)"/></h2>
+                                <field name="body_html" widget="html" options="{'style-inline': true}"/>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                            <page name="Approvals" string="Approvals" states="submitted,confirmed,verified,approved,done">
+                                <group>
+                                    <group>
+                                        <label for="submitted_by" states="submitted,confirmed,verified,approved,done"/>
+                                        <div states="submitted,confirmed,verified,approved,done">
+                                            <field name="submitted_by" class="oe_inline"/>
+                                            <field name="submitted_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="confirmed_by" states="confirmed,verified,approved,done"/>
+                                        <div states="confirmed,verified,approved,done">
+                                            <field name="confirmed_by" class="oe_inline"/>
+                                            <field name="confirmed_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="verified_by" states="verified,approved,done"/>
+                                        <div states="verified,approved,done">
+                                            <field name="verified_by" class="oe_inline"/>
+                                            <field name="verified_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <label for="approved_by" string="Approved (Final)" states="approved,done"/>
+                                        <div states="approved,done">
+                                            <field name="approved_by" class="oe_inline"/>
+                                            <field name="approved_date" class="oe_inline"/>
+                                        </div>
+                                        <label for="canceled_by" states="canceled"/>
+                                        <div states="canceled">
+                                            <field name="canceled_by" class="oe_inline"/>
+                                            <field name="canceled_date" class="oe_inline"/>
+                                        </div>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_rfi_search">
+            <field name="name">admin.request.for.information.search</field>
+            <field name="model">admin.request.for.information</field>
+            <field name="arch" type="xml">
+                <search string="Request For Information Details">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="vendor_ids"/>
+                    <field name="state"/>
+                    <filter string="Waiting for Confirmation" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                    <filter string="Waiting for Verification" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Waiting for Approval" name="verified" domain="[('state', '=', 'verified')]"/>
+                    <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                    <separator/>
+                    <filter string="Due Date" name="due_date" date="due_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Purchasing Officer" name="grp_user_id" context="{'group_by': 'user_id'}"/>
+                        <filter string="Company" name="grp_company_id" context="{'group_by': 'company_id'}"/>
+                        <filter string="Status" name="grp_state" context="{'group_by': 'state'}"/>
+                        <filter string="Due Date" name="grp_due_date" context="{'group_by': 'due_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="admin_request_for_information_action" model="ir.actions.act_window">
+            <field name="name">Request For Information Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">admin.request.for.information</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_rfi_search"/>
+        </record>
+
+        <menuitem id="admin_request_for_information_action_menu" name="RFI Details"
+                  parent="admin_request_for_information_menu" action="admin_request_for_information_action"
+                  sequence="1"/>
+
+    </data>
+</odoo>

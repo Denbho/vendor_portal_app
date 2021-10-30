@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="customer_update_success_template">
+		<t t-call="website.layout">
+	        <div id="wrap">
+	          <div class="oe_structure" id="oe_structure_website_form_contact_us_thanks_1"/>
+	          <div class="container pt-3">
+	              <div class="row">
+	                  <div class="col-lg-8">
+	                      <div class="alert alert-success" role="status">
+	                          Customer updated successfully.
+	                          <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+	                      </div>
+	                  </div>
+	              </div>
+	          </div>
+	        </div>
+      	</t>
+  	</template>
+
+	<template id="avatar_template_old">
+		<div class="avatar-edit d-none" t-att-id="current_partner.id">
+	        <!-- <input type='file' id="imageUpload" name="image_1920" accept=".png, .jpg, .jpeg"  class="form-control o_website_form_input"/> -->
+	       <!-- <input type="file" id="imageUpload" class="d-none o_forum_file_upload" name="attachment" accept="image/*"/> -->
+	        <input type="file" name="image_1920" class="file" multiple="true" data-show-upload="true" data-show-caption="true" lass="file" data-show-preview="true" id="imageUpload"/> 
+	        <label for="imageUpload"> <i class="fa fa-camera profile_camera_icon"></i>  </label>
+	        <!-- <div t-field="current_partner.image_1920" t-options='{"widget": "image", "preview_image": "image_512", "class": "d-block mx-auto mb16"}'/> -->
+	    </div>
+	    <div class="avatar-preview">
+	        <div id="imagePreview" style="background-image: url(); display:none">
+	        </div>
+	        <div id="saved_image" style="display:block;">
+	        	<t t-if="current_partner.image_1920">
+					<img alt="User" class="img-responsive"
+						t-attf-src="/web/image/res.partner/#{current_partner.id}/image_1920" />
+				</t>
+				<t t-else="">
+					<t t-if="current_partner.gender == 'female'">
+						<img alt="User" class="img-responsive"
+						src="/skit_customer_portal/static/src/img/avatar_female.png" />
+					</t>
+					<t t-else="">
+						<img alt="User" class="img-responsive"
+						src="/skit_customer_portal/static/src/img/avatar.png" />
+					</t>
+				</t>
+	        </div>
+	    </div>
+	</template>
+
+	<template id="document_template" name='Study'>
+		<t t-call="website.layout">
+			<div class="o_portal_wrap">
+				<div style="padding: 100px;">
+					<div class="box_container">
+						<span style="font-size: 25px;">Documents</span>
+						<hr style="width:100%;text-align:left;margin-left:0"></hr>
+						<table style="width: 100%;">
+							<tbody>
+								<tr>
+									<td style="width: 50%;padding-left: 50px;">
+										<span style="font-size: 18px;color: gba(0, 0, 0, 0.1);color: gray;">Requirements</span>
+									</td>
+
+									<td style="width: 50%;text-align: right;padding-right: 75px;">
+										<span style="font-size: 18px;color: gba(0, 0, 0, 0.1);color: gray;">Notes</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br></br>
+						<table style="width: 100%;">
+							<tbody>
+								<t style="page-break-before: always" t-foreach="required_docs"
+									t-as="req_doc">
+									<tr>
+										<td style="width: 1%;">
+											<ul class="checkmark">
+												<li class="tooltip_skit">
+													<span class="tooltiptext_skit">
+														<a t-attf-href="/web/content/951?download=true" target="_blank">
+															<div class='oe_attachment_embedded o_image'
+																t-att-title="'test'" t-att-data-mimetype="'application/pdf'"
+																t-attf-data-src="/web/image/951/100x80" />
+															<div style="color:white" class='oe_attachment_name'>
+																<t t-raw='"test"' />
+															</div>
+														</a>
+													</span>
+												</li>
+												<!-- append bottom line -->
+												<!-- <div class="myDIV"><li></li></div> <div class="hide"><a 
+													t-attf-href="/web/content/951?download=true" target="_blank"> <div class='oe_attachment_embedded 
+													o_image' t-att-title="'test'" t-att-data-mimetype="'application/pdf'" t-attf-data-src="/web/image/951/100x80"/> 
+													<div style="color:white" class='oe_attachment_name'><t t-raw='"test"' /></div> 
+													</a></div> -->
+											</ul>
+										</td>
+										<td class="" style="width: 40%;padding-left: 50px;">
+											<span style="font-size: 20px;color: gba(0, 0, 0, 0.1);">
+												<t t-esc="req_doc['name']"></t>
+											</span>
+											<br></br>
+											<span>Must be original and notarized</span>
+										</td>
+										<td style="width: 40%;text-align: right;padding-right: 50px;">
+											<span style="font-size: 20px;color: gba(0, 0, 0, 0.1);">
+												<t t-esc="req_doc['note']"></t>
+											</span>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<br></br>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+						</table>
+						<br></br>
+						<br></br>
+						<div class="submit_document_form"></div>
+						<span id="submit_doc" class="btn btn-primary btn-block submit_doc_btn">Submit Document</span>
+						<br></br>
+						<hr style="width:100%;text-align:left;margin-left:0"></hr>
+						<!-- <input type="file" id="input" style='display:none;'></input> <button>Upload 
+							File</button> -->
+						<table style="width: 100%;">
+							<tbody>
+								<tr>
+									<td style="width: 50%;padding-left: 50px;">
+										<span style="font-size: 18px;color: gba(0, 0, 0, 0.1);color: gray;">Downloadable</span>
+									</td>
+									<td style="width: 50%;text-align: right;padding-right: 50px;">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br></br>
+						<table style="width: 100%;">
+							<tbody>
+								<t style="page-break-before: always" t-foreach="downloadable_docs"
+									t-as="download_doc">
+									<tr>
+										<td style="width: 40%;padding-left: 50px;">
+											<span style="font-size: 18px;color: gba(0, 0, 0, 0.1);">
+												<t t-esc="download_doc['name']" />
+											</span>
+										</td>
+										<td
+											style="width: 50%;text-align: right;padding-right: 20px;float:right;">
+											<a t-attf-href="/web/content/#{attachment.id}?download=true"
+												target="_blank">
+												<span id="download" class="btn btn-primary btn-block portal_btn black_btn download_btn">Download</span>
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<br></br>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+						</table>
+						<!-- <label class="custom-file-upload"> <input type="file" t-attf-name="attachment" 
+							t-attf-id="add_down_load_file"/> <span t-attf-id="add_down_load_file_span" 
+							class="fa_icon fa fa-paperclip fa-lg"></span> </label> <span 
+							id="download_doc_create_btn" class="btn btn-primary btn-block submit_doc_btn">Create</span> -->
+					</div>
+					<div class="side_icons_section">
+						<ul class="side_icon_menu_ul">
+							<li style="list-style:none" class="side_icon_menu_li">
+								<span t-attf-id="calender"
+									class="fa_icon_side_menu fa fa-calendar-o"></span>
+								<!-- <i class="fa fa-comment-alt" title="Rating: Great" role="img" 
+									aria-label="Happy face"/> <i class="fas fa-comment-alt-lines"></i> -->
+								<!-- <i class='fas fa-comment-alt'>fa-comment-alt</i> <i class='far 
+									fa-comment-alt'>fa-comment-alt</i> <span class="far fa-comment-dots"></span> -->
+							</li>
+							<br></br>
+							<li style="list-style:none" class="side_icon_menu_li">
+								<span t-attf-id="question"
+									class="fa_icon_side_menu fa fa-question-circle"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="send_message_popup" name="student_popup">
+		<div role="dialog" id="send_message" class="modal" tabindex="-1"
+			t-ignore="true" data-keyboard="false">
+			<div class="modal-dialog" style=" max-width: 70%;">
+				<form class="send_message_form" role="form" method="post">
+					<div class="modal-content" style="border-radius: unset;">
+						<div class="popup_form_container">
+							<div class="tab">
+								<button class="tablinks">Send message</button>
+							</div>
+							<div class="tabcontent d-block">
+								<div id="inner_div" class="write_section">
+								</div>
+								<div id="sec_inner_div" class="fa_icon_section">
+									<i class="fa_icon fa fa-smile-o text-success" title="Rating: Great"
+										role="img" aria-label="Happy face" />
+									<label class="custom-file-upload">
+										<input type="file" t-attf-name="attachment" t-attf-id="doc_attachment" />
+										<span t-attf-id="attachment_doc"
+											class="fa_icon fa fa-paperclip fa-lg"></span>
+									</label>
+								</div>
+								<button class="btn btn-primary send_btn portal_btn black_btn">Send</button>
+								<!-- <div id="fakeDiv"> <input type="file" id="selectedFile" /> <input 
+									type="text" id="fakeInput" /> <span id="buttonImage" >Browse</span> </div> -->
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</template>
+
+	<template id="download_doc">
+		<a t-attf-href="/web/content/#{attachment.id}?download=true" target="_blank">
+			<div class='oe_attachment_embedded o_image' t-att-title="attachment.name"
+				t-att-data-mimetype="attachment.mimetype" t-attf-data-src="/web/image/#{attachment.id}/100x80" />
+			<div class='oe_attachment_name'>
+				<t t-raw='attachment.name' />
+			</div>
+		</a>
+	</template>
+</odoo>

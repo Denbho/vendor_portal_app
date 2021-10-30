@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="calendar_appointment_type_view_form_inherited" model="ir.ui.view">
+            <field name="name">calendar.appointment.type.form.inherited</field>
+            <field name="model">calendar.appointment.type</field>
+            <field name="inherit_id" ref="website_calendar.calendar_appointment_type_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='slot_ids']" position="replace"/>
+                <xpath expr="//page[@name='slots']" position="inside">
+                    <field name="slot_ids">
+                        <tree editable="bottom">
+                            <field name="weekday"/>
+                            <field name="hour" string="Starting Hour (0:00 - 24:00)" widget="float_time"/>
+                            <field name="number_of_slots"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="admin_set_mass_sourcing_form" model="ir.ui.view">
+            <field name="name">admin.set.mass.sourcing.form</field>
+            <field name="model">admin.set.mass.sourcing</field>
+            <field name="arch" type="xml">
+                <form string="Cancelation Reason Form">
+                    <group>
+                      <field name="sourcing"/>
+                    </group>
+                    <footer>
+                        <button string="Set Sourcing" type="object" name="btn_set_mass_sourcing" class="oe_highlight"/>
+                        <button string="Close" class='oe_link' special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

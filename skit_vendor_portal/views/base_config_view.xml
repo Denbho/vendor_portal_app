@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+	<record id="res_config_settings_view_form_purchase_inherit_vendor_portal" model="ir.ui.view">
+   		<field name="name">res.config.settings.view.form.purchase.inherit.vendor.portal</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+     		 <xpath expr="//div[hasclass('settings')]" position="inside">
+          		<div class="app_settings_block"> 
+                	<h2>Vendor Portal Settings</h2>
+                	
+                   	<div class="row mt16 o_settings_container" attrs="{'invisible': [('website_id', '=', False)]}">
+                 		<div class="col-12 col-lg-12 o_setting_box">
+                     		<div class="o_setting_left_pane">
+                       			<field name="enable_nda"/>
+                   			</div>
+                            <div class="o_setting_right_pane">
+			                    <label for="enable_nda" class="oe_inline o_form_label"/>
+			                    <div class="text-muted">
+			                        Configure NDA
+			                    </div>
+			                    <div class="content-group" attrs="{'invisible': [('enable_nda', '=', False)]}">
+			                        <div class="mt16 row">
+			                            <label for="nda_title" string="Title" class="col-3 col-lg-3 o_form_label"/>
+			                            <field name="nda_title"/>
+			                        </div>
+			                        <div class="mt16 row">
+			                            <label for="nda_body" string="Body" class="col-3 col-lg-3 o_form_label align-top"/>
+			                            <field name="nda_body"/>
+			                        </div>
+			                    </div>
+               	 			</div>
+                        </div>
+                        
+                        <div class="col-12 col-lg-12 o_setting_box">
+                     		<div class="o_setting_left_pane">
+                       			<field name="enable_privacy_policy"/>
+                   			</div>
+                            <div class="o_setting_right_pane">
+			                    <label for="enable_privacy_policy" class="oe_inline o_form_label"/>
+			                    <div class="text-muted">
+			                        Configure Privacy Policy
+			                    </div>
+			                    <div class="content-group" attrs="{'invisible': [('enable_privacy_policy', '=', False)]}">
+			                        <div class="mt16 row">
+			                            <label for="privacy_policy_title" string="Title" class="col-3 col-lg-3 o_form_label"/>
+			                            <field name="privacy_policy_title"/>
+			                        </div>
+			                        <div class="mt16 row">
+			                            <label for="privacy_policy_body" string="Body" class="col-3 col-lg-3 o_form_label align-top"/>
+			                            <field name="privacy_policy_body"/>
+			                        </div>
+			                    </div>
+               	 			</div>
+                        </div>
+                        
+                        <div class="col-12 col-lg-12 o_setting_box">
+                     		<div class="o_setting_left_pane">
+                       			<field name="enable_terms_and_condition"/>
+                   			</div>
+                            <div class="o_setting_right_pane">
+			                    <label for="enable_terms_and_condition" class="oe_inline o_form_label"/>
+			                    <div class="text-muted">
+			                        Configure Terms and Condition
+			                    </div>
+			                    <div class="content-group" attrs="{'invisible': [('enable_terms_and_condition', '=', False)]}">
+			                        <div class="mt16 row">
+			                            <label for="terms_and_condition_title" string="Title" class="col-3 col-lg-3 o_form_label"/>
+			                            <field name="terms_and_condition_title"/>
+			                        </div>
+			                        <div class="mt16 row">
+			                            <label for="terms_and_condition_body" string="Body" class="col-3 col-lg-3 o_form_label align-top"/>
+			                            <field name="terms_and_condition_body"/>
+			                        </div>
+			                    </div>
+               	 			</div>
+                        </div>
+                        
+             		</div>
+               	</div>
+             </xpath>
+        </field>
+    </record> 
+</odoo>

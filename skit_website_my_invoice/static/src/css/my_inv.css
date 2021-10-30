@@ -1,0 +1,108 @@
+.si_modal_header{
+	border-bottom: 1px solid silver;
+    margin-bottom: 2% !important;
+    width: 95%;
+    margin: 0 auto;
+}
+.inv_coverage,.inv_details{
+	width: 95%;
+    margin: 0 auto;
+    font-size: 16px;
+}
+.si_attachment_ul{
+	list-style-type: none;
+	padding: 0%;
+}
+.lighter_span{
+	font-weight: 300;
+    font-size: small;
+}
+.send_sales_inv_btn{
+	background-color: #4682B4;
+    border: none;
+    padding: 5px 15px;
+}
+.dr_no_span{
+	width: 85%;
+    display: block;
+    float: left;
+    padding: 2%;
+}
+.req_span{
+	color:red;
+}
+.add_dr_no{
+	float: right;
+    font-size: 22px;
+    color: green;
+    cursor: pointer;
+}
+
+.si_submit_content,.amount_warning_content,.selected_dr_warning_content{
+	width: 60%;
+    margin: 0 auto;
+}
+.si_sub_txt,.amt_wrng_txt,.sdr_wrng_txt{
+	padding: 5%;
+    text-align: justify;
+    background: #ffc0cb38;
+    margin: 4%;
+}
+.close_si_submit,.close_amt_warning.close_sdr_warning{
+	background-color: #4682B4;
+    border: none;
+    padding: 5px 15px;
+}
+.delivery_info_create{
+	cursor: pointer;
+}
+.si_attach_fileList,.sipay_attach_fileList{
+	display: inline-grid;
+}
+.si_attach_fileList li,.sipay_attach_fileList li{
+	list-style: none;
+	font-style: 16px;
+}
+
+.payspan-bold{
+	font-weight: 600;
+}
+.vp_fw400{
+	text-decoration: none !important;
+	font-weight: 400 !important;
+	font-size: 16px;
+}
+.vp_fs16{
+	font-size: 16px;
+}
+.vp_cur_p{
+	cursor: pointer;
+}
+.vd_pl15{
+	padding-left: 15px;
+}
+.po_dr_delete{
+	cursor: pointer;
+	margin-left: 5%;
+}
+.vp_po_pr2{
+	padding-right: 2.2% !important;
+}
+.s_faq_collapse .accordion .card .card-header:before{
+	content: '\f0d8' !important;
+    color: #fff !important;
+    width: 1vw !important;
+    margin: 0 !important;
+    background-color: #a7a7a7 !important;
+    text-align: center !important;
+    border-radius: 100% !important;
+}
+.s_faq_collapse .accordion .card .card-header.collapsed:before{
+	content: '\f0d7' !important;
+    color: #fff !important;
+    width: 1vw ;
+    margin: 0 !important;
+    background-color: #a7a7a7 !important;
+    text-align: center !important;
+    border-radius: 100% !important;
+}

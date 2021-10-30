@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_autobackup" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.autobackup</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="25"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Database Auto Backup" string="Database Auto Backup"
+                     data-key="database_autobackup">
+                    <h2>Configure Backup</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="autobackup_enabled" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="autobackup_enabled"/>
+                                <div class="text-muted">
+                                    Enable database auto backup
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box"
+                             attrs="{'invisible': [('autobackup_enabled', '=', False)]}">
+                            <div class="o_setting_right_pane">
+                                <label for="db_name"/>
+                                <div class="text-muted">
+                                    The name of database you want to backup
+                                </div>
+                                <field name="db_name" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="master_pwd"/>
+                                <div class="text-muted">
+                                    Odoo master password
+                                </div>
+                                <field name="master_pwd" class="oe_inline" password="True"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="backup_dir"/>
+                                <div class="text-muted">
+                                    Directory to store backup files
+                                </div>
+                                <field name="backup_dir" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="backup_format"/>
+                                <div class="text-muted">
+                                    Type of backup; choose zip if you need to backup odoo filestore
+                                </div>
+                                <field name="backup_format" class="oe_inline"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_autobackup_configuration" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'autobackup_core'}</field>
+    </record>
+
+    <menuitem id="menu_autobackup" name="Database Auto Backup" sequence="5" groups="base.group_system"/>
+
+    <menuitem id="menu_autobackup_general_settings" name="Settings" parent="menu_autobackup"
+              sequence="0" action="action_autobackup_configuration"/>
+
+</odoo>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="skit_cal_appointment" inherit_id="website_calendar.appointment">
+	     
+	     <xpath expr="//div[@class='o_website_calendar']" position="after">
+	     	<t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+       		<ul class="shortcut_icon_ul sticky-btn-bottom-0">
+				<li class="list-unstyled">
+					<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+				</li>
+				<br></br>
+				<li class="list-unstyled">
+					<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+				</li>
+				<br></br>
+				<li class="list-unstyled">
+					<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+			    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+			   		</a>	
+				</li>
+			</ul>
+	    </xpath>
+	    
+	    <xpath expr="//div[@class='o_website_calendar']" position="attributes">
+	       <attribute name="class">o_website_calendar skit_cal_appt</attribute>
+	    </xpath>
+     </template>   
+	
+	<template id="appointment_form_customer_portal" inherit_id="website_calendar.appointment_form">
+   		<xpath expr="//t[@t-call='website.layout']" position="replace">
+        	<t t-call="website.layout">
+        		<div class="card-body">
+	            	<div id="wrap" class="o_website_calendar">
+	                	<div class="oe_structure container mb128 o_website_calendar_form skit_appt_form">
+	                		<t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+	                		<div class="portal_container"> 
+	                    		<div class="o_page_header page_header_calender">
+		                     		<div class="row customer_portal">
+			                    		<div class="col-md-6">
+	         								<h3 class="mt-3 ml-4 appt_header">Schedule an Appointment</h3>
+	                    				</div>
+				                    	<div class="col-md-6" id="right-column">
+						                    <ul class="wizard float-right mr-4 mt-3">
+						                        <li><a t-attf-href="/website/calendar" class="text-success">Appointment</a><span class="chevron"></span></li>
+						                        <li><a t-attf-href="/website/calendar/#{ slug(appointment_type) }/appointment" class="text-success">Time</a><span class="chevron"></span></li>
+						                        <li class="text-primary">Confirmation<span class="chevron"></span></li>
+						                    </ul>
+			                    		</div>
+		                    		</div>
+	                    		</div>
+	                   			<div class="mt-4 ml-4 mbl_ml_0 appt_form_container">
+	                   				<h2>Confirm your details</h2>
+	                    			<br></br>
+				                    <p>
+				                        <span t-field="appointment_type.name"/> on <strong t-esc="datetime_locale"/>
+				                    </p>
+				                    <form class="mt32 appointment_submit_form" t-attf-action="/website/calendar/#{ slug(appointment_type) }/submit" method="POST">
+				                		<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+				                      	<input type="hidden" name="datetime_str" t-att-value="datetime_str"/>
+				                      	<input type="hidden" name="employee_id" t-att-value="employee_id"/>
+				                      	<div class="form-group row col-xl-8">
+				                        	<label for="name" class="col-md-4 col-form-label">Your Name</label>
+					                        <div class="col-md-8">
+					                          <input type="char" class="form-control" name="name" required="1" t-att-value="'name' in partner_data and partner_data['name']"/>
+					                        </div>
+				                    	</div>
+					                    <div class="form-group row col-xl-8">
+					                        <label class="col-md-4 col-form-label" for="country_id">Your Country</label>
+					                        <div class="col-md-8">
+					                        	<select name="country_id" class="form-control" required="1" id="country_field">
+					                           		<t t-if="'country_id' not in partner_data or not partner_data['country_id']">
+					                                	<option disabled="1" selected="1"> -- select a country -- </option>
+					                              	</t>
+					                              	<t t-foreach="countries or []" t-as="country">
+					                              		<option t-att-value="country.id" t-att-data-phone-code="country.phone_code and ('+'+str(country.phone_code)+' ') or None" t-att-selected="partner_data.get('country_id') and country.id == partner_data['country_id'][0]"><t t-esc="country.name"/></option>
+					                              	</t>
+					                          	</select>
+					                        </div>
+					              		</div>
+					              		<div class="form-group row col-xl-8">
+					                        <label for="email" class="col-md-4 col-form-label">Your Email</label>
+					                        <div class="col-md-8">
+					                          <input type="email" class="form-control" name="email" t-att-value="'email' in partner_data and partner_data['email']" required="1"/>
+					                        </div>
+					                    </div>
+					                    <div class="form-group row col-xl-8">
+					                		<label for="phone" class="col-md-4 col-form-label">Your Phone</label>
+					                        <div class="col-md-8">
+					                     		<input type="tel" class="form-control" name="phone" required="1" id="phone_field" t-att-value="'mobile' in partner_data and partner_data['mobile']"/>
+					                          	<small t-if="appointment_type.reminder_ids.filtered(lambda r:r.alarm_type=='sms')">
+					                          		A text message reminder is sent to you before your appointment
+					                          	</small>
+					                		</div>
+					                	</div>
+				                      
+				                      	<div class="form-group row col-xl-8">
+				                        	<label class="col-md-4 col-form-label" for="property_sale_id">SO Number</label>
+				                        	<div class="col-md-8">
+					                      		<select name="property_sale_id" class="form-control" required="1" id="property_sale_id">
+					                         		<option></option>
+					                              	<t t-foreach="property_sales or []" t-as="property_sale">
+					                            		<option t-att-value="property_sale.id" t-att-selected="property_sale.so_number == request.session.get('selected_property_so_number')"><t t-esc="property_sale.so_number"/></option>
+					                              	</t>
+					                          	</select>
+				                        	</div>
+				                      	</div>
+				
+					                 	<t t-foreach="appointment_type.question_ids" t-as="question">
+					                 		<div class="form-group row col-xl-8" t-if="question.question_type!='text'">
+					                      		<label t-att-for="question_#{question.id}" class="col-md-4 col-form-label" t-esc="question.name"/>
+					                         	<div class="col-md-8">
+					                         		<t t-if="question.question_type=='char'">
+					                              		<input type="char" class="form-control"
+					                                        t-attf-name="question_#{question.id}"
+					                                        t-att-required="question.question_required or None"
+					                                        t-att-placeholder="question.placeholder"/>
+					                              	</t>
+					                              	<t t-if="question.question_type=='select'">
+					                              		<select t-attf-name="question_#{question.id}" class="form-control"
+					                                 		t-att-required="question.question_required or None"
+					                                        t-att-placeholder="question.placeholder">
+					                                 		<t t-foreach="question.answer_ids or []" t-as="answer">
+					                                       		<option t-att-value="answer.name"><t t-esc="answer.name"/></option>
+					                                      	</t>
+					                              		</select>
+					                              	</t>
+					                              	<t t-if="question.question_type=='radio'">
+					                              		<div class="checkbox" t-foreach="question.answer_ids or []" t-as="answer">
+					                                 		<label>
+					                                     		<input type="radio" t-attf-name="question_#{question.id}"
+					                                       			t-att-required="question.question_required or None"
+					                                            	t-att-value="answer.name"/> <t t-esc="answer.name"/>
+					                                      	</label>
+					                                  	</div>
+					                           		</t>
+						                       		<t t-if="question.question_type=='checkbox'">
+						                          		<div class="checkbox" t-foreach="question.answer_ids or []" t-as="answer">
+						                             		<label>
+						                                 		<input type="checkbox" t-attf-name="question_#{question.id}_answer_#{answer.id}"
+						                                    		t-att-value="answer.name"/><t t-esc="answer.name"/>
+						                                 	</label>
+						                            	</div>
+						                      		</t>
+					                       		</div>
+					                  		</div>
+					                		<div class="form-group row col-xl-8" t-if="question.question_type=='text'">
+					                     		<label t-att-for="question_#{question.id}" class="col-md-4 col-form-label" t-esc="question.name"/>
+					                         	<div class="col-md-8">
+					                          		<textarea class="form-control" rows="8"
+					                              		t-att-required="question.question_required or None"
+					                            		t-attf-name="question_#{question.id}"
+					                            		t-att-placeholder="question.placeholder"/>
+					                      		</div>
+					               			</div>
+					            		</t>
+				
+					                	<div class="form-group row">
+					               			<div class="portal_btn_div">
+					                     		<button type="submit" class="btn btn-primary font-weight_bold font-large border-0 bg-dark">Confirm Appointment <span class="fa fa-arrow-right"/></button>
+					                  		</div>
+					             		</div>
+				               		</form>
+	                			</div>
+	            			</div>
+	            		</div>
+	            		
+	            		<ul class="shortcut_icon_ul sticky-btn-bottom-0">
+							<li class="list-unstyled">
+								<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+							</li>
+							<br></br>
+							<li class="list-unstyled">
+								<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+							</li>
+							<br></br>
+							<li class="list-unstyled">
+								<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+						    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+						   		</a>	
+							</li>
+						</ul>
+	            		
+	            	</div>
+	            </div>
+	        </t>
+		</xpath>
+    </template>
+    
+    <!-- Pages -->
+	<template id="index_customer_portal" inherit_id="website_calendar.index">
+  		<xpath expr="//form[hasclass('o_website_appoinment_form')]" position="attributes">
+    		<attribute name="class">o_website_appoinment_form</attribute>
+		</xpath>
+		<xpath expr="//label[@for='calendarType']" position="replace">
+			<label for="calendarType" class="col-md-3 col-form-label">Appointment Type</label>
+		</xpath>
+  		<xpath expr="//div[hasclass('o_website_calendar_appointment')]" position="inside">
+			<t t-call="skit_customer_portal.scheduled_appointment_table"/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_calendar_intro')]" position="replace">
+		</xpath>
+        <xpath expr="//button[@type='submit']" position="replace">
+        	<button type="submit" class="btn btn-primary float-right">Next<span class="fa fa-arrow-right"/></button>
+        </xpath>
+    </template>
+    
+	<template id="scheduled_appointment_table" name="Website Appointment: Scheduled Appointment Table">
+		<t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+   		<div name="scheduled_appointment" class="scheduled_appt_tbl">
+   			<h3>Scheduled Appointment</h3>
+      		<table class="appointment_table width_100">
+				<tr>
+				    <th class="appointment_table bg_dark_gray">Subject</th>
+				    <th class="appointment_table bg_dark_gray">Date</th> 
+				    <th class="appointment_table bg_dark_gray">Duration</th>
+				    <th class="appointment_table bg_dark_gray">Location</th>
+			  	</tr>
+				<t t-foreach="calendar_event" t-as="event">
+			  		<tr>
+			    		<td class="appointment_table"><t t-esc="event.name"></t></td>
+			    		<td class="appointment_table"><t t-esc="event.start_datetime"></t></td>
+			    		<td class="appointment_table"><t t-esc="event.duration" t-options='{"widget": "float_time"}'></t></td>
+			    		<td class="appointment_table"><t t-esc="event.location"></t></td>
+			  		</tr>
+				</t>
+				<tr class="bg-gray">
+		    		<td class="appointment_table"></td>
+		    		<td class="appointment_table"></td>
+		    		<td class="appointment_table"></td>
+		    		<td class="appointment_table"></td>
+		  		</tr>
+			</table>
+      	</div>
+      	<ul class="shortcut_icon_ul sticky-btn-bottom-0">
+			<li class="list-unstyled">
+				<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+			</li>
+			<br></br>
+			<li class="list-unstyled">
+				<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+			</li>
+			<br></br>
+			<li class="list-unstyled">
+				<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+		    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+		   		</a>	
+			</li>
+		</ul>
+    </template>
+    
+</odoo>

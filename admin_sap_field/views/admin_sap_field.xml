@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <menuitem id="menu_documents" parent="purchase.menu_purchase_config"
+                name="Documents" sequence="2"/>
+
+      <menuitem id="menu_document_requirement" parent="menu_documents"
+                action="admin_purchase_order.document_requirement_action" sequence="1"/>
+
+      <menuitem id="menu_po_document_type" parent="menu_documents"
+                action="admin_purchase_order.po_document_type_action" sequence="2"/>
+
+      <menuitem id="menu_pr_document_type" parent="menu_documents"
+                action="admin_purchase_requisition.pr_document_type_action" sequence="3"/>
+
+      <record id="view_account_analytic_account_form" model="ir.ui.view">
+          <field name="name">analytic.analytic.account.form</field>
+          <field name="model">account.analytic.account</field>
+          <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+          <field name="arch" type="xml">
+              <field name="company_id" position="replace">
+                <label for="company_id"/>
+                <div>
+                    [<field name="company_code" class="oe_inline"/>]
+                    <field name="company_id" class="oe_inline"/>
+                </div>
+              </field>
+          </field>
+      </record>
+
+    </data>
+</odoo>

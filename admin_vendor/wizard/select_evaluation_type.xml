@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="admin_select_type_of_evaluation_form" model="ir.ui.view">
+            <field name="name">admin.select.type.of.evaluation.form</field>
+            <field name="model">admin.select.type.of.evaluation</field>
+            <field name="arch" type="xml">
+                <form string="Please revisit the following:">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="partner_evaluation_id" invisible="1"/>
+                                <label for="company_id"/>
+                                <div>
+                                    [<field name="company_code" class="oe_inline"/>]
+                                    <field name="company_id" groups="base.group_multi_company"
+                                            options="{'no_create': True}" class="oe_inline"/>
+                                </div>
+                                <field name="purchase_org_id"/>
+                                <field name="vendor_account_group_id"/>
+                            </group>
+                            <group>
+                                <field name="vat_type"/>
+                                <field name="is_subject_to_wh_tax"/>
+                                <field name="wh_tax_code_id" attrs="{'invisible':[('is_subject_to_wh_tax','=',False)],
+                                                                     'required':[('is_subject_to_wh_tax','=',True)]}"/>
+                                <field name="property_supplier_payment_term_id"/>
+                            </group>
+                        </group>
+                        <separator/>
+                        <div>
+                            <label for="type_of_evaluation" class="oe_inline"/>
+                            <field name="type_of_evaluation" class="oe_inline"/>
+                        </div>
+                        <div>
+                            <label for="evaluation_responsible_ids" class="oe_inline"/>
+                            <field name="evaluation_responsible_ids" widget="many2many_tags" options="{'no_create': True}" class="oe_inline"/>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button string="Approve" type="object"
+                                name="approve" class="oe_highlight"/>
+                        <button string="Cancel" class='oe_link' special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="admin_select_type_of_evaluation_action_wizard" model="ir.actions.act_window">
+            <field name="name">Please revisit the following:</field>
+            <field name="res_model">admin.select.type.of.evaluation</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'default_partner_evaluation_id': active_id}</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

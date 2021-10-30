@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+      <record id="rfi_by_company_rule" model="ir.rule">
+          <field name="name">RFI: multi-company</field>
+          <field ref="admin_request_for_information.model_admin_request_for_information" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+      <record id="rfi_line_by_company_rule" model="ir.rule">
+          <field name="name">RFI Line: multi-company</field>
+          <field ref="admin_request_for_information.model_admin_request_for_information_line" name="model_id"/>
+          <field name="domain_force">['|',('company_id','=',False),('company_id', 'child_of', company_ids)]</field>
+      </record>
+
+    </data>
+</odoo>

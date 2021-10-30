@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+	<!-- Inherited to add Property Sale field -->
+    <record id="calendar_event_view_form_inherit_customer_portal" model="ir.ui.view">
+        <field name="name">calendar.event.form</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='description']" position="before">
+            	<group>
+                	<group>
+                   		<field name="property_sale_id" readonly="1"/> 
+                	</group>
+            	</group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

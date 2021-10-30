@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="admin_request_for_proposal_line_view_form_inherit_portal" model="ir.ui.view">
+        <field name="name">admin.request.for.proposal.line.inherit.portal</field>
+        <field name="model">admin.request.for.proposal.line</field>
+        <field name="inherit_id" ref="admin_request_for_proposal.admin_request_for_proposal_line_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='proposal_line_ids']//tree" position="replace">
+            	<tree editable="bottom" string="Proposal Line">
+                	<control>
+                        <create name="add_product_control" string="Add a Products/Services"/>
+                        <create name="add_section_control" string="Add a Grouping"
+                                                    context="{'default_display_type': 'line_section'}"/>
+                        <create name="add_note_control" string="Add a note"
+                                                    context="{'default_display_type': 'line_note'}"/>
+                     </control>
+                     <field name="display_type" invisible="1"/>
+                     <field name="sequence" widget="handle" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="product_name" attrs="{'required': [('display_type', '=', False)],'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="name" widget="section_and_note_text"
+                                               attrs="{'required': [('display_type', '=', 'line_section')], 'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="delivery_lead_time" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="validity_from" optional="hide" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="validity_to" optional="hide" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="qty" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="unit_name" attrs="{'required': [('display_type', '=', False)], 'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="price" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="total" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <field name="product_id" invisible="1" attrs="{'invisible': [('parent.state', '!=', 'submitted')]}"/>
+                     <button string="Link to Product" name="%(admin_request_for_proposal.admin_link_rfp_item_to_product_action_wizard)d"
+                           class="oe_link" icon="fa-external-link" type="action"
+                           attrs="{'invisible': ['|', ('product_id', '!=', False), ('parent.state', '!=', 'selected_as_vendor')]}"/>
+                 </tree>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

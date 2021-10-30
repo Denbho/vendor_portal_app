@@ -1,0 +1,80 @@
+/* Style the tab */
+#view_full_profile .tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+#view_full_profile .tab span {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+#view_full_profile .tab span:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+#view_full_profile .tab span.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+#view_full_profile .tabcontent {
+  display: none;
+  /* padding: 6px 12px; */
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.font-weight-normal{
+	font-weight: normal;
+}
+
+/* address.align-items-baseline > span {
+   font-size: 30px;
+} */
+
+input[type=file]::file-selector-button {
+  opacity: 0; 
+  z-index: -1; 
+  position: absolute; 
+}
+
+.input-icons i {
+	position: absolute;
+	right: 24px;
+	top: 7px;
+	font-size: 21px;
+}
+
+.input-icons {
+	width: 100%;
+	/* margin-bottom: 10px; */
+	position: absolute;
+}
+
+.input-field {
+	width: 100%;
+	padding: 10px;
+	text-align: center;
+}
+.empty-row-height{
+	height: 35px;
+}
+
+#other_categories:disabled {
+  	background-color:white;
+} 
+.col-form-label:after
+{
+	color: red;
+}

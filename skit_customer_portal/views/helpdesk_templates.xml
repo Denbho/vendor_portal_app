@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<template id="ticket_submit_customer_portal" inherit_id="website_helpdesk_form.ticket_submit">
+    	<xpath expr="//t[@t-call='website.layout']" position="replace">
+			<t t-call="skit_customer_portal.support_ticket_submit_template"></t>
+		</xpath>
+	</template>
+	
+	<template id="helpdesk_navbar" inherit_id="website_helpdesk.team">
+		<xpath expr="//div[1]" position="attributes">
+	       <attribute name="id">helpdesk_navbar</attribute>
+	    </xpath>
+	    <xpath expr="//div[@id='right-column']" position="attributes">
+	       <attribute name="class">col-md-3 helpdesk_right_sec</attribute>
+	    </xpath>
+    </template>
+    
+	<template id="support_ticket_submit_template">
+		<t t-call="website.layout">
+	    	<div class="card-body">
+            	<t t-set="additional_title">Ticket</t>
+             	<div id="wrap" class="oe_structure oe_empt">
+					<div class="container m_pd_0">
+		      			<div class="portal_container"> 
+                			<div t-attf-class="pb-2 pt-3 #{'card-header bg-white'}">
+						  		<h3 class="my-0">
+						     		<t t-esc="'Support'"/>
+						     	</h3>
+							</div>
+							<div t-attf-class="pt-3 pl-5 ticket_head">
+								<h4>
+						     		<t t-esc="'Ticket'"/>
+						     	</h4>
+							</div>
+                			<div class="row mb16">
+			             		<div class="col-md-8">
+         							<t t-call="skit_customer_portal.ticket_submit_form"></t>
+         							<t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+                    			</div>
+			                    <div class="col-md-3" id="right-column">
+		                            <div class="col-12 btn-group btn-block mb16">
+		                                <a id="submit-ticket" t-attf-href="/my/tickets">
+		                                 <button t-attf-class="btn btn-primary font-weight_bold font-large border-0 mbl_btn bg-dark #{'col-md-10' if multi_type else 'col-md-12'}">View my Tickets</button>
+		                                </a>
+		                            </div>
+			                        <t t-if="team.description">
+			                            <div class="card" id="about_team">
+			                                <h3 class="card-header">Description</h3>
+			                                <div class="card-body">
+			                                    <span t-field="team.description"/>
+			                                </div>
+			                            </div>
+			                        </t>
+			                    </div>
+			                    
+			                    <ul class="shortcut_icon_ul sticky-btn-bottom-0">
+									<li class="list-unstyled">
+										<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+									</li>
+									<br></br>
+									<li class="list-unstyled">
+										<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+									</li>
+									<br></br>
+									<li class="list-unstyled">
+										<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+								    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+								   		</a>	
+									</li>
+								</ul>
+			                    
+							</div>
+						</div>
+                	</div>
+				</div>
+			</div>
+		</t>
+	</template>
+	
+	<template id="ticket_submit_form">
+		<section id="forms" class="col-12">
+		<span class="hidden" data-for="helpdesk_ticket_form" t-att-data-values="{'partner_name': default_values.get('name', ''), 'partner_email': default_values.get('email', ''), 'team_id': team and team.id or False}" />
+		<form id="helpdesk_ticket_form" action="/website_form/" method="post" class="s_website_form container-fluid mt32" enctype="multipart/form-data" data-model_name="helpdesk.ticket" data-success_page="/your-ticket-has-been-submitted" data-editable-form="false"  hide-change-model="true">
+			<div class="form-group row form-field o_website_form_custom o_website_form_required_custom">
+				
+	     		<div class="col-lg-3 col-md-4 text-right">
+	          		<label class="col-form-label" for="ticket_type_id">Ticket Type</label>
+	          	</div>
+              	<div class="col-lg-7 col-md-8">
+            		<select name="ticket_type_id" t-attf-class="form-control o_website_form_input" required="1">
+                  		<option value="">Ticket Type...</option>
+                       	<t t-foreach="ticket_types or []" t-as="ticket">
+                         	<option t-att-value="ticket.id">
+                             	<t t-esc="ticket.name" />
+                         	</option>
+                      	</t>
+              		</select>
+              	</div>
+			</div>
+			<div class="col-lg-7 col-md-8">
+			<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+			</div>
+	     	<div class="form-group row form-field o_website_form_required">
+	    		<div class="col-lg-3 col-md-4 text-right">
+	        		<label class="col-form-label" for="partner_name">Your Name</label>
+	         	</div>
+	        	<div class="col-lg-7 col-md-8">
+	        		<input type="text" class="form-control o_website_form_input" name="partner_name" required="1"/>
+	        	</div>
+	    	</div>
+	   		<div class="form-group row form-field o_website_form_required">
+	            <div class="col-lg-3 col-md-4 text-right">
+	                <label class="col-form-label" for="partner_email">Your Email</label>
+	            </div>
+	            <div class="col-lg-7 col-md-8">
+	                <input type='email' class='form-control o_website_form_input' name="partner_email" required="1"/>
+	            </div>
+	     	</div>
+          	<div class="form-group row form-field o_website_form_custom o_website_form_required_custom">
+	     		<div class="col-lg-3 col-md-4 text-right">
+	          		<label class="col-form-label" for="property_sale_id">SO. Reference </label>
+	          	</div>
+              	<div class="col-lg-7 col-md-8">
+            		<select name="property_sale_id" t-attf-class="form-control o_website_form_input">
+                  		<t t-if="not request.session.get('selected_property_so_number')">
+                       		<option disabled="1" selected="1"> -- select a property sale -- </option>
+                     	</t>
+                       	<t t-foreach="property_sales or []" t-as="property_sale">
+                         	<option t-att-value="property_sale.id" t-att-selected="property_sale.so_number == request.session.get('selected_property_so_number')">
+                             	<t t-esc="property_sale.so_number" />
+                         	</option>
+                      	</t>
+              		</select>
+              	</div>
+			</div> 
+          	<div class="form-group row form-field o_website_form_required">
+         		<div class="col-lg-3 col-md-4 text-right">
+             		<label class="col-form-label" for="name">Subject</label>
+              	</div>
+              	<div class="col-lg-7 col-md-8">
+               		<input type="text" class="form-control o_website_form_input" name="name" required="1"/>
+              	</div>
+          	</div>
+	     	<div class="form-group row form-field">
+	      		<div class="col-lg-3 col-md-4 text-right">
+	        		<label class="col-form-label" for="description">Description</label>
+	         	</div>
+	         	<div class="col-lg-7 col-md-8">
+	         		<textarea class="form-control o_website_form_input" name="description"/>
+	        	</div>
+	    	</div>
+	    	<div class="form-group row form-field">
+	     		<div class="col-lg-3 col-md-4 text-right">
+	          		<label class="col-form-label" for="attachments">Attachment(s)</label>
+	         	</div>
+	        	<div class="col-lg-7 col-md-8">
+	           		<input type="file" name="attachments" class="form-control o_website_form_input" multiple="true" accept="image/*,application/pdf,video/*"/>
+	        	</div>
+	   		</div>
+	    	<div class="form-group row form-field d-none">
+	     		<div class="col-lg-3 col-md-4">
+	          		<label class="col-form-label" for="team_id">Team</label>
+	          	</div>
+	        	<div class="col-lg-7 col-md-8">
+	          		<input type="hidden" class="form-control o_website_form_input" name="team_id"/>
+	        	</div>
+	   		</div>
+	     	<div class="form-group row">
+	      		<div class="col-lg-10">
+	           		<button type="submit" class="btn btn-primary btn-lg o_website_form_send o_default_snippet_text float-right font-weight_bold font-large border-0 bg-dark mbl_btn">Submit Ticket</button>
+	           		<span id="o_website_form_result"></span>
+	        	</div>
+	  		</div>
+	 	</form>
+	 	</section>
+	</template>
+	
+	<template id="portal_helpdesk_ticket_customer_portal" inherit_id="helpdesk.portal_helpdesk_ticket">
+   		<xpath expr="//t[@t-if='tickets']" position="after">
+			<!--  <t t-set="selected_sale_order" t-value="request.env['property.admin.sale'].search([('id', '=', request.session.get('selected_property_so_id'))])"/>
+			 <t t-if="selected_sale_order">
+			 	<div class="o_portal_messages_container mt32">
+	                <t t-call="portal.message_thread">
+	                    <t t-set="pid" t-value="pid"/>
+	                    <t t-set="hash" t-value="hash"/>
+	                    <t t-set="object" t-value="selected_sale_order"/>
+	                </t>
+            	</div>
+            </t> -->
+            <t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+            <ul class="shortcut_icon_ul sticky-btn-bottom-0">
+				<li class="list-unstyled">
+					<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+				</li>
+				<br></br>
+				<li class="list-unstyled">
+					<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+				</li>
+				<br></br>
+				<li class="list-unstyled">
+					<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+			    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+			   		</a>	
+				</li>
+			</ul>
+		</xpath>
+    </template>
+	
+	<template id="tickets_followup_customer_portal" inherit_id="helpdesk.tickets_followup">
+   		<xpath expr="//t[@t-call='portal.portal_record_layout']" position="after">
+            <t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+            <ul class="shortcut_icon_ul sticky-btn-bottom-0">
+				<li class="list-unstyled">
+					<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+				</li>
+				<br></br>
+				<li class="list-unstyled">
+					<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+				</li>
+				<br></br>
+				<li class="list-unstyled">
+					<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+			    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+			   		</a>	
+				</li>
+			</ul>
+		</xpath>
+    </template>
+</odoo>

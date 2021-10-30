@@ -1,0 +1,388 @@
+.sks_form_outline {
+	padding: 2%;
+	background-color: #fff;
+}
+.skit_po_details {
+	width: 100%; display: inline-flex; line-height: 2em;
+}
+
+.skit_po_left, .skit_po_right {
+	width: 100%; display: inline-flex;
+}
+
+.skit_row_wo_margin {
+	margin-right: 0px; margin-left: 0px; line-height: 1.5em;
+}
+
+.skit_po_order_line {
+	width: 14.25%;
+	padding: 5px;
+}
+
+.skit_row_wo_margin > #product_name , .skit_row_wo_margin > .skit_my_po_ol {
+	border: 2px solid #a7a7a7;
+}
+.dspan_label{
+	font-weight:600;
+}
+.po_status_head{
+	padding:0.5rem;
+}
+.po_pending{
+	background: #FFDF8F;
+}
+.po_accepted{
+	background: #B1E1B5;
+}
+.po_declined{
+	background: #ffcccb;
+}
+.po_status_label{
+	margin:0.5rem;
+}
+.po_collapse_icon{
+	background: gray;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    vertical-align: middle;
+	font-size: 13px;
+    float: left;
+    color: white;
+}
+.po_collapse_btn{
+	width: 17%;
+    text-align: center;
+    color: gray;
+}
+.po_collapse_btn.focus{
+	border: none !important;
+	box-shadow: none !important;
+}
+.po_delivery_send{
+	padding: 0.5rem;
+	background: #448ee4;
+    color: white;
+	text-align: center;
+	cursor: pointer;
+}
+.po_bnone{
+	border: none;
+}
+.po_del_col{
+	border: 1.5px solid gray;
+    text-align: center;
+}
+.po_deli_edit, .po_deli_delete{
+	font-size: 18px;
+    cursor: pointer;
+}
+.po_txt{
+	text-align: center;
+}
+.po_cursor{
+	cursor: pointer;
+}
+.po_deli_new, .with_invoice{
+	background: #1e7e34;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    vertical-align: middle;
+	font-size: 13px;
+    color: white;
+	cursor: pointer;
+}
+.required_style {
+  border-style: solid;
+  border-width: 1px;
+  border-color: red !important;
+}
+
+.skit_reprint_watermark{
+	position: absolute;
+	opacity:0.2;
+	font-size:100px;
+	width:50%;
+	text-align:center;
+	z-index:99;
+	-webkit-transform: rotate(-30deg);
+	top: 400px; 
+	right: 350px;
+}
+.po_late_not{
+	color: #B40F2B;
+	background: #F79081;
+	padding: 0.5rem;
+	font-weight: bold;
+    width: 60%;
+    float: right;
+    text-align: center;
+}
+.po_today_not{
+	color: #07931B;
+	background: #81E585;
+	padding: 0.5rem;
+	font-weight: bold;
+    width: 60%;
+    float: right;
+    text-align: center;
+}
+.po_future_not{
+	color: #F3B554;
+	background: #F8CC87;
+	padding: 0.5rem;
+	font-weight: bold;
+    width: 60%;
+    float: right;
+    text-align: center;
+}
+.po_mt2{
+	margin-top: 2%;
+}
+.po_txt_active{
+	color: #B40F2B;
+    font-weight: bold;
+}
+.po_noti_icon{
+	background: gray;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 25px;
+    vertical-align: middle;
+	font-size: 20px;
+    float: right;
+    color: white;
+	font-weight: bold;
+}
+
+.accordion_noti {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+  border-top: 1px solid lightgrey !important;
+  border-bottom: 1px solid lightgray !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.po_noti_active, .accordion_noti:hover {
+  	background-color: rgba(0, 0, 0, 0.02);
+    border-bottom: 0px solid gray !important;
+    border-left: 1px solid lightgray !important;
+	border-right: 1px solid lightgray !important;
+}
+
+.panel_noti {
+  padding: 0% 2% 2% 2%;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  font-size: 18px;
+  color: black;
+  border: 1px solid lightgrey;
+}
+.noti_blue{
+	color: #2874A6;
+}
+.panel_center_noti{
+	background-color: #EFECEB;
+    margin: 0;
+    padding: 2%;
+}
+.panel_bt{
+	border-top: 0 !important;
+}
+.reminder_center_noti{
+	background-color: #F9EBEA;
+    margin: 0% 0%;
+    padding: 2% 2%;
+	font-size: 16px;
+    color: black;
+	margin-bottom: 4%;
+}
+.po_td_wd{
+	width: 8%;
+}
+.po_accept_s_txt{
+	font-size: 13px;
+    color: green;
+    margin-left: 1%;
+}
+.dl_attach_fileList{
+	display: inline-grid;
+}
+.dl_attach_fileList li{
+	list-style: none;
+	font-style: 16px;
+}
+.po_pay_dn{
+	display: none;
+}
+.po_or_attachment{
+	font-size: 20px;
+    font-weight: bold;
+    color: #448ee4;
+    cursor: pointer;
+}
+
+
+
+	
+.my_inv_form_header_prl15 {
+	padding: 0px 15px 0px 15px;
+}
+
+.my_po_ol_header {
+	vertical-align: bottom !important;
+	width: 12%;
+	border: none !important;
+}
+
+.my_po_ol_tr {
+	border: none;
+	width: 100%;
+	line-height: 1.5em;
+}
+
+.my_po_ol_header_w14 {
+	vertical-align: bottom !important;
+	width: 14%;
+	border: none !important;
+}
+
+.my_po_ol_header_w20 {
+	vertical-align: bottom !important;
+	width: 20%;
+	border: none !important;
+}
+
+.my_po_ol {
+	border: 2px solid #a7a7a7 !important;
+	vertical-align: middle !important;
+}
+
+.k_btn_my_po_form_popup {
+	width: 30%;
+    margin: 0% 35%;
+}
+
+.sks_form_span_float {
+	float: right;
+}
+.vp_fw400{
+	text-decoration: none !important;
+	font-weight: 400 !important;
+	font-size: 16px;
+}
+.vp_fs16{
+	font-size: 16px;
+}
+.vp_po_cursor{
+	cursor: pointer;
+}
+.vp_po_pr2{
+	padding-right: 2.2%;
+}
+	
+/* ----------MEDIA QUERY---------- */
+@media 
+only screen and (max-width: 300px),
+(min-device-width: 320px) and (max-device-width: 768px)  {
+	.sks_form_outline1 {
+		display: inline-block !important;
+	}
+
+	.my_inv_form_header_prl15 {
+		padding: 0px 5px 0px 5px;
+	}
+	
+	.my_po_form_inv_info, .my_po_form_del_info, .my_po_form_ordr_info, .my_po_form_popup {
+		overflow: scroll;
+	}
+	
+	.my_po_form_empty_fld {
+		display: none !important;
+	}
+	
+	.my_po_form_pay_cal {
+		width: 50%;
+	}
+	
+	.sks_form_nxt_prev_rec {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+	
+	.sks_mypo_form_header {
+		margin: 0 0 1em 0;
+	}
+	
+	.po_delivery_send {
+		width: 50%;
+	}
+	
+	#po_delivery_creation {
+		padding: 0px !important;
+	}
+	
+	.sks_form_span_float {
+		float: left;
+	}
+	
+	.reminder_center_noti{
+    	padding: 2% 4%;
+	}
+	
+	.menu_noti_title {
+	    position: relative;
+	    top: 50%;
+	    transform: translateY(-50%);
+		line-height: 2em;
+	}
+	
+	.menu_noti_status {
+		padding: 0% 0% 0% 0.5%; 
+		margin: 0% 2%; 
+		/*box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%);*/
+	}	
+	
+	.po_status_label{
+	    position: relative;
+	    top: 50%;
+	    transform: translateY(-50%);
+	}
+	
+	.menu_noti_body {
+		padding: 0;
+	}
+	
+	.panel_center_noti {
+		margin: 0;
+    	padding: 4%;
+	}
+	
+	.my_po_form_payment_info {
+		overflow: scroll;
+	}
+
+}
+	
+	
+	
+	
+	

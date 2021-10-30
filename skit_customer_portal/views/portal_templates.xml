@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="customer_portal_top_menu" inherit_id="portal.frontend_layout" name="Show Notification, User Avatar and SO Number">
+		<xpath expr="//li[@class='nav-item divider']" position="before">
+			<t t-if="not request.website.is_public_user()">
+				<li class="nav-item o_mail_systray_item notification_menu mt-2"> 
+		           	<div class="dropdown show">
+		           		<t t-set="po_notif" t-value="website.get_po_status()" />
+						<a class="dropdown-toggle po_noti_cl" href="#" role="button" id="dropdownNotification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    <i class="fa fa-bell" role="img" aria-label="Activities"></i>
+						    <sup t-if="po_notif['total_count'] > 0" t-attf-class="po_noti_badge" t-esc="po_notif['total_count']" />
+						</a>
+					
+						<div class="dropdown-menu po_notification" aria-labelledby="dropdownNotification">
+							<span class="po_noti_txt">Purchase Order(PO)</span>
+							<table class="po_noti_tbl">
+								<tbody>
+									<tr>
+										<td class="po_noti_late" onclick="window.location='/purchase_order/notification/late'"><t t-esc="po_notif['late_count']" /> Late </td>
+										<td class="po_noti_today" onclick="window.location='/purchase_order/notification/today'"><t t-esc="po_notif['today_count']" /> Today</td>
+										<td class="po_noti_future" onclick="window.location='/purchase_order/notification/future'"><t t-esc="po_notif['future_count']" /> Future</td>
+									</tr>
+								</tbody>
+							</table>
+							<!-- <a class="dropdown-item" href="#">Action</a>
+						    <a class="dropdown-item" href="#">Another action</a>
+						    <a class="dropdown-item" href="#">Something else here</a> -->
+						</div>
+					</div>
+	        	 </li>
+        	 </t> 
+		</xpath>
+		<xpath expr="//li[@class='nav-item dropdown']" position="before">
+	   		<t t-if="not request.website.is_public_user()">
+	   			<div t-field="user_id.partner_id.image_1920" class="user_avatar_image rounded-circle" t-options='{"widget": "image", "preview_image": "image_512", "class": "d-block mx-auto mb16"}'/>
+	   		</t> 
+       	</xpath>	
+     	<xpath expr="//a[@class='nav-link dropdown-toggle']/b" position="after">
+     		<b>
+        		<br></br>
+             	<span><t t-esc="request.session.get('selected_property_so_number')"></t></span>
+          	</b>
+      	</xpath>
+    </template> 
+
+</odoo>
+    

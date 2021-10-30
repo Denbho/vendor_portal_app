@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="product_classification_view_tree" model="ir.ui.view">
+          <field name="name">product.classification.view.tree</field>
+          <field name="model">product.classification</field>
+          <field name="arch" type="xml">
+              <tree editable="bottom" string="Product Classification">
+                  <field name="name"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="product_classification_action" model="ir.actions.act_window">
+          <field name="name">Product Classification</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">product.classification</field>
+          <field name="view_mode">tree</field>
+          <field name="view_id" ref="product_classification_view_tree"/>
+      </record>
+
+      <record id="purchase.product_normal_action_puchased" model="ir.actions.act_window">
+          <field name="res_model">product.template</field>
+          <field name="view_mode">kanban,tree,pivot,form,activity</field>
+      </record>
+
+      <record id="product_template_form_view" model="ir.ui.view">
+          <field name="name">product.template.common.form</field>
+          <field name="model">product.template</field>
+          <field name="inherit_id" ref="product.product_template_form_view"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='company_id']" position="replace">
+                  <label for="company_id"/>
+                  <div>
+                      [<field name="company_code" class="oe_inline"/>]
+                      <field name="company_id" class="oe_inline"/>
+                  </div>
+              </xpath>
+              <xpath expr="//field[@name='uom_id']" position="replace">
+                  <label for="uom_id"/>
+                  <div>
+                      [<field name="product_uom_code" class="oe_inline"/>]
+                      <field name="uom_id" class="oe_inline"/>
+                  </div>
+              </xpath>
+              <xpath expr="//field[@name='uom_po_id']" position="replace">
+                  <label for="uom_po_id"/>
+                  <div>
+                      [<field name="po_uom_code" class="oe_inline"/>]
+                      <field name="uom_po_id" class="oe_inline"/>
+                  </div>
+              </xpath>
+          </field>
+      </record>
+
+      <record id="product_template_only_form_view" model="ir.ui.view">
+          <field name="name">product.template.product.form</field>
+          <field name="model">product.template</field>
+          <field name="inherit_id" ref="product.product_template_only_form_view"/>
+          <field name="arch" type="xml">
+              <field name="default_code" position="replace"/>
+              <field name="barcode" position="replace"/>
+              <xpath expr="//field[@name='categ_id']" position="replace">
+                  <label for="categ_id"/>
+                  <div>
+                      [<field name="categ_id_code" class="oe_inline"/>]
+                      <field name="categ_id" class="oe_inline"/>
+                  </div>
+                  <field name="default_code" attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}"/>
+                  <field name="barcode" attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}"/>
+              </xpath>
+          </field>
+      </record>
+
+      <record id="product_category_search_view" model="ir.ui.view">
+          <field name="name">product.category.search</field>
+          <field name="model">product.category</field>
+          <field name="inherit_id" ref="product.product_category_search_view"/>
+          <field name="arch" type="xml">
+              <xpath expr="//search" position="attributes">
+                  <attribute name="string">Material Group</attribute>
+              </xpath>
+          </field>
+      </record>
+
+      <record id="product_category_list_view" model="ir.ui.view">
+          <field name="name">product.category.list</field>
+          <field name="model">product.category</field>
+          <field name="inherit_id" ref="product.product_category_list_view"/>
+          <field name="arch" type="xml">
+              <xpath expr="//tree" position="attributes">
+                  <attribute name="string">Material Groups</attribute>
+              </xpath>
+              <field name="display_name" position="attributes">
+                  <attribute name="string">Material Group</attribute>
+              </field>
+          </field>
+      </record>
+
+      <record id="product.product_category_action_form" model="ir.actions.act_window">
+          <field name="name">Material Groups</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">product.category</field>
+          <field name="search_view_id" ref="product.product_category_search_view"/>
+          <field name="view_id" ref="product.product_category_list_view"/>
+      </record>
+
+      <record id="product_template_search_view" model="ir.ui.view">
+          <field name="name">product.template.search</field>
+          <field name="model">product.template</field>
+          <field name="inherit_id" ref="product.product_template_search_view"/>
+          <field name="arch" type="xml">
+            <xpath expr="//filter[@name='categ_id']" position="attributes">
+                <attribute name="string">Material Group</attribute>
+            </xpath>
+          </field>
+      </record>
+
+      <record id="product_category_search_view" model="ir.ui.view">
+          <field name="name">product.category.search</field>
+          <field name="model">product.category</field>
+          <field name="inherit_id" ref="product.product_category_search_view"/>
+          <field name="arch" type="xml">
+              <xpath expr="//search" position="attributes">
+                  <attribute name="string">Material Groups</attribute>
+              </xpath>
+              <field name="name" position="attributes">
+                  <attribute name="string">Material Groups</attribute>
+              </field>
+          </field>
+      </record>
+
+      <record id="product_category_form_view" model="ir.ui.view">
+          <field name="name">product.category.form</field>
+          <field name="model">product.category</field>
+          <field name="inherit_id" ref="product.product_category_form_view"/>
+          <field name="arch" type="xml">
+            <xpath expr="//label[@for='name']" position="attributes">
+                <attribute name="string">Group name</attribute>
+            </xpath>
+            <xpath expr="//group[@name='first']" position="before">
+                <group>
+                    <field name="code"/>
+                </group>
+            </xpath>
+            <field name="parent_id" position="replace">
+              <label for="parent_id"/>
+              <div>
+                  [<field name="parent_code" class="oe_inline"/>]
+                  <field name="parent_id" class="oe_inline"/>
+              </div>
+            </field>
+          </field>
+      </record>
+
+      <record id="product_uom_tree_view" model="ir.ui.view">
+          <field name="name">uom.uom.tree</field>
+          <field name="model">uom.uom</field>
+          <field name="inherit_id" ref="uom.product_uom_tree_view"/>
+          <field name="arch" type="xml">
+              <field name="name" position="after">
+                  <field name="code"/>
+              </field>
+          </field>
+      </record>
+
+      <record id="product_uom_form_view" model="ir.ui.view">
+          <field name="name">uom.uom.form</field>
+          <field name="model">uom.uom</field>
+          <field name="inherit_id" ref="uom.product_uom_form_view"/>
+          <field name="arch" type="xml">
+              <field name="name" position="after">
+                  <field name="code"/>
+              </field>
+              <field name="category_id" position="replace">
+                <label for="category_id"/>
+                <div>
+                    [<field name="category_code" class="oe_inline"/>]
+                    <field name="category_id" required="1" class="oe_inline"/>
+                </div>
+              </field>
+          </field>
+      </record>
+
+      <record id="product_uom_categ_tree_view" model="ir.ui.view">
+          <field name="name">uom.category.tree</field>
+          <field name="model">uom.category</field>
+          <field name="inherit_id" ref="uom.product_uom_categ_tree_view"/>
+          <field name="arch" type="xml">
+              <field name="name" position="after">
+                  <field name="code"/>
+              </field>
+          </field>
+      </record>
+
+      <record id="product_supplierinfo_form_view" model="ir.ui.view">
+          <field name="name">product.supplierinfo.form.view</field>
+          <field name="model">product.supplierinfo</field>
+          <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+          <field name="arch" type="xml">
+            <field name="company_id" position="replace">
+              <label for="company_id"/>
+              <div>
+                  [<field name="company_code" class="oe_inline"/>]
+                  <field name="company_id" class="oe_inline" options="{'no_create': True}"/>
+              </div>
+            </field>
+          </field>
+      </record>
+
+      <menuitem
+          action="product.product_category_action_form" id="purchase.menu_product_category_config_purchase"
+          parent="purchase.menu_product_in_config_purchase" string="Material Groups" sequence="1" />
+
+      <menuitem
+          action="product_classification_action" id="menu_product_classification_config_purchase"
+          parent="purchase.menu_product_in_config_purchase" string="Product Classification" sequence="2" />
+
+    </data>
+</odoo>

@@ -1,0 +1,1032 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- Assets -->
+	<template id="my_inv_assets_frontend" inherit_id="website.assets_frontend" name="My Invoice Front-end assets">
+		<xpath expr="//link[last()]" position="after">
+			<link rel="stylesheet" href="/skit_website_my_invoice/static/src/scss/my_inv_styles.scss" />
+			<link rel="stylesheet" href="/skit_website_my_invoice/static/src/css/my_inv.css" />
+		</xpath>
+		<xpath expr="//script[last()]" position="after">
+			<script type="text/javascript" src="/skit_website_my_invoice/static/src/js/my_invoice.js"></script>
+			<script type="text/javascript" src="/skit_website_my_invoice/static/src/js/si_payment.js"></script>
+		</xpath>
+	</template>
+<!-- Dashboard -->
+    <template id="account.portal_my_home_invoice" name="Portal My Home : invoice entries" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Sales Invoice</t>
+                <t t-set="url" t-value="'/my/myinvoices'"/>
+                <t t-set="count" t-value="invoice_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="inherit_portal_searchbar" inherit_id="portal.portal_searchbar" name="Portal Search Bar">
+    <xpath expr="//nav" position="replace">
+        <nav t-attf-class="navbar navbar-light navbar-expand-lg border py-0 mb-2 o_portal_navbar {{classes if classes else ''}} {{'mt-3 rounded' if breadcrumbs_searchbar else 'border-top-0' }}" style="padding: 2% !important; margin-bottom: 0px !important;  border: none !important; border-radius: 0px !important;">
+        	<div style="width: 100%;">
+        		<div class="sks_form_sort" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; width: 100%; display: inline-flex;">
+		            <!--  Navbar breadcrumb or title  -->
+		            <t t-if="breadcrumbs_searchbar">
+		                <t t-call="portal.portal_breadcrumbs"/>
+		            </t>
+		            <span t-else="" class="navbar-brand mb-0 h1 mr-auto vd_pl15" t-esc="title or 'No title'"/>
+
+		            <!--  Collapse button -->
+		            <button class="navbar-toggler sks_form_sort_btn" type="button" data-toggle="collapse" data-target="#o_portal_navbar_content" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle filters">
+		                <span class="navbar-toggler-icon small"/>
+		            </button>
+
+		            <!--  Collapsable content  -->
+		            <div class="collapse navbar-collapse" id="o_portal_navbar_content" style="padding-right: 15px; font-size: 20px; font-weight: bold;">
+		                <div class="nav flex-column flex-lg-row ml-auto p-0 mb-3 mb-lg-0 mt-1 mt-lg-0">
+		                    <div t-if="searchbar_sortings" class="form-inline">
+		                        <span class="small mr-1 navbar-text" style="color: black; font-weight:540; font-size: 0.875rem">Sort By:</span>
+		                        <div class="btn-group">
+		                            <button id="portal_searchbar_sortby" data-toggle="dropdown" class="btn btn-secondary btn-sm dropdown-toggle">
+		                                <t t-esc="searchbar_sortings[sortby].get('label', 'Newest')"/>
+		                            </button>
+		                            <div class="dropdown-menu" aria-labelledby="portal_searchbar_sortby">
+		                                <t t-foreach="searchbar_sortings" t-as="option">
+		                                    <a t-att-href="request.httprequest.path + '?' + keep_query('*', sortby=option)"
+		                                       t-attf-class="dropdown-item#{sortby == option and ' active' or ''}">
+		                                        <span t-esc="searchbar_sortings[option].get('label')"/>
+		                                    </a>
+		                                </t>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div t-if="searchbar_filters" class="form-inline ml-lg-2">
+		                        <span class="small mr-1 navbar-text">Filter By:</span>
+		                        <div class="btn-group">
+		                            <button id="portal_searchbar_filters" data-toggle="dropdown" class="btn btn-secondary btn-sm dropdown-toggle">
+		                                <t t-esc="searchbar_filters.get(filterby,searchbar_filters.get('all')).get('label', 'All')"/>
+		                            </button>
+		                            <div class="dropdown-menu" aria-labelledby="portal_searchbar_filters">
+		                                <t t-foreach="searchbar_filters" t-as="option">
+		                                    <a t-att-href="default_url + '?' + keep_query('*', filterby=option)"
+		                                       t-attf-class="dropdown-item#{filterby == option and ' active' or ''}">
+		                                        <span t-esc="searchbar_filters[option].get('label')"/>
+		                                    </a>
+		                                </t>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div t-if="searchbar_groupby" class="form-inline ml-lg-2">
+		                        <span class="small mr-1 navbar-text">Group By:</span>
+		                        <div class="btn-group">
+		                            <button id="portal_searchbar_groupby" data-toggle="dropdown" class="btn btn-secondary btn-sm dropdown-toggle">
+		                                <t t-esc="searchbar_groupby[groupby].get('label', 'None')"/>
+		                            </button>
+		                            <div class="dropdown-menu" aria-labelledby="portal_searchbar_groupby">
+		                                <t t-foreach="searchbar_groupby" t-as="option">
+		                                    <a t-att-href="default_url + '?' + keep_query('*', groupby=option)"
+		                                       t-attf-class="dropdown-item#{groupby == option and ' active' or ''}">
+		                                        <span t-esc="searchbar_groupby[option].get('label')"/>
+		                                    </a>
+		                                </t>
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <t t-raw="0"/>
+		                </div>
+		                <form t-if="searchbar_inputs" class="form-inline o_portal_search_panel ml-lg-4">
+		                    <div class="input-group input-group-sm w-100">
+		                        <div class="input-group-prepend">
+		                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"/>
+		                            <div class="dropdown-menu" role="menu">
+		                                <t t-foreach='searchbar_inputs' t-as='input'>
+		                                    <a t-att-href="'#' + searchbar_inputs[input]['input']"
+		                                        t-attf-class="dropdown-item#{search_in == searchbar_inputs[input]['input'] and ' active' or ''}">
+		                                        <span t-raw="searchbar_inputs[input]['label']"/>
+		                                    </a>
+		                                </t>
+		                            </div>
+		                        </div>
+		                        <input type="text" class="form-control form-control-sm" placeholder="Search" t-att-value='search' name="search"/>
+		                        <span class="input-group-append">
+		                            <button class="btn btn-secondary search-submit" type="button">
+		                                <span class="fa fa-search"/>
+		                            </button>
+		                        </span>
+		                    </div>
+		                </form>
+		            </div>
+	            </div>
+            </div>
+        </nav>
+        </xpath>
+    </template>
+
+    <template id="inherit_portal_breadcrumbs" inherit_id="portal.portal_breadcrumbs" name="Portal Breadcrumbs">
+	    <xpath expr="//ol[hasclass('o_portal_submenu')]" position="replace">
+	        <ol t-if="page_name != 'home'" class="o_portal_submenu breadcrumb mb-0 py-2 flex-grow-1" style="padding-left: 15px; font-size: 20px; font-weight: bold;">
+	            <li class="breadcrumb-item"><a href="/my/dashboard" aria-label="Home" title="Home"><i class="fa fa-home"/></a></li>
+	            <li t-if="page_name == 'my_details'" class="breadcrumb-item">Details</li>
+	        </ol>
+		</xpath>
+    </template>
+
+<!-- Bread crumbs in Form View & List View -->
+    <template id="account.portal_my_home_menu_invoice" name="Portal layout : invoice menu entries" inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol" position="before">
+			<div t-if="sendsi" class="bg-white text-right send_si_portal" style="padding: 0% 2%;">
+		    	<button class="send_si_btn" po_id="0" style="background-color: #4682B4;border: none; padding: 5px 15px;">Send SI</button>
+		    </div>
+        </xpath>
+
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'invoice'" t-attf-class="breadcrumb-item #{'active ' if not invoice else ''}">
+                <a t-if="my_invoice_form" t-attf-href="/my/myinvoices?{{ keep_query() }}">Sales Invoice</a>
+                <t t-else="">Sales Invoice</t>
+            </li>
+            <li t-if="page_name == 'invoice' and my_invoice_form" class="breadcrumb-item active">
+                <t t-esc="my_invoice_form.vendor_si_number"/>
+            </li>
+            <li t-if="invoice" class="breadcrumb-item active">
+                <t t-esc="invoice.name" t-if="invoice.name != '/'"/>
+                <t t-else=""><em>My Draft Invoice</em></t>
+            </li>
+        </xpath>
+    </template>
+<!-- List View -->
+	<template id="sks_portal_my_invoices" inherit_id="account.portal_my_invoices" name="My Invoices and Payments">
+    	<xpath expr="//t" position="replace">
+	      <t t-call="portal.portal_layout">
+	        <!-- <t t-set="breadcrumbs_searchbar" t-value="True"/> -->
+<!-- 			<div class="mb-3 mt-3 text-right send_si_portal">
+		    	<button class="send_si_btn" po_id="0" style="background-color: #4682B4;border: none;padding: 5px 15px;">Send SI</button>
+		    </div> -->
+	        <t t-call="portal.portal_searchbar">
+	            <t t-set="title">Sales Invoice</t>
+	        </t>
+
+			<div style="padding: 2%; background-color: #fff;">
+				<div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+		        <t t-if="invoices" t-call="portal.portal_table">
+		            <thead style="line-height: 3em;">
+		                <tr class="active" style="line-height: 2em; background-color: #fff;">
+		                    <th>SI No.</th>
+		                    <th>SI Date</th>
+		                    <th>SI Amount</th>
+		                    <th>Processing Status</th>
+		                    <th>Payment Amount</th>
+		                    <th>OR No.</th>
+		                    <th>OR Copy</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <t t-foreach="invoices" t-as="invoice">
+		                	<t t-set="si_invoice" t-value="invoice['invoices']"/>
+		                	<tr style="line-height: 2em;">
+		                		<td>
+		                			<a t-attf-href="/my/myinvoice/#{si_invoice.id}">
+		                				<span t-field="si_invoice.vendor_si_number"/>
+		                			</a>
+	                			</td>
+	                			<td><span t-field="si_invoice.invoice_date" t-options="{'widget': 'date'}"/></td>
+		                		<td><span t-field="si_invoice.amount" t-options='{"widget": "float", "precision": 2}'/></td>
+		                		<td><span t-field="si_invoice.document_status"/></td>
+		                		<td>
+		                			<t t-set="payment_amount" t-value="0.00"></t>
+		                			<t t-foreach="invoice['payments']" t-as="pay" >
+		                				<t t-set="payment_amount" t-value="'%.2f' % (payment_amount+pay.amount)"></t>
+		                			</t>
+		                			<span t-esc="payment_amount" t-options='{"widget": "float", "precision": 2}'></span>
+								</td>
+								<td><span t-field="invoice['payments'].or_number"/></td>
+								<td><t t-if="invoice['payments'].original_or_received">
+									<span>Received</span>
+								</t>
+								<t t-else="">
+									<span>Awaiting Original</span>
+								</t>
+
+								</td>
+		                	</tr>
+		                </t>
+		            </tbody>
+		        </t>
+	<style>
+	tr:nth-child(even) {background: #FFF}
+	tr:nth-child(odd) {background: #c0c0c01c}
+	</style>
+				</div>
+			</div>
+	      </t>
+		</xpath>
+    </template>
+<!-- Form View -->
+
+	<template id="sales_invoice_popup" name="Sales Invoice">
+        <div role="dialog" id="sales_invoice_modal" class="modal after_added_dr" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog" style="max-width: 700px;">
+                <form role="form" id="sales_invoice_form">
+                    <div class="modal-content">
+                        <header class="modal-header si_modal_header">
+                        	<span class="lead font-weight-normal">Send Sales Invoice<![CDATA[&nbsp;]]>(SI)</span>
+                            <button type="button" class="close close_si_popup" aria-label="Close">×</button>
+                        </header>
+                        <div class="mb-4">
+                        	<h6 class="inv_coverage">Invoice Coverage:</h6><br/>
+                        	<div class="row col-12">
+                        		<div class="col-6">
+	                        		<input class="with_purchase_order" checked="true" type="checkbox"/>
+	                        		<span>with Purchase Order</span>
+	                        		<br/>
+	                        		<div class="col-12 child_chkboxes">
+	                        			<input class="g_service" type="checkbox"/>
+	                        			<span>Goods or Services</span>
+	                        			<br/>
+	                        			<input class="delivery_charge" type="checkbox"/>
+	                        			<span>Hauler/Delivery Charge</span>
+	                        		</div>
+                        		</div>
+                        		<div class="col-6">
+                        			<input class="without_purchase_order" type="checkbox"/>
+                        			<span>without Purchase Order</span>
+                        		</div>
+                        	</div>
+                        	<div class="row col-12 mt-4">
+                        		<div class="form-group col-6 vendor_po_no_col">
+                        			<label>Purchase Order (PO) Number<![CDATA[&nbsp;]]><span class="req_span">*</span></label>
+                        			<select id="vendor_po_no" name="vendor_po_no" t-attf-class="form-control" required="required">
+											<option value=""></option>
+											<t t-foreach="purchase_orders" t-as="po">
+												<t t-if="po.id == selected_po_order.id" >
+													<option t-att-value="po.id" placeholder="" selected="true"><t t-esc="po.name" /></option>
+												</t>
+												<t t-else="">
+													<option t-att-value="po.id" placeholder=""><t t-esc="po.name" /></option>
+												</t>
+											</t>
+									</select>
+                        		</div>
+                        		<div class="form-group col-6 d-none service_orderno_col">
+                        			<label>Service Order Number</label>
+                        			<input type="text" class="form-control service_orderno"/>
+                        		</div>
+                        		<div class="form-group col-6">
+                        			<label style="width:100%;">Delivery Receipt (DR) Number<![CDATA[&nbsp;]]><span class="req_span dr_number_required">*</span>
+                        				<i class="fa fa-plus-circle add_dr_no"></i>
+                        			</label>
+                        			<div class="dr_numbers"></div>
+                        		</div>
+                        	</div>
+                        	<h6 class="inv_details mt-4">Invoice Details:</h6><br/>
+                        	<div class="row col-12">
+                        		<div class="form-group col-6">
+                        			<label>SI Number<![CDATA[&nbsp;]]><span class="req_span">*</span></label>
+                        			<input type="text" class="form-control si_number" required="required"/>
+                        		</div>
+                        		<div class="form-group col-6">
+                        			<label>SI Date<![CDATA[&nbsp;]]><span class="req_span">*</span></label>
+                        			<div class="o_website_form_date input-group date" id="si_date" data-target-input="nearest">
+							            <input type="text" class="form-control datetimepicker-input o_website_form_input si_date" required="required" data-target="#si_date" name="si_date"/>
+							            <div class="input-group-append" data-target="#si_date" data-toggle="datetimepicker">
+							              <div class="input-group-text si_date">
+							                <i class="fa fa-calendar"></i>
+							              </div>
+							            </div>
+							         </div>
+                        		</div>
+                        		<!-- <div class="form-group col-6 ">
+                        			<label>SI Date<![CDATA[&nbsp;]]><span class="req_span">*</span></label>
+                        			<input type="date" class="form-control si_date" required="required"/>
+                        		</div> -->
+                        	</div>
+                        	<div class="row col-12">
+                        		<div class="form-group col-6">
+                        			<label>Company<![CDATA[&nbsp;]]><span class="si_company_span req_span"></span></label>
+                        			<t t-if="selected_po_order">
+                        				<input type="text" readonly="readonly" t-att-value="selected_po_order.company_code" class="form-control si_company"/>
+                        			</t>
+                        			<t t-else="">
+                        				<input type="text" class="form-control si_company"/>
+                        			</t>
+
+                        		</div>
+                        		<div class="form-group col-6 ">
+                        			<label>SI Amount<![CDATA[&nbsp;]]><span class="req_span">*</span></label>
+                        			<input type="float" class="form-control si_amount" required="required"/>
+                        		</div>
+                        	</div>
+                        	<div class="row col-12">
+                        		<div class="form-group col-12">
+                        			<label>Vendor Notes</label>
+                        			<textarea rows="2" class="form-control vendor_remarks"></textarea>
+                        		</div>
+                        	</div>
+                        	<div class="row col-12">
+                        		<div class="form-group col-8">
+                        			<label>Attach Sales Invoice and Other Supporting Documents</label>
+                        		</div>
+                        		<div class="form-group col-4">
+									<label for="upload_si_invoice"><i class="fa fa-upload upload_si_invoice vp_cur_p"></i></label>
+                        		</div>
+                        	</div>
+                        	<div class="row col-12">
+				              	<div class="si_attachments col-12">
+				              		<input type="file" id="si_file_input" class="si_file_input d-none" multiple="multiple"/>
+				              		<ul id="si_attach_fileList" class="si_attach_fileList"></ul>
+				              		<p class="pro_attach_p">Click the upload icon to add delivery documents</p>
+				              	</div>
+			              	</div>
+                        	<div class="mb-3 mt-3 text-center">
+                        		<button class="send_sales_inv_btn">Send</button>
+                        	</div>
+                        </div>
+                    </div>
+                </form>
+             </div>
+         </div>
+    </template>
+
+    <template id="dr_number_popup" name="Add DR Number">
+        <div role="dialog" id="dr_number_modal" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header dr_no_modal_header">
+                        	<span class="lead font-weight-normal">Add Delivery Receipt (DR) Number</span>
+                            <button type="button" class="close close_dr_no_popup" aria-label="Close">×</button>
+                        </header>
+                        <div class="mb-4 p-3">
+                        	<t t-if="purchase_order">
+	                        	<span class="h6">Purchase Order (PO) Number</span>
+	                        		<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><t t-esc="purchase_order.name"/><br/>
+                        	</t>
+                        	<div class="row mt-3 col-6">
+                        		<t t-foreach="dr_ids" t-as="dr">
+                        			<t t-set="selected_dr" t-value="request.env['po.delivery.line'].search([('id', '=', dr)])"/>
+                        			<div class="col-12 p-2 dr_no_panel" style="border:1px solid lightgrey;cursor: pointer;">
+                        				<span t-att-no="selected_dr.dr_no" t-att-value="selected_dr.id" class="dr_no_span"><t t-esc="selected_dr.dr_no"/></span>
+                        				<span class="float-right d-block h4 dr_no_plus">+</span>
+                        			</div>
+                        		</t>
+                        	</div>
+
+                        	<div class="row mt-3 col-12">
+                        		<span>
+                        			<img class="img-responsive" style="max-width: 18px;" src="/skit_website_my_invoice/static/src/img/red_exclamation.png" />
+                        			<span style="color:red;">Delivery Receipt Number not included in the list? Add DR Number by clicking<![CDATA[&nbsp;]]></span>
+                        			<a style="color: #4682B4;" t-att-po_id="purchase_order.id if purchase_order else '0'" class="delivery_info_create">here.</a>
+                        		</span>
+                        	</div>
+                        	<div class="mt-3 text-center">
+                        		<button class="dr_no_confirm" style="background-color: #4682B4;border: none;padding: 5px 15px;">Confirm</button>
+                        	</div>
+                        </div>
+                    </div>
+                 </form>
+        	</div>
+    	</div>
+    </template>
+
+    <template id="si_submit_popup" name="Add DR Number">
+        <div role="dialog" id="si_submit_modal" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+            	<div class="modal-content si_submit_content">
+                	<header class="modal-header dr_no_modal_header">
+                    	<button type="button" class="close close_si_submit_popup" aria-label="Close">×</button>
+                    </header>
+                    <div class="si_sub_txt">
+                    	<span>Please do not forget to submit your original billing documents to the Billing Team or your local Materials Management Team so we can process your payment:</span>
+                    	<br/><br/><span>a.Sales Invoice</span><br/>
+                    	<span>b.Delivery Receipt</span>
+                    </div>
+                    <div class="mb-3 mt-3 text-center">
+                    	<button class="close_si_submit" aria-label="Close">Okay</button>
+                    </div>
+                </div>
+             </div>
+         </div>
+    </template>
+
+    <template id="amount_warning_popup" name="Amount Warning">
+        <div role="dialog" id="amount_warning_modal" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+            	<div class="modal-content amount_warning_content">
+                	<header class="modal-header">
+                    	<button type="button" class="close close_amt_warning_popup" aria-label="Close">×</button>
+                    </header>
+                    <div class="amt_wrng_txt">
+                    	<span>Oops...Something went wrong...</span><br/><br/>
+                    	<span>Total Sales Invoice (SI) Amount is greater than the Total Purchase Order (PO) Amount.</span><br/><br/>
+                    	<span>Please revisit the amounts you have entered.</span>
+                    </div>
+                    <div class="mb-3 mt-3 text-center">
+                    	<button class="close_amt_warning" aria-label="Close">Okay</button>
+                    </div>
+            	</div>
+        	</div>
+    	</div>
+    </template>
+
+    <template id="selected_dr_warning_popup" name="Linked DR Warning">
+        <div role="dialog" id="selected_dr_warning_modal" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+            	<div class="modal-content selected_dr_warning_content">
+                	<header class="modal-header">
+                		<span class="lead font-weight-normal">Warning</span>
+                    	<button type="button" class="close close_sdr_warning_popup" aria-label="Close">×</button>
+                    </header>
+                    <div class="sdr_wrng_txt">
+                    	<span>Below DR already has Invoice</span><br></br>
+                    	<ul class="si_dr_ul">
+                    		<t t-foreach="linked_dr" t-as="dr">
+                    			<li><t t-esc="dr['name']"/></li>
+                    		</t>
+                    	</ul>
+                    	<span>Please revisit and uncheck Delivery details.</span>
+                    </div>
+                    <div class="mb-3 mt-3 text-center">
+                    	<button class="close_sdr_warning" aria-label="Close">Okay</button>
+                    </div>
+            	</div>
+        	</div>
+    	</div>
+    </template>
+
+	<template id="sks_portal_my_invoices_form">
+	<t t-call="portal.portal_layout">
+	  <div class="sks_inv_form_outline">
+	  <div style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px;">
+      <section class="s_text_image col-lg-12 pb8" style="background-color: #fff;" data-name="Text - Image">
+        <div class="container col-lg-12">
+          <div class="row align-items-center">
+          	<div class="col-lg-7 my_inv_form_header_pt15">
+	            <div class="col-lg-6">
+	              <h2><t t-esc="my_invoice_form.vendor_si_number"></t></h2>
+	            </div>
+            </div>
+            <div class="col-lg-5 text-right">
+	            <label class="po_status_label">Processing Status </label>
+	            <span class="po_status_head" t-field="my_invoice_form.document_status" style="background: lightgray;"/>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="s_text_image col-lg-12 pt0 pb0" style="background-color: #fff;" data-name="Text - Image">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-12 pt0 pb0 my_inv_form_divider">
+              <div class="s_hr text-left pt0 pb0" data-name="Separator">
+                <hr class="s_hr_1px s_hr_solid border-600 w-100 mx-auto" style="border: 1px solid #a7a7a7; border-top: 0px;"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="s_text_image pb16" data-name="Text - Image">
+        <div class="container col-lg-12">
+          <div class="row align-items-center">
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-6">
+                    <span><b>Purchase Order (PO) Number</b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <a t-attf-href="/my/purchase/#{my_invoice_form.purchase_id.id}" style="color: #337ab7; font-weight: bold;text-decoration: none;"><t t-esc="my_invoice_form.purchase_id.name"></t></a>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-4">
+                    <span><b>Invoice Coverage:</b></span>
+                </div>
+                <div class="col-lg-6">
+                    <span><input disabled="true" type="checkbox" id="with_po" style="width: 10%;" t-att-checked="true if (my_invoice_form.admin_si_type =='with_po') else false" name="admin_si_type" value="with_po"/>With Purchase Order</span><br></br>
+                    <span><input disabled="true" type="checkbox" id="without_po" style="width: 10%;" t-att-checked="true if (my_invoice_form.admin_si_type =='no_po') else false" name="admin_si_type" value="no_po"/>Without Purchase Order</span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-6">
+                    <span><b>Company</b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span><t t-esc="my_invoice_form.company_code"></t></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex my_inv_form_body_dis">
+                <div class="col-lg-6">
+                    <span><b></b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span><b></b></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-6">
+                    <span style="font-size: 17px; font-weight: 400;">Invoice Details</span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex my_inv_form_body_dis">
+                <div class="col-lg-6">
+                    <span><b></b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-6">
+                    <span><b>Sales Invoice Date</b></span>
+                </div>
+
+                <div class="col-lg-6">
+                	<span t-field="my_invoice_form.invoice_date" t-options="{'widget': 'date'}"/>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-4">
+                    <span><b>Vendor Notes</b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span><t t-esc="my_invoice_form.vendor_remarks"></t></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-6">
+                    <span><b>Sales Invoice Amount</b></span>
+                </div>
+
+                <div class="col-lg-6">
+                	<span t-field="my_invoice_form.amount" t-options='{"widget": "float", "precision": 2}'/>
+                </div>
+            </div>
+
+            <div class="col-lg-12 pt16 d-inline-flex my_inv_form_body_dis">
+                <div class="col-lg-3">
+                    <span><b></b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex">
+                <div class="col-lg-6">
+                    <span><b>Attachments</b></span>
+                </div>
+                <div class="col-lg-6">
+                	<t t-if="attachments">
+                		<ul class="si_attachment_ul">
+                			<t t-foreach="attachments" t-as="attachment">
+                				<li>
+                					<span><t t-esc="attachment.name"></t></span>
+                					<t t-if="attachment.mimetype == 'application/pdf'">
+										<span class="span_view vp_fw400 show_si_attach_pdf" action="/show/vp_si_document" t-att-att_id="attachment.id"><i class="fa fa-eye span_eye_icon" style="margin-right: 0;"></i>View</span>
+									</t>
+									<t t-else="">
+										<a class="al_txt_none" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id">
+											<span class="span_view vp_fw400"><i class="fa fa-download span_eye_icon"></i> </span>
+										</a>
+									</t>
+								</li>
+                			</t>
+                		</ul>
+                	</t>
+                	<t t-else="">
+                		<span class="" >No attachments</span>
+                	</t>
+                </div>
+            </div>
+
+            <div class="col-lg-6 pt16 d-inline-flex my_inv_form_body_dis">
+                <div class="col-lg-6">
+                    <span><b></b></span>
+                </div>
+
+                <div class="col-lg-6">
+                    <span></span>
+                </div>
+            </div>
+
+          </div>
+        </div>
+<style>
+.table-bordered th, .table-bordered td {
+	border: none;
+}
+.table th, .table td {
+	padding: 0.30rem;
+}
+</style>
+      </section>
+
+      <section class="s_tabs" style="background-color: #fff;" data-name="Tabs">
+        <div class="container col-lg-12">
+          <div class="row s_col_no_bgcolor">
+            <div class="col-lg-12 pb48">
+              <div class="card bg-white" style="border: none !important;">
+                <div class="card-header bg-white">
+                  <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link o_default_snippet_text active show" id="nav_tabs_link_1622605059684_2" data-toggle="tab" href="#nav_tabs_content_1622605059684_2" role="tab" aria-controls="nav_tabs_content_1622605059684_2" aria-selected="true" style="font-size: 17px; font-weight: 400; color: #000;">Delivery Receipt</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link o_default_snippet_text" id="nav_tabs_link_1622605059685_3" data-toggle="tab" href="#nav_tabs_content_1622605059685_3" role="tab" aria-controls="nav_tabs_content_1622605059685_3" aria-selected="false" style="font-size: 17px; font-weight: 400; color: #000;">Payment</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="card-body tab-content">
+                  <div class="tab-pane fade active show" id="nav_tabs_content_1622605059684_2" role="tabpanel" aria-labelledby="nav_tabs_link_1622605059684_2">
+                    <h5 class="o_default_snippet_text" style="font-size: 17px; font-weight: 400;">Delivery Details:</h5>
+                          <section class="s_faq_collapse si_delivery_receipt_sec" data-name="Accordion">
+                            <div class="container">
+                              <div class="row s_col_no_bgcolor">
+                                <div class="col-lg-12 pt16 pb16 my_invf_pr_dr_acc">
+                                <t t-foreach="my_delivery" t-as="sks_del">
+                                  <div t-attf-id="myCollapse#{sks_del.id}" class="accordion" role="tablist">
+                                    <div class="card bg-white" style="border: none !important;">
+<!-- DR No Start -->
+									<div style="display: inline-flex;">
+										<a href="#" role="tab" data-toggle="collapse" aria-expanded="true" class="bg-white card-header o_default_snippet_text" t-attf-data-parent="#myCollapse#{sks_del.id}" t-attf-data-target="#myCollapseTab#{sks_del.id}">
+											<font style="color: rgb(0, 0, 0);">
+												<b data-original-title="" title="" aria-describedby="tooltip252644">Delivery Receipt (DR) Number</b>
+											</font>
+											<span class="my_inv_form_drn_acc">&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;&amp;nbsp;</span>
+											<b style="color: #337ab7;">
+												<span t-esc="sks_del.dr_no" />
+											</b>
+										</a>
+										<span t-if="my_invoice_form.document_status == 'Awaiting Original Documents'" t-att-dr_id="sks_del.id" class="my_invf_pr_dr_acc_arrow" style="color: #6e6e6e; line-height: 34.8px; margin-left: -5%;">
+											<i class="fa fa-1x fa-edit vp_cur_p"></i>
+										</span>
+									</div>
+<!-- DR No End -->
+                                      <div class="collapse show" role="tabpanel" t-attf-id="myCollapseTab#{sks_del.id}">
+                                        <div class="card-body my_inv_form_drn_acc1">
+                                        <table class="table table-bordered" style="line-height: 2em; border: none;">
+                                          <thead>
+                                            <tr>
+                                              <td>
+                                                <span>
+                                                  <b>DR Date</b>
+                                                </span>
+                                              </td>
+                                              <td>
+                                              	<span><span t-field="sks_del.dr_date" t-options="{'widget': 'date'}"/></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>
+                                                <span>
+                                                  <b>Delivery Remarks</b>
+                                                </span>
+                                              </td>
+                                              <td>
+                                                <span><span t-esc="sks_del.delivery_remarks"/></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>
+                                                <span>
+                                                  <b>Delivered By</b>
+                                                </span>
+                                              </td>
+                                              <td>
+                                                <span><span t-esc="sks_del.delivered_by"/></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                            </tr>
+                                            <tr class="d-none">
+                                              <td>
+                                                <span>
+                                                  <b>PO</b>
+                                                </span>
+                                              </td>
+                                              <td>
+                                                <span><span t-att-dr_po_id="sks_del.po_id.id" class="dr_po_id" t-esc="sks_del.po_id.id"/></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>
+                                                <span>
+                                                  <b>Received By</b>
+                                                </span>
+                                              </td>
+                                              <td>
+                                                <span><span t-esc="sks_del.received_by"/></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>
+                                                <span>
+                                                  <b>Actual / Projected Delivery Date</b>
+                                                </span>
+                                              </td>
+                                              <td>
+                                              	<span><span t-field="sks_del.receiving_date" t-options="{'widget': 'date'}"/></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                              <td class="my_inv_form_drn_acc">
+                                                <span></span>
+                                              </td>
+                                            </tr>
+                                          </thead>
+                                        </table>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  </t>
+                                </div>
+                              </div>
+                            </div>
+<style>
+.s_faq_collapse .accordion .card .card-header:before {
+	content: '\f0d7';
+	color: #fff;
+    width: 1vw;
+    margin: 0;
+    background-color: #a7a7a7;
+    text-align: center;
+    border-radius: 100%;
+}
+
+.s_faq_collapse .accordion .card .card-header.collapsed:before {
+	content: '\f0d8';
+	color: #fff;
+    width: 1vw;
+    margin: 0;
+    background-color: #a7a7a7;
+    text-align: center;
+    border-radius: 100%;
+}
+</style>
+                          </section>
+                  </div>
+                  <div class="tab-pane fade my_inv_form_pay_tab" id="nav_tabs_content_1622605059685_3" role="tabpanel" aria-labelledby="nav_tabs_link_1622605059685_3">
+                    <h5 class="o_default_snippet_text" style="font-size: 17px; font-weight: 400;">Payment Details:</h5>
+	                    <table class="table table-bordered si_payment_table" style="border: none;">
+	                      <tbody class="my_inv_payment_tab_mob" style="border: none; line-height: 2rem;">
+	                        <tr  style="border: none; width: 100%; line-height: 1.5em;">
+	                          <td class="text-left" style="border: none; width: 12%; vertical-align: bottom;">
+	                            <b>Payment Transaction No.</b>
+	                          </td>
+	                          <td class="text-right" style="border: none; width: 8%; vertical-align: bottom;">
+	                            <b>Released<br></br>Amount</b>
+	                          </td>
+	                          <td class="text-left" style="border: none; width: 8%; vertical-align: bottom;">
+	                            <b>Released<br></br>Date</b>
+	                          </td>
+	                          <td class="text-left" style="border: none; width: 8%; vertical-align: bottom;">
+	                            <b>OR No.</b>
+	                          </td>
+	                          <td class="text-left" style="border: none; width: 8%; vertical-align: bottom;">
+	                            <b>OR Date</b>
+	                          </td>
+	                          <td class="text-right" style="border: none; width: 8%; vertical-align: bottom;">
+	                            <b>OR Amount</b>
+	                          </td>
+	                          <td class="text-center" style="border: none; width: 8%; vertical-align: bottom;">
+	                            <b>OR Copy</b>
+	                          </td>
+	                          <td style="text-align: center; border: none; width: 3%; vertical-align: bottom;">
+	                            <b></b>
+	                          </td>
+	                        </tr>
+							<t t-foreach="my_payment" t-as="payment">
+	                        <tr>
+		                          <td class="text-left" style="border: 2px solid #a7a7a7;">
+		                            <span style="color: #a7a7a7;"><t t-esc="payment.name"></t></span>
+		                          </td>
+		                          <td class="text-right" style="border: 2px solid #a7a7a7;">
+		                            <span style="color: #a7a7a7;"><span t-field="payment.amount"/></span>
+		                          </td>
+		                          <td class="text-left" style="border: 2px solid #a7a7a7;">
+		                            <span style="color: #a7a7a7;"><span t-field="payment.payment_release_date" t-options="{'widget': 'date'}"/></span>
+		                          </td>
+		                          <td class="text-left" style="border: 2px solid #a7a7a7;">
+		                            <span style="color: #a7a7a7;"><t t-esc="payment.or_number"></t></span>
+		                          </td>
+		                          <td class="text-left" style="border: 2px solid #a7a7a7;">
+		                            <span style="color: #a7a7a7;"><span t-field="payment.or_date" t-options="{'widget': 'date'}"/></span>
+		                          </td>
+		                          <td class="text-right" style="border: 2px solid #a7a7a7;">
+		                            <span style="color: #a7a7a7;"><span t-field="payment.amount"/></span>
+		                          </td>
+		                          <td class="text-center" style="border: 2px solid #a7a7a7;">
+									 	<t t-set="attachment" t-value="request.env['ir.attachment'].sudo().search([('res_id', '=', payment.id), ('res_model', '=', 'admin.invoice.payment')])" />
+				  						<t t-if="len(attachment) > 0">
+				  							<t t-if="len(attachment) == 1">
+				  								<span class="span_view d-none dl_file" t-att-attachment="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><t t-esc="attachment.name"/></span>
+												<t t-if="attachment.mimetype == 'application/pdf'">
+												 	<span class="span_view sipay_file_view po_cursor vp_fs16" action="/show/dl_document" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><i class="fa fa-eye span_eye_icon iproduct_file_view"></i> View</span>
+												</t>
+												<t t-else="">
+												 	<a class="al_txt_none" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id">
+														<span class="span_view vp_fw400" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><i class="fa fa-download span_eye_icon iproduct_file_view"></i> View</span>
+													</a>
+												</t>
+				  							</t>
+				  							<t t-else="">
+				  								<span t-att-pay_id="payment.id" class="span_view show_attachment_view po_cursor" action="/show/sipaymentattach/popup"><i class="fa fa-eye span_eye_icon iproduct_file_view"></i> View</span>
+				  							</t>
+				  						</t>
+		                          </td>
+		                          <td class="text-center" style="border: 2px solid #a7a7a7;">
+		                            <span t-if="(my_invoice_form.state != 'Fully Paid' and my_invoice_form.state != 'Rejected')" class="edit_si_payment" t-att-si_id="payment.admin_si_id" t-att-pay_id="payment.id" action="/si/edit_payment" style="color: #000;"><i class="fa fa-lg fa-edit vp_cur_p"></i></span>
+		                          </td>
+		                        </tr>
+		                     </t>
+	                      </tbody>
+	                    </table>
+                  </div>
+<style>
+.s_faq_collapse .accordion .card .card-header:before {
+	float: right;
+}
+</style>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
+      </div>
+      <div class="o_portal_messages_container mt32">
+          <h4>Send Message</h4>
+          <t t-call="portal.message_thread">
+              <t t-set="object" t-value="my_invoice_form"/>
+              <t t-set="pid" t-value="pid"/>
+              <t t-set="hash" t-value="hash"/>
+          </t>
+     </div>
+     	<div id="vp_page_loading">
+				<div id="vp_loading-image">
+					<img src="/web/static/src/img/spin.png" style="animation: fa-spin 1s infinite steps(12);"></img>
+					<br></br><br></br>
+					<span id="loading-text">Please wait..</span>
+				</div>
+		</div>
+        </t>
+    </template>
+
+    <template id="si_payment_edit_popup" name="SI Payment Edit Form">
+        <div role="dialog" id="si_payment_edit_popup" class="modal si_payment_edit_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Payment Details</h4>
+                            <button type="button" id="si_payment_close" class="close" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin new_form_popup">
+                        		<div class="form-group col-md-6 col-sm-6">
+                        			<span class="payspan-bold">Official Receipt (OR) No</span>
+						            <input type="text" id="or_number" name="or_number" required="required" t-attf-class="form-control mt-2" t-att-value="payment.or_number"/>
+                        		</div>
+                        		<div class="form-group col-md-6 col-sm-6">
+						            <span class="payspan-bold">Payment Transaction No.</span>
+						            <input type="text" id="name" name="name" readonly="readonly" t-attf-class="form-control mt-2" t-att-value="payment.name"/>
+						        </div>
+                        		<div class="form-group col-md-6 col-sm-6">
+                        			<span class="payspan-bold">OR Date</span>
+                        			<div class="o_website_form_date input-group date" id="or_date" data-target-input="nearest">
+                        				<t t-set='or_date_formatted'><t t-options='{"widget": "date"}' t-esc="payment.or_date"/></t>
+								        <input type="text" class="form-control datetimepicker-input o_website_form_input or_date" data-target="#or_date" name="or_date" t-att-value="or_date_formatted"/>
+								        <div class="input-group-append" data-target="#or_date" data-toggle="datetimepicker">
+								            <div class="input-group-text or_date">
+								                <i class="fa fa-calendar"></i>
+								            </div>
+								        </div>
+							         </div>
+                        		</div>
+                        		<div class="form-group col-md-6 col-sm-6">
+                        			<span class="payspan-bold">Released Date</span>
+                        			<div class="o_website_form_date input-group date" id="release_date" data-target-input="nearest">
+                        				<t t-set='release_date_formatted'><t t-options='{"widget": "date"}' t-esc="payment.payment_release_date"/></t>
+								        <input type="text" class="form-control datetimepicker-input o_website_form_input release_date" readonly="readonly" data-target="#release_date" name="payment_release_date" t-att-value="release_date_formatted"/>
+								        <div class="input-group-append" data-target="#release_date" data-toggle="datetimepicker">
+								            <div class="input-group-text release_date">
+								                <i class="fa fa-calendar"></i>
+								            </div>
+								        </div>
+							         </div>
+                        		</div>
+                        		<div class="form-group col-md-6 col-sm-6">
+                        			<span class="payspan-bold">OR Amount</span>
+						            <input type="text" id="amount" name="amount" required="required" t-attf-class="form-control mt-2" t-att-value="payment.amount"/>
+                        		</div>
+                        		<div class="form-group col-md-6 col-sm-6">
+                        			<span class="payspan-bold">Released Amount</span>
+                        			<input type="text" id="relesed_amount" name="relesed_amount" readonly="readonly" t-attf-class="form-control mt-2" t-att-value="payment.amount"/>
+                        		</div>
+                        		<div class="form-group col-md-12 col-sm-12">
+			                    	<span class="payspan-bold">Remarks</span>
+						            <textarea rows="3" id="remark" class="form-control mt-2 pay_remark" t-attf-name="remark"><t t-esc="payment.remark" /></textarea>
+						        </div>
+                        		<div class="form-group col-md-6 col-sm-6">
+									<div class="upload_file_div">
+			              			 	<span class="payspan-bold upload_file">OR Copy <i id="sipay_file_upload" class="fa fa-upload sipay_file_upload vp_cur_p"></i></span>
+			              			</div>
+			              		</div>
+			              		<div class="form-group col-md-12 col-sm-12">
+			              			<t t-if="file_attached">
+			              				<div class="pay_attachments">
+				              				<input type="file" id="dl_file_input" class="pay_file_input d-none" multiple="multiple"/>
+				              				<ul id="sipay_attach_fileList" class="sipay_attach_fileList">
+				              					<t t-foreach="file_attachments" t-as="attachment">
+				              						<li t-att-id="attachment['id']" t-att-data="attachment['pfile_name']" t-attf-file_data="data:#{attachment['type']};base64,#{attachment['pfile_content']}"><t t-esc="attachment['pfile_name']" /><span class="remove-list" onclick="return this.parentNode.remove()"><i class="fa fa-trash span_icon"></i></span></li>
+				              					</t>
+				              				</ul>
+				              				<p class="pro_attach_p d-none">Click the upload icon to add a file</p>
+				              			</div>
+			              			</t>
+			              			<t t-if="not file_attached">
+				              			<div class="pay_attachments">
+				              				<input type="file" id="pay_file_input" class="pay_file_input d-none" multiple="multiple"/>
+				              				<ul id="sipay_attach_fileList" class="sipay_attach_fileList"></ul>
+				              				<p class="pro_attach_p">Click the upload icon to add delivery documents</p>
+				              			</div>
+			              			</t>
+			              		</div>
+						    </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" t-att-si_id="payment.admin_si_id" t-att-pay_id="payment.id" action="/save/si_payment" id="si_payment_save" class="btn btn-secondary js_goto_event popup_save">Save</button>
+                        	</div>
+                        </footer>
+                     </div>
+                 </form>
+          	</div>
+       </div>
+	</template>
+	<template id="show_inv_si_attached_files" name="Preview">
+        <div role="dialog" id="vp_si_file_view" class="modal vp_si_file_view_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog" style="width: 80%; max-width: 100%; margin: 0% 10% 0% 10%;">
+                <form role="form" style="height:100%">
+                    <div class="modal-content" style="height:100%">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Preview</h4>
+                            <button type="button" class="close vp_si_pdf_close" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin" style="height:100%">
+						        <div class="form-group col-lg-12 dl_image_attach">
+						        	<iframe class="mt32 o_viewer_pdf" width="100%" height="100%"  t-attf-src="/web/static/lib/pdfjs/web/viewer.html?file=/web/content/#{attachment.id}" />
+						        </div>
+					        </div>
+                        </main>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+</odoo>

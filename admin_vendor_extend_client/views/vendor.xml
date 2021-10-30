@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_partner_extend_view_tree" model="ir.ui.view">
+            <field name="name">res.partner.extend.tree</field>
+            <field name="model">res.partner.extend</field>
+            <field name="arch" type="xml">
+                <tree string="Vendor Extend Tree">
+                    <field name="name"/>
+                    <field name="universal_vendor_code"/>
+                    <field name="partner_id"/>
+                    <field name="extend_to_client"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_partner_extend_view_form" model="ir.ui.view">
+            <field name="name">res.partner.extend.form</field>
+            <field name="model">res.partner.extend</field>
+            <field name="arch" type="xml">
+                <form string="Vendor Extend Form">
+                    <header>
+                        <button name="submit_request" string="Submit"
+                                class="oe_highlight" states="draft" type="object"/>
+                        <button name="confirm_request" string="Confirm"
+                                class="oe_highlight" states="submitted" type="object"/>
+                        <button name="verify_request" string="Verify"
+                                class="oe_highlight" states="confirmed" type="object"/>
+                        <button name="approve_request" string="Approve"
+                                help="Final Approval" class="oe_highlight" states="verified" type="object"/>
+                        <button name="btn_reject" string="Reject"
+                                states="submitted,confirmed,verified" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="partner_id" options="{'no_create': True}"/>
+                            </h1>
+                            <div>
+                                <label for="universal_vendor_code" class="oe_inline"/>
+                                <field name="universal_vendor_code" class="oe_inline oe_input_align"/>
+                            </div>
+                            <div attrs="{'invisible': [('vendor_code_113', 'in', [False])]}">
+                                <label for="vendor_code_113" class="oe_inline"/>
+                                <field name="vendor_code_113" class="oe_inline oe_input_align"/>
+                            </div>
+                            <div attrs="{'invisible': [('vendor_code_303', 'in', [False])]}">
+                                <label for="vendor_code_303" class="oe_inline"/>
+                                <field name="vendor_code_303" class="oe_inline oe_input_align"/>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="extend_to_client" widget="radio" options="{'horizontal': true}"/>
+                                <label for="company_id"/>
+                                <div>
+                                    [<field name="company_code" class="oe_inline"/>]
+                                    <field name="company_id" options="{'no_create': True}" class="oe_inline"/>
+                                </div>
+                                <field name="purchase_org_id"/>
+                                <field name="vendor_account_group_id"/>
+                            </group>
+                            <group>
+                                <field name="name"/>
+                                <field name="note"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <label for="submitted_by"
+                                       states="submitted,confirmed,verified,approved"/>
+                                <div states="submitted,confirmed,verified,approved">
+                                    <field name="submitted_by" class="oe_inline"/>
+                                    <field name="submitted_date" class="oe_inline"/>
+                                </div>
+                                <label for="confirmed_by"
+                                       states="confirmed,verified,approved"/>
+                                <div states="confirmed,verified,approved">
+                                    <field name="confirmed_by" class="oe_inline"/>
+                                    <field name="confirmed_date" class="oe_inline"/>
+                                </div>
+                                <label for="verified_by" states="verified,approved"/>
+                                <div states="verified,approved">
+                                    <field name="verified_by" class="oe_inline"/>
+                                    <field name="verified_date" class="oe_inline"/>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="approved_by" string="Approved (Final)" states="approved"/>
+                                <div states="approved">
+                                    <field name="approved_by" class="oe_inline"/>
+                                    <field name="approved_date" class="oe_inline"/>
+                                </div>
+                                <label for="canceled_by" states="canceled"/>
+                                <div states="canceled">
+                                    <field name="canceled_by" class="oe_inline"/>
+                                    <field name="canceled_date" class="oe_inline"/>
+                                </div>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="extend_vendor_action" model="ir.actions.act_window">
+            <field name="name">Extend Vendor</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.extend</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_vendor_accreditation" action="extend_vendor_action"
+                  parent="admin_vendor.menu_po_admin_vendor" sequence="1"/>
+
+    </data>
+</odoo>

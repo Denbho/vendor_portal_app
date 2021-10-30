@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Customer Portal",
+    'summary': """Customer Portal""",
+    'description': """ """,
+    'author': "Srikesh Infotech",
+    'category': 'Website',
+    'version': '0.1',
+    'depends': [
+        'website',
+        'property_admin_monitoring',
+        'website_helpdesk_form',
+        'website_calendar',
+        'portal',
+        'website_helpdesk',
+        ],
+    'data': [
+        'views/login_templates.xml',
+        'views/skit_customer_portal_templates.xml',
+        'views/skit_customer_portal_templates.xml',
+        'data/otp_mail_template.xml',
+        'report/statement_report_template.xml',
+        'report/statement_report.xml',
+        'views/property_sale_portal_templates.xml',
+        'views/profile_portal_templates.xml',
+        'views/helpdesk_templates.xml',
+        'views/portal_templates.xml',
+        'views/website_calendar_templates.xml',
+        'security/ir.model.access.csv',
+        'views/base_config_view.xml',
+        'views/calendar_views.xml',
+    ],
+    'installable': True,
+    'auto_install': False,
+    'application': True
+}

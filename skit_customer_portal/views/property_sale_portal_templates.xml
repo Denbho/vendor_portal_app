@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_menu_property_sale" name="Portal layout : property sales menu entries" inherit_id="portal.portal_breadcrumbs" priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'property_sale' or property_sale" t-attf-class="breadcrumb-item #{'active ' if not property_sale else ''}">
+                <a t-if="property_sale" t-attf-href="/my/property_sales?{{ keep_query() }}">Property Sales</a>
+                <t t-else="">Property Sales</t>
+            </li>
+            <li t-if="property_sale" class="breadcrumb-item active">
+                <t t-esc="property_sale.so_number"/>
+            </li>
+        </xpath>
+    </template>
+    
+    <template id="portal_searchbar_customer_portal" inherit_id="portal.portal_searchbar">
+		<xpath expr="//nav" position="attributes">
+		  	<attribute name="t-attf-class" separator=" " add="#{'border_top' if show_border_top else ''}"/>
+		</xpath>
+    </template>
+    
+	<template id="portal_my_home_property_sale" name="Portal My Home : property sales entries" inherit_id="portal.portal_my_home" priority="50">
+    	<xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+	        <t t-call="portal.portal_docs_entry">
+	       		<t t-set="title">Property Sale</t>
+	          	<t t-set="url" t-value="'/my/property_sales'"/>
+	            <t t-set="count" t-value="property_sale_count"/>
+	        </t>
+    	</xpath>
+  	</template>
+
+ 	<template id="portal_my_property_sale_orders" name="Portal: My Property Sale Orders">
+   		<t t-call="website.layout"> 
+			<t t-set="no_footer" t-value="True"/> 
+      		<div id="so_header">
+                <div class="property_so_panel">
+                    <div class="over-all-header">
+                        <img t-if="request.env.user.company_id.logo"
+								t-att-src="image_data_uri(request.env.user.company_id.logo)"
+								alt="Logo" width="150" height="100" title="saturate" class="saturate"/>
+                        <div class="p-2 over-all-text">
+                            <div class="welcome-text">Welcome to the</div>
+                            <div class="cus-text">Customer Portal</div>
+                        </div>
+                    </div>
+                    <t t-if="len(property_sales)">
+	                    <div class="over-all">
+	                        <h3 class="my-0 text-white">
+				                <t t-esc="'Select SO number'"/>
+				            </h3>
+	                       	<div class="scroll-div">
+	                            <t t-foreach="property_sales" t-as="order">
+	                            	<a class="element-div" t-attf-href="/my/property_sale/#{order.id}?#{keep_query()}"><t t-esc="order.so_number"/></a>
+	                            </t>
+	                       	</div>
+	                    </div>
+                    </t>
+                </div>
+            </div>
+     	 </t>  
+  	</template>
+
+	<template id="portal_my_property_sale_order" name="Portal: My Property Sale Order">
+   		<t t-call="portal.portal_layout">
+   			<t t-set="no_footer" t-value="True"/>
+	      	<div class="container">
+	        	<div class="card">
+		    		<div class="card-body card_container">
+		          		<div id="so_detail">
+		                	<div id="sod_grid" class="mb16">
+			                    <div id="sod_left_grid">
+			                    	<t t-call="skit_customer_portal.property_overview_template"></t>
+			                    </div>
+		                    	<div id="sod_right_grid">
+				                    <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white'}">
+							       		<h3 class="my-0">
+							                <t t-esc="'Statement Summary'"/>
+							            </h3>
+							        </div>
+							        <t t-set="soa_id" t-value="property_sale.soa_id"></t>
+				                    <t t-call="skit_customer_portal.statement_summary_view"></t>
+		                    	</div>
+		                    	<div id="sod_right_grid" class="box_shadow_none">
+		                    	</div>
+		                    	<t t-call="skit_customer_portal.view_history_popup"></t>
+		                	</div>
+		            	</div>
+		            	<t t-call="skit_customer_portal.payment_summary_template"></t>
+		                <t t-call="skit_customer_portal.document_template"></t>
+		           		<t t-call="skit_customer_portal.portal_helpdesk_ticket_view_template"></t> 
+		            	<t t-call="skit_customer_portal.portal_messages_container_view_template"></t>
+		            </div>
+	          	</div>
+	      	</div>
+	 		<div class="oe_structure mb32"/>
+     	</t>
+	</template>
+  
+	<template id="view_history_popup" name="history popup">
+   		<!-- modal relative to the actions view history -->
+        <div role="dialog" class="modal fade" id="modal_history">
+            <div class="modal-dialog">
+                <form method="POST" class="modal-content">
+                    <header class="modal-header">
+                        <h4 class="modal-title">Statement of Accounts</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                    </header>
+                    <main class="modal-body">
+                        <t t-if="len(soa_ids)">
+                        	<table class="soa_history width_100">
+								<tbody>
+									<tr t-foreach="soa_ids" t-as="soa">
+										<td>
+											<a role="button" class="w-100 btn btn-primary font-weight-bold font-large text-dark bg-gray border-0" t-attf-href="#">
+												<span t-field="soa.soa_date" t-options='{"format": "MMMM d, YYYY"}'/>
+											</a>
+										</td>
+										<td>
+											<a role="button" class="btn btn-primary font-weight_bold font-large border-dark transparent_bg text-dark download_billing_stmt w-100" t-attf-href="/download/billing_statement/#{soa.id}" target="_blank" aria-label="Download" title="Download">Download</a>
+										</td>
+										<td>
+	                                		<a role="button" class="btn btn-primary btn-block mb8 font-weight_bold font-large border-dark transparent_bg text-dark" data-toggle="modal" t-att-data-target="'#modal_preview_' + str(soa.id)" href="#">
+	                                			Preview
+	                            			</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</t>		
+						<t t-else="">
+							<span>No records found</span>
+						</t>  
+                    </main>
+                </form>
+            </div>
+        </div>
+        <t t-call="skit_customer_portal.view_preview_popup"></t>
+	</template>
+  
+	<template id="statement_summary_view">
+        <div t-attf-class="#{'card-body m_pd_0'}">
+            <div id="informations">
+                <div class="row">
+                    <div class="mb-3 col-8">
+                      <strong>Statement No.:</strong> 
+                      <span t-field="soa_id.soa_number"/>
+                      <br></br>
+                      <strong>Statement Date:</strong> 
+                      <span t-field="soa_id.soa_date" t-options='{"widget": "date"}'/>
+                      <br></br>
+                      <strong>Payment Due Date:</strong> 
+                      <span t-field="soa_id.soa_due_date" t-options='{"widget": "date"}'/>
+                    </div>
+                    <div class="mb-3 col-4">
+                   		<t t-if="is_show">
+					      	<a  role="button" class="btn btn-primary btn-block mb8 font-weight_bold font-large border-0 bg-dark v_history_btn" data-toggle="modal" data-target="#modal_history" href="#">
+                                View History
+                            </a>
+	    				</t>
+                    </div>
+                </div>
+             	<div class="row">
+            		<table class="amount_detail_table width_100">
+						<tbody>
+							<tr>
+								<td>
+									<span class="font-large">Past Due Amount:</span>
+								</td>
+								<td class="text-right">
+									<t t-if="soa_id">
+										<span class="font-large">
+											<t t-esc="soa_id.past_due"  t-options='{"widget": "monetary","display_currency": soa_id.property_sale_id.currency_id}'/>
+										</span>
+									</t>
+								</td>
+							</tr>
+							<tr><td></td></tr> 
+							<tr>
+								<td>
+									<span class="font-large">Penalty:</span>
+								</td>
+								<td class="text-right">
+									<t t-if="soa_id">
+										<span class="font-large">
+											<t t-esc="soa_id.penalty"  t-options='{"widget": "monetary","display_currency": soa_id.property_sale_id.currency_id}'/>
+										</span>
+									</t>
+								</td>
+							</tr>
+							<tr><td></td></tr> 
+							<tr>
+								<td>
+									<span class="font-large">Current Amount Due:</span>
+								</td>
+								<td class="text-right">
+									<t t-if="soa_id">
+										<span class="font-large">
+											<t t-esc="soa_id.current_amount"  t-options='{"widget": "monetary","display_currency": soa_id.property_sale_id.currency_id}'/>
+										</span>
+									</t>
+								</td>
+							</tr>
+							<tr>
+								<td class="width_50">
+									<span class="font-large">Total Amount Due:</span>
+								</td>
+								<td class="text-right width_50">
+									<hr></hr>
+									<t t-if="soa_id">
+										<span class="font-large">
+											<t t-esc="soa_id.total_amount_due"  t-options='{"widget": "monetary","display_currency": soa_id.property_sale_id.currency_id}'/>
+										</span>
+									</t>
+									<hr></hr>
+									<hr></hr>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+                </div>
+            </div>
+            <section id="details" class="mt32">
+                <div class="row">
+	                <div class="col-5">
+				   		<h5>Past Due Breakdown</h5>
+				  	</div>
+	                <div class="col-7">
+	                	<hr class="width_100"></hr>
+	                </div>
+                </div>
+	            <table class="table_past_due_breakdown">
+					<tr>
+					    <th class="table_past_due_breakdown bg-dark">Bill Ref</th>
+					    <th class="table_past_due_breakdown bg-dark">Billing Amount</th> 
+					    <th class="table_past_due_breakdown bg-dark">Penalty</th>
+					    <th class="table_past_due_breakdown bg-dark">Total</th>
+				  	</tr>
+					<t t-foreach="soa_id.past_due_line_ids" t-as="past_due_line_id">
+				  		<tr>
+				    		<td class="table_past_due_breakdown"><t t-esc="past_due_line_id.bill_number"></t></td>
+				    		<td class="table_past_due_breakdown"><t t-esc="past_due_line_id.billing_amount"></t></td>
+				    		<td class="table_past_due_breakdown"><t t-esc="past_due_line_id.penalty"></t></td>
+				    		<td class="table_past_due_breakdown"><t t-esc="past_due_line_id.amount_due"></t></td>
+				  		</tr>
+					</t>
+					<tr class="bg-gray">
+			    		<td class="table_past_due_breakdown"></td>
+			    		<td class="table_past_due_breakdown"></td>
+			    		<td class="table_past_due_breakdown"></td>
+			    		<td class="table_past_due_breakdown"></td>
+			  		</tr>
+				</table>
+	            <div class="text-center">
+	        		<t t-if="is_show">
+	        			<a t-if="soa_id" role="button" class="btn btn-primary font-weight_bold font-large border-0 bg-dark download_billing_stmt" t-attf-href="/download/billing_statement/#{soa_id.id}" target="_blank" aria-label="Download" title="Download">Download</a>
+	            		<a t-else="" role="button" class="disabled btn btn-primary font-weight_bold font-large border-0 bg-dark download_billing_stmt" t-attf-href="/download/billing_statement/#{soa_id.id}" target="_blank" aria-label="Download" title="Download">Download</a>
+	            		<button class="btn btn-primary font-weight_bold font-large border-0 bg-dark ml-1">Pay Now</button>
+	              	</t>
+	              	<t t-else="">
+	              		<a t-if="soa_id" role="button" class="btn btn-primary font-weight_bold font-large border-0 bg-dark download_billing_stmt preview_download_btn float-right" t-attf-href="/download/billing_statement/#{soa_id.id}" target="_blank" aria-label="Download" title="Download">Download</a>
+	              		<a t-else="" role="button" class="disabled btn btn-primary font-weight_bold font-large border-0 bg-dark download_billing_stmt preview_download_btn float-right" t-attf-href="/download/billing_statement/#{soa_id.id}" target="_blank" aria-label="Download" title="Download">Download</a>
+	              	</t>
+	       		</div>
+            </section>
+        </div>
+    </template>  
+    
+    <template id="property_overview_template">
+		<div id="top-grid">
+            <div class="row">
+                <div class="m_parent_div">
+                	<div t-field="property_sale.partner_id.image_1920" t-options='{"widget": "image", "preview_image": "image_512", "class": "d-block mx-auto mb16"}'/>
+                </div>
+                <div class="col-12 col-sm-8 customer_panel">
+                    <div class="common-text1 p-1">Welcome home</div>
+                    <div class="common-text2"><t t-esc="property_sale.partner_id.name"></t></div>
+                    <div class="common-text1 p-1">
+                        <span>Customer No.: <t t-esc="property_sale.customer_number"></t></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="bottom-grid" class=" mt-lg-0 mt-3">
+            <div class="sales-order-content row ">
+                <div class="sales-order-word col-sm-6">Sales Order No.:</div>
+                <div class="sales-order-number col-sm-6 text-center bg-gray"><t t-esc="property_sale.so_number"></t></div>
+            </div>
+            <div class="property-content-header">
+                <span class="property-content"><h3>Property Overview</h3></span>
+                <div class="property-content-below mt-3">
+                    <div class="row mt-4">
+                        <div class="col-12 col-sm-5 left-property">Project Name:</div>
+                        <div class="col-12 col-sm-7 right-property"><t t-esc="project_name"></t> <!-- <t t-esc="property_sale.brand"></t> --></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-sm-5 left-property">Block-Lot:</div>
+                        <div class="col-12 col-sm-7 right-property"><t t-esc="block_lot"></t><!-- <t t-esc="property_sale.block_lot"></t> --></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-sm-5 left-property">House Model:</div>
+                        <div class="col-12 col-sm-7 right-property"><t t-esc="house_model"></t><!-- <t t-esc="property_sale.house_model_id.name"></t> --></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-sm-5 left-property">Floor Area:</div>
+                        <t t-set="floor_area" t-value="int(floor_area)"></t>
+                        <div class="col-12 col-sm-7 right-property"><t t-esc="floor_area"></t><span> sqm</span></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12 col-sm-5 left-property">Lot Area:</div>
+                        <t t-set="lot_area" t-value="int(lot_area)"></t>
+                        <div class="col-12 col-sm-7 right-property"><t t-esc="lot_area"></t> <span> sqm</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</template> 
+	
+	<template id="view_preview_popup" name="preview popup">
+   		<!-- modal relative to the actions preview popup -->
+       	<t t-foreach="soa_ids" t-as="soa">
+	        <div role="dialog" class="modal fade" t-att-id="'modal_preview_' + str(soa.id)">
+	            <div class="modal-dialog">
+	                <form method="POST" class="modal-content">
+	                    <header class="modal-header">
+	                        <h4 class="modal-title">Statement Summary</h4>
+	                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+	                    </header>
+	                    <main class="modal-body">
+	                   		<t t-set="is_show" t-value="False"></t>
+	                    	<t t-set="soa_id" t-value="soa"></t>
+	                    	<t t-call="skit_customer_portal.statement_summary_view"></t>
+	                    </main>
+	                </form>
+	            </div>
+	        </div>
+        </t>
+	</template>
+
+	<template id="document_template_view">
+		<div class="portal_container"> 
+        	<div t-attf-class="pb-2 pt-3 #{'card-header bg-white'}">
+		  		<h3 class="my-0">
+		     		<t t-esc="'Documents'"/>
+		     	</h3>
+			</div>
+			<div class="card-body">
+         		<div class="row mb16 doc_container">
+		          	<div class="col-md-12">
+				      	<t t-set="required_docs" t-value="property_sale._get_document_requirement_list_portal(property_sale.id)"></t>
+						<table class="first_document_tbl doc_checklist width_100">
+							<thead>
+								<tr>
+									<th>
+										<span>Requirements</span>
+									</th>
+									<th class="text-right">
+										<span>Notes</span>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<t t-foreach="required_docs" t-as="req_doc">
+									<t t-if="req_doc['checked']">
+										<t t-set="doc_checklist" t-value="'doc_checked'"></t>
+									</t>
+									<t t-else="">
+										<t t-set="doc_checklist" t-value="'doc_unchecked'"></t>
+									</t>
+									<tr>
+										<td class="doc_detail_cell">
+											<table class="w-100 inner_doc_tbl">
+												<tr>
+													<td class="checkmark_cell">
+														<ul class="checkmark padding_0">
+															<li t-att-class="'tooltip_skit '+doc_checklist">
+																<t t-if="req_doc['preview_file_name']">
+																	<span class="tooltiptext_skit">
+																		<a t-att-href="'/web/binary/preview_document?model=property.sale.required.document&amp;field=preview_file&amp;id=%s&amp;filename=%s' % (req_doc['id'], req_doc['preview_file_name'])" target="_new">
+																			<div class='oe_attachment_embedded o_image'
+																				t-att-title="req_doc['preview_file_name']" t-att-data-mimetype="'application/pdf'"
+																				 />
+																			<div class='oe_attachment_name text-white'>
+																				<t t-raw="req_doc['preview_file_name']" />
+																			</div>
+																		</a>
+																	</span>
+																</t>
+															</li>
+														</ul>
+													</td>
+													<td>
+														<span>
+															<t t-esc="req_doc['document_name']"></t>
+														</span>
+														<br></br>
+														<span class="text-small"><t t-esc="req_doc['document_description']"></t></span>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td class="text-right doc_notes_cell">
+											<span>
+												<t t-esc="req_doc['document_note']"></t>
+											</span>
+										</td>
+									</tr>
+									<tr class="mbl_tr_hide">
+										<td>
+											<br></br>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+						</table>
+						<br class="mbl_br_hide"></br>
+						<br></br>
+						<div class="submit_document_form"></div>
+						<t t-call="skit_customer_portal.view_submit_doc_popup"></t>
+						<a  role="button" class="btn btn-primary mb8 font-weight_bold font-large border-0 bg-dark float-right mbl_btn" data-toggle="modal" data-target="#modal_submit_doc" href="#">
+			                Submit Document
+			            </a>
+						<br></br>
+						<hr></hr>
+						<t t-set="downloadable_docs" t-value="property_sale._get_document_downloadable_list_portal()"></t>
+						<table class="downloadable_tbl width_100">
+							<thead>
+								<tr>
+									<th>
+										<span>Downloadable</span>
+									</th>
+									<th class="text-right">
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<br></br>
+									</td>
+								</tr>
+								<t t-foreach="downloadable_docs" t-as="downloadable_doc">
+									<tr>
+										<td>
+											<span>
+												<t t-esc="downloadable_doc['name']"></t>
+											</span>
+											<br></br>
+											<span class="text-small"><t t-esc="downloadable_doc['description']"></t></span>
+										</td>
+										<td class="text-right">
+										 	<a class="btn btn-primary font-weight_bold font-large bg-dark border-0 mbl_btn" t-att-href="'/web/binary/download_document?model=property.sale.downloadable.document&amp;field=attachment_file&amp;id=%s&amp;filename=%s' % (downloadable_doc['id'], downloadable_doc['attachment_file_name'])" title="Download" target="_new">Download</a>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<br></br>
+										</td>
+									</tr>
+								</t>
+							</tbody>
+						</table>
+              		</div>
+				</div>
+			</div>
+		</div>
+    </template>	
+	
+	<template id="payment_summary_view">
+		<div class="portal_container"> 
+       		<div t-attf-class="pb-2 pt-3 #{'card-header bg-white'}">
+		 		<h3 class="my-0">
+		    		<t t-esc="'Payment Summary'"/>
+		    	</h3>
+			</div>
+			<div class="card-body">
+           		<div class="row mb16">
+	         		<div class="col-md-12">
+				 		<!-- <t t-set="payments_data" t-value="property_sale._get_property_info(property_sale.id)"></t>
+				 		<t t-set="loanable_amount" t-value="payments_data['loanable_amount']"></t>
+				 		<t t-set="loanable_amount_readable_format" t-value="payments_data['loanable_amount_readable_format']"></t>
+				 		<t t-set="downpayment_amount" t-value="payments_data['downpayment_amount']"></t>
+				 		<t t-set="downpayment_amount_readable_format" t-value="payments_data['downpayment_amount_readable_format']"></t>
+				      	<t t-set="downpayment_percent" t-value="payments_data['downpayment_percent']"></t>
+				      	<t t-set="total_dp_amount_paid_percent" t-value="payments_data['total_dp_amount_paid_percent']"></t>
+				      	<t t-set="amortization_percent" t-value="100 - downpayment_percent"></t>
+				      	<t t-set="amortization_paid_percent" t-value="payments_data['total_loan_amount_paid_percent']"></t>
+						<t t-set="amortization_paid_percent"  t-value="'%.0f'% amortization_paid_percent"/>
+						<t t-set="total_dp_amount_paid_percent"  t-value="'%.0f'% total_dp_amount_paid_percent"/> -->
+						
+						
+						
+						<!-- <t t-set="loanable_amount" t-value="loanable_amount"></t> -->
+						<!-- <t t-set="loanable_amount_readable_format" t-value="loanable_amount_readable_format"></t> -->
+						<!-- <t t-set="downpayment_amount" t-value="downpayment_amount"></t> -->
+				 		<!-- <t t-set="downpayment_amount_readable_format" t-value="downpayment_amount_readable_format"></t> -->
+				      	<!-- <t t-set="downpayment_percent" t-value="downpayment_percent"></t> -->
+				      	<!-- <t t-set="total_dp_amount_paid_percent" t-value="total_dp_amount_paid_percent"></t> -->
+						<t t-set="amortization_percent" t-value="100 - downpayment_percent"></t>
+				      	<t t-set="amortization_paid_percent" t-value="total_loan_amount_paid_percent"></t>
+						<t t-set="amortization_paid_percent"  t-value="'%.0f'% amortization_paid_percent"/>
+						<t t-set="total_dp_amount_paid_percent"  t-value="'%.0f'% total_dp_amount_paid_percent"/>
+						
+						<t t-if="downpayment_percent and downpayment_amount and loanable_amount">
+							<div class="row mb16 row-no-margin progress_divider_row">
+								<div t-attf-data-dp-progress-after="#{total_dp_amount_paid_percent}%" id="downpayment_progress" class="progress_bar_divider bg_none" t-attf-style="width: #{downpayment_percent}%;">
+								  	<div  id="downpayment_bar" class="progress_bar_divider bg_none" t-attf-style="width: #{total_dp_amount_paid_percent}%;">
+								  	</div>
+								</div>
+								<div t-attf-data-amort-progress-after="#{amortization_paid_percent}%" id="amortization_progress" class="progress_bar_divider bg_none" t-attf-style="width: #{amortization_percent}%;">
+								  	<div id="amortization_bar" class="progress_bar_divider bg_none" t-attf-style="width: #{amortization_paid_percent}%;">
+								  	</div>
+								</div>
+		   					</div> 
+		   					
+		   					<div class="row mb16 row-no-margin">
+								<div t-att-data-dp-progress-before="downpayment_amount_readable_format" data-dp-progress-after="Down Payment" id="downpayment_progress_1" class="progress_bar_divider" t-attf-style="width: #{downpayment_percent}%">
+								  	<div  id="downpayment_bar_1" class="progress_bar_divider" t-attf-style="width: #{total_dp_amount_paid_percent}%">
+								  	</div>
+								</div>
+								
+								<div t-att-data-amort-progress-before="loanable_amount_readable_format" data-amort-progress-after="Amortization" id="amortization_progress_1" class="progress_bar_divider" t-attf-style="width: #{amortization_percent}%">
+								  	<div id="amortization_bar_1" class="progress_bar_divider" t-attf-style="width: #{amortization_paid_percent}%">
+								  	</div>
+								</div> 
+		   					</div>
+	   					</t>
+						<t t-else="">
+							<div id="downpayment_progress_1" class="w-100">
+							  	<div id="downpayment_bar_1" class="width_0">
+							  	</div>
+							</div>
+						</t>
+	   					
+			      		<table class="m-5 paymnt_summary_tbl1">
+					  		<tr>
+								<td class="width_50">
+									Total Contract Price(TCP):
+								</td>
+								<td class="text-right width_50">
+									<t t-esc="tcp"  t-options='{"widget": "monetary","display_currency": property_sale.currency_id}'/>
+								</td>
+							</tr>
+							<tr>
+								<td><br></br></td>
+							</tr>
+							<tr>
+								<td class="width_50">
+									Outstanding Balance:
+								</td>
+								<td class="text-right width_50">
+									<t t-esc="outstanding_balance"  t-options='{"widget": "monetary","display_currency": property_sale.currency_id}'/>
+								</td>
+							</tr>
+						</table>
+                    	<div class="row m-4 payment_mode_header">
+                            <div class="col-3">
+                            	<h4>Payments Made</h4>
+                            </div>
+                            <div class="col-9">
+                            	<hr class="width_100"></hr>
+                            </div>
+                    	</div>  
+			         	<table class="paymnt_summary_tbl2">
+					  		<tr>
+								<td class="width_50">
+									Total Principal Amount:
+								</td>
+								<td class="text-right width_50">
+									<t t-esc="total_principal_amount_paid"  t-options='{"widget": "monetary","display_currency": property_sale.currency_id}'/>
+								</td>
+							</tr>
+							<tr>
+								<td><br></br></td>
+							</tr>
+							<tr>
+								<td class="width_50">
+									Total Interest Amount:
+								</td>
+								<td class="text-right width_50">
+									<t t-esc="total_interest_amount_paid"  t-options='{"widget": "monetary","display_currency": property_sale.currency_id}'/>
+								</td>
+							</tr>
+							<tr>
+								<td><br></br></td>
+							</tr>
+							<tr>
+								<td class="width_50">
+									Total Penalty (Sundry):
+								</td>
+								<td class="text-right width_50">
+									<t t-esc="total_penalty_paid" t-options='{"widget": "monetary","display_currency": property_sale.currency_id}'/>
+								</td>
+							</tr>
+							<tr>
+								<td class="width_50">
+									Total Amount Paid:
+								</td>
+								<td class="text-right width_50">
+									<hr></hr>
+									<span class="font-large paid_amt">
+										<t t-esc="grand_total_paid"  t-options='{"widget": "monetary","display_currency": property_sale.currency_id}'/>
+									</span>
+									<hr></hr>
+									<hr></hr>
+								</td>
+							</tr>
+						</table>  
+                 	</div>
+				</div>
+			</div>
+		</div>
+    </template>	
+
+    <template id="payment_summary_template">
+	   	<div class="row mb16">
+       		<div class="col-md-11">
+   				<t t-call="skit_customer_portal.payment_summary_view"></t>
+        	</div>
+			<div class="col-md-1" id="right-column">
+	   		</div>
+	   	</div>
+    </template> 
+    
+	<template id="document_template">
+		<div class="row mb16">
+       		<div class="col-md-11">
+   				<t t-call="skit_customer_portal.document_template_view"></t>
+        	</div>
+			<div class="col-md-1 shortcut_icon_panel" id="right-column">
+				<ul class="shortcut_icon_ul sticky-btn">
+					<li class="list-unstyled">
+						<a href="/website/calendar"><span t-attf-id="calender" class="shortcut_icon fa fa-calendar-o"></span></a>
+					</li>
+					<br></br>
+					<li class="list-unstyled">
+						<a href="/helpdesk/"><span t-attf-id="question" class="shortcut_icon fa fa-question-circle"></span></a> 
+					</li>
+					<br></br>
+					<li class="list-unstyled">
+						<a data-toggle="modal" data-target="#modal_submit_doc" href="#">
+				    		<span t-attf-id="calender" class="shortcut_icon fa fa-comments"></span>
+				   		</a>	
+					</li>
+				</ul>
+	   		</div>
+	   	</div>
+    </template> 
+    
+    <template id="portal_messages_container_view_template">
+		<div class="row mb16">
+        	<div class="col-md-11">
+        		<t t-call="skit_customer_portal.portal_messages_container_view"></t>
+			</div>
+	   	</div>
+    </template> 
+    
+    <template id="portal_messages_container_view">
+		<div class="portal_container"> 
+			<div class="card-body">
+         		<div class="row mb16 doc_container">
+		          	<div class="col-md-12">
+						<t t-if="request.session.get('selected_property_so_id')">
+	                    	<t t-set="selected_sale_order" t-value="request.env['property.admin.sale'].search([('id', '=', request.session.get('selected_property_so_id'))])"/>
+	                    	<div class="o_portal_messages_container">
+				                <t t-call="portal.message_thread">
+				                <t t-if="property_sale">
+				                	<t t-set="object" t-value="property_sale"/>
+				                </t>
+				                <t t-else="">
+				                	<t t-set="object" t-value="selected_sale_order"/>
+				                </t>
+				                <t t-set="pid" t-value="pid"/>
+				                <t t-set="hash" t-value="hash"/>
+				                </t>
+	            			</div>
+            			</t>
+            			<t t-else="">
+            				<div class="mb32">
+            					<p class="text-center">Please select any property sale under "My Account".</p>
+            				</div>
+            			</t>
+              		</div>
+				</div>
+			</div>
+		</div>
+    </template>	
+    
+    <template id="portal_helpdesk_ticket_view_template">
+		<div class="row mb16">
+        	<div class="col-md-11">
+        		<t t-call="skit_customer_portal.portal_helpdesk_ticket_view"></t>
+			</div>
+	   	</div>
+    </template> 
+    
+	<template id="portal_helpdesk_ticket_view">
+		<div class="portal_container"> 
+			<div class="card-body">
+         		<div class="row mb16 doc_container ticket_panel">
+		          	<div class="col-md-12">
+	                	<t t-set="breadcrumbs_searchbar" t-value="False"/>
+			            <t t-call="portal.portal_searchbar">
+			                <t t-set="title">Tickets</t>
+			            </t>
+			            <div t-if="not tickets" class="alert alert-info">
+			                There are currently no Ticket for your account.
+			            </div>
+			            <t t-if="tickets" t-call="portal.portal_table">
+			                <thead>
+			                    <tr>
+			                        <th class="text-right">Ref</th>
+			                        <th class="w-100">Description</th><th/>
+			                        <th class="text-center">Status</th>
+			                    </tr>
+			                </thead>
+			                <t t-foreach="tickets" t-as="ticket">
+			                    <tr>
+			                        <td class="text-right"><a t-attf-href="/helpdesk/ticket/#{ticket.id}"><small>#</small><t t-esc="ticket.id"/></a></td>
+			                        <td><a t-attf-href="/helpdesk/ticket/#{ticket.id}"><span t-field="ticket.name"/></a></td><td/>
+			                        <td class="text-center"><span class="badge badge-pill badge-info" t-field="ticket.stage_id.name"/></td>
+			                    </tr>
+			                </t>
+			            </t>
+              		</div>
+				</div>
+			</div>
+		</div>
+    </template>	
+    
+	<template id="view_submit_doc_popup" name="Submit doc popup">
+   		<!-- modal relative to the actions Submit doc -->
+        <div role="dialog" class="modal fade submit_doc_modal" id="modal_submit_doc">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <header class="modal-header"> 
+	               		<button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+	                </header>
+                    <main class="modal-body">
+                    	<t t-if="request.session.get('selected_property_so_id')">
+	                    	<t t-set="selected_sale_order" t-value="request.env['property.admin.sale'].search([('id', '=', request.session.get('selected_property_so_id'))])"/>
+	                    	<div class="o_portal_messages_container">
+				                <t t-call="portal.message_thread">
+				                <t t-if="property_sale">
+				                	<t t-set="object" t-value="property_sale"/>
+				                </t>
+				                <t t-else="">
+				                	<t t-set="object" t-value="selected_sale_order"/>
+				                </t>
+				                <t t-set="pid" t-value="pid"/>
+				                <t t-set="hash" t-value="hash"/>
+				                </t>
+	            			</div>
+            			</t>
+            			<t t-else="">
+            				<div class="mb32">
+            					<p class="text-center">Please select any property sale under "My Account".</p>
+            				</div>
+            			</t>
+                    </main>
+                </div>
+            </div>
+        </div>
+	</template>
+
+</odoo>

@@ -1,0 +1,67 @@
+<odoo>
+    <data>
+    <template id="portal_my_details_custom" inherit_id="portal.portal_my_details">
+        <xpath expr="//input[@name='redirect']" position="before">
+            <div t-attf-class="form-group #{error.get('barangay_id') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label label-optional" for="barangay_id">Barangay</label>
+                <select name="barangay_id" t-attf-class="form-control #{error.get('barangay_id') and 'is-invalid' or ''}">
+                    <option value="">select...</option>
+                    <t t-foreach="barangays or []" t-as="barangay">
+                        <option t-att-value="barangay.id" t-att-selected="barangay.id == partner.barangay_id.id">
+                            <t t-esc="barangay.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+
+            <div t-attf-class="form-group #{error.get('province_id') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label label-optional" for="province_id">Province</label>
+                <select name="province_id" t-attf-class="form-control #{error.get('province_id') and 'is-invalid' or ''}">
+                    <option value="">select...</option>
+                    <t t-foreach="provinces or []" t-as="province">
+                        <option t-att-value="province.id" t-att-selected="province.id == partner.province_id.id">
+                            <t t-esc="province.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+
+            <div t-attf-class="form-group #{error.get('island_group_id') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label label-optional" for="island_group_id">Island Group</label>
+                <select name="island_group_id" t-attf-class="form-control #{error.get('island_group_id') and 'is-invalid' or ''}">
+                    <option value="">select...</option>
+                    <t t-foreach="island_groups or []" t-as="island_group">
+                        <option t-att-value="island_group.id" t-att-selected="island_group.id == partner.island_group_id.id">
+                            <t t-esc="island_group.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+
+            <div t-attf-class="form-group #{error.get('continent_region_id') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label label-optional" for="continent_region_id">Continent Region</label>
+                <select name="continent_region_id" t-attf-class="form-control #{error.get('continent_region_id') and 'is-invalid' or ''}">
+                    <option value="">select...</option>
+                    <t t-foreach="continent_regions or []" t-as="continent_region">
+                        <option t-att-value="continent_region.id" t-att-selected="continent_region.id == partner.continent_region_id.id">
+                            <t t-esc="continent_region.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+
+            <div t-attf-class="form-group #{error.get('continent_id') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label label-optional" for="continent_id">Continent</label>
+                <select name="continent_id" t-attf-class="form-control #{error.get('continent_id') and 'is-invalid' or ''}">
+                    <option value="">select...</option>
+                    <t t-foreach="continents or []" t-as="continent">
+                        <option t-att-value="continent.id" t-att-selected="continent.id == partner.continent_id.id">
+                            <t t-esc="continent.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </xpath>
+    </template>
+    </data>
+</odoo>

@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Vendor Portal",
+    'summary': """Vendor Portal""",
+    'description': """ Vendor Portal - Registration and Dashboard """,
+    'author': "Srikesh Infotech",
+    'category': 'Website',
+    'version': '0.1',
+    'depends': [
+            'website',
+            'base',
+            'admin_request_for_quotation',
+            'admin_vendor',
+            'website_event',
+            'admin_request_for_information',
+            'admin_request_for_proposal',
+            'admin_purchase_order',
+            'admin_purchase_bid',
+        ],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/portal_data.xml',
+        'data/notify_user_email_template.xml',
+        'data/vendor_portal_email_template.xml',
+        'data/website_menu.xml',
+        'data/rfq_email_templates.xml',
+        'data/rfq_decline_email_templates.xml',
+        'views/vendor_registration_form_template.xml',
+        'views/vendor_portal_templates.xml',
+        'views/vendor_dashboard_templates.xml',
+        'views/base_config_view.xml',
+        'views/view_full_profile.xml',
+        'views/website_config_settings.xml',
+        'views/event_views.xml',
+        'views/request_for_proposal_view.xml'
+    ],
+    'installable': True,
+    'auto_install': False,
+    'application': True
+}

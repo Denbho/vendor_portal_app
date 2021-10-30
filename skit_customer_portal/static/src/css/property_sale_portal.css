@@ -1,0 +1,251 @@
+/* Background CSS */
+
+.transparent_bg {
+	background-color: transparent;
+}
+
+.bg_none {
+	background: none;
+}
+
+.bg-gray{
+	background-color: #e7e7e7;
+}
+
+/* Progress Bar CSS */
+
+#downpayment_bar, #amortization_bar {
+	height: 3px;
+	/* background-color: #66C10BB3; */
+}
+
+#downpayment_bar:before {
+	content: attr(data-dp-progressbar-before);
+}
+
+#downpayment_bar:after {
+	content: attr(data-dp-progressbar-after);
+	text-align: right;
+}
+
+#amortization_bar:before {
+	content: attr(data-amort-progressbar-before);
+}
+
+#amortization_bar:after {
+	content: attr(data-amort-progressbar-after);
+}
+
+#downpayment_progress, #amortization_progress {
+	display: inline-block;
+	position: relative;
+	/* background-color: #8e8a8a; */
+	font-size: small;
+}
+
+#downpayment_progress:before, #downpayment_progress:after,
+	#amortization_progress:before, #amortization_progress:after {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+#downpayment_progress:before {
+	content: attr(data-dp-progress-before);
+	text-align: right;
+}
+
+#downpayment_progress:after {
+	content: attr(data-dp-progress-after);
+	text-align: left;
+}
+
+#amortization_progress:before {
+	content: attr(data-amort-progress-before);
+	text-align: right;
+}
+
+#amortization_progress:after {
+	content: attr(data-amort-progress-after);
+	text-align: left;
+}
+
+#downpayment_bar_1, #amortization_bar_1 {
+	height: 30px;
+	background-color: #66C10BB3;
+}
+
+#downpayment_bar_1:after {
+	content: attr(data-dp-progressbar-after);
+}
+
+#amortization_bar_1:before {
+	content: attr(data-amort-progressbar-before);
+}
+
+#amortization_bar_1:after {
+	content: attr(data-amort-progressbar-after);
+}
+
+#downpayment_progress_1, #amortization_progress_1 {
+	text-align: center;
+	display: inline-block;
+	position: relative;
+	background-color: #8e8a8a;
+	font-size: small;
+}
+
+#downpayment_progress_1:before, #downpayment_progress_1:after,
+	#amortization_progress_1:before, #amortization_progress_1:after
+	{
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+#downpayment_progress_1:before {
+	content: attr(data-dp-progress-before);
+	text-align: right;
+	padding-top:5px;
+}
+
+#downpayment_progress_1:after {
+	content: attr(data-dp-progress-after);
+	text-align: center;
+}
+
+#amortization_progress_1:before {
+	content: attr(data-amort-progress-before);
+	text-align: right;
+	padding-top:5px;
+}
+
+#amortization_progress_1:after {
+	content: attr(data-amort-progress-after);
+	text-align: center;
+}
+
+.progressbar-bg-success{
+	background-color: #66C10BB3;
+}
+
+.progress-bg{
+	background-color: #8e8a8a;
+}
+
+.payment_summary_progress .progress{
+	height: 2rem !important;
+	background-color: #8e8a8a !important;
+	border-radius: 0px;
+}
+
+.progress_bar_divider {
+    border-right: 2px solid white;
+}
+
+/* Side Icon CSS */
+
+/* .side_icons_section {
+	display: inline-block;
+	width: 10%;
+	margin-top: 32%;
+} */
+
+/* Table CSS */
+
+.table_past_due_breakdown, .appointment_table {
+	border-collapse: separate;
+	padding: 10px;
+	text-align: center;
+}
+
+.table_past_due_breakdown tr:nth-child(even), .appointment_table tr:nth-child(even){
+	background-color: #dddddd;
+}
+
+.table_past_due_breakdown tr:nth-child(odd), .appointment_table tr:nth-child(odd) {
+	background-color: #eee;
+}
+
+table.table_past_due_breakdown{
+	width:96%; 
+}
+.paymnt_summary_tbl1{
+	width:90%;
+}
+.amount_detail_table > tbody > tr > td:first-child{
+	width: 50%;
+	padding-left: 50px;
+}
+.amount_detail_table > tbody > tr > td:last-child{
+	width: 50%;
+	padding-right: 75px;
+}
+.paymnt_summary_tbl2{
+	width:90%;
+	margin: 3rem;
+}
+.soa_history td{
+	padding:10px;
+}
+.checkmark_cell{
+	width:15%;
+}
+.amount_detail_table hr, .paymnt_summary_tbl2 hr{
+	margin-left: 59%;
+	border-top: 3px solid rgba(0, 0, 0, 0.1);
+}
+.doc_container hr{
+	width:100%;
+	text-align:left;
+	margin-left:0;
+}
+
+.doc_detail_cell{
+	width:40%;
+}
+.doc_notes_cell{
+	width:50%;
+}
+
+.width_50{
+	width:50%;
+}
+
+.width_100{
+	width:100%;
+}
+
+.box_shadow_none{
+	box-shadow: none !important;
+}
+
+.padding_0{
+	padding: 0;
+}
+
+.page_header_calender{
+	height:70px;
+}
+
+.preview_download_btn{
+	margin-right: 6%;
+}
+
+.text_capitalize{
+	text-transform: capitalize;
+}
+
+.sticky-btn {
+ 	bottom: 14%;
+    left: 76.5%;
+}
+
+.sticky-btn-bottom-0 {
+ 	bottom: 0;
+    left: 85%;   
+ }
+ 
+ .border_top {
+    border-top: 1px solid #dee2e6 !important;
+}

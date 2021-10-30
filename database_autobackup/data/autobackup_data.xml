@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo noupdate="1">
+
+    <record id="default_autobackup_enabled" model="ir.config_parameter" forcecreate="0">
+        <field name="key">database_autobackup.default_autobackup_enabled</field>
+        <field name="value">False</field>
+    </record>
+
+</odoo>

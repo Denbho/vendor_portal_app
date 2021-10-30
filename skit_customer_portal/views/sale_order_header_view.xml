@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <template id="customer_portal_assets_frontend_scss" inherit_id="website.assets_frontend" name="Customer Portal Assets scss">
+        <xpath expr="//link[last()]" position="after">
+            <link rel="stylesheet" type="text/css" href="/skit_customer_portal/static/src/css/style.scss"/>
+        </xpath>
+    </template> -->
+    
+<!--     <template id="property_sale_list_view">
+        <t t-call="website.layout">
+        <t t-call="portal.portal_layout"> 
+            <div id="so_header">
+                <div>
+                    <div class="over-all-header">
+                        <img t-if="request.env.user.company_id.logo"
+								t-att-src="image_data_uri(request.env.user.company_id.logo)"
+								alt="Logo" width="150" height="100" title="saturate" class="saturate"/>
+                        <img src="/web/image/website/1/logo/My%20Website?unique=19941b3" style="height: 50px;" class="img img-fluid" alt=""/>
+                        <div class="p-2 over-all-text">
+                            <div class="welcome-text">Welcome to the</div>
+                            <div class="cus-text">Customer Portal</div>
+                        </div>
+                    </div>
+                    <div class="over-all">
+                        <span style="color: white; font-size: 25px;" class="text-content">Select SO number</span>
+                        <div class="scroll-div">
+                            <t t-foreach="value" t-as="temp">
+                                <div class="element-div" t-att-id="temp">
+                                    <span class="" t-esc="temp"></span>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template> -->
+
+</odoo>

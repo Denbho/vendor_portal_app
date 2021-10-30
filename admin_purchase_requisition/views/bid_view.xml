@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="sequence_purchase_bid" model="ir.sequence">
+          <field name="name">Bids</field>
+          <field name="code">purchase.bid</field>
+          <field name="prefix">BID</field>
+          <field name="padding">5</field>
+          <field name="company_id" eval="False"/>
+      </record>
+
+      <record id="pr_bid_form" model="ir.ui.view">
+          <field name="name">purchase.bid.form</field>
+          <field name="model">purchase.bid</field>
+          <field name="arch" type="xml">
+            <form string="Bids">
+              <header>
+                  <button name="action_confirm" type="object" string="Confirm" confirm="Are you sure?"
+                    class="oe_highlight" states="draft"/>
+                  <button name="action_verify" type="object" string="Verify" confirm="Are you sure?"
+                    class="oe_highlight" states="waiting_for_verification"/>
+                  <button name="action_approve" type="object" string="Approve" confirm="Are you sure?"
+                    class="oe_highlight" states="waiting_for_approval"/>
+                  <button name="action_send_invitation" type="object" string="Send Invitation"
+                    class="oe_highlight" attrs="{'invisible': ['|',('state', '!=', 'send_bid_invitation'),('invitation_sent','=',True)]}"/>
+                  <button name="action_force_initiate_prebid" type="object" string="Force Initiate Pre-Bid" confirm="Are you sure?"
+                    class="oe_highlight" attrs="{'invisible': ['|',('state', '!=', 'send_bid_invitation'),('invitation_sent','=',False)]}" />
+                  <button name="action_force_postbid" type="object" string="Force Post-Bid" confirm="Are you sure?"
+                    class="oe_highlight" states="pre_bidding"/>
+                  <button name="action_bid_selection" type="object" string="Bid Selection" confirm="Are you sure?"
+                    class="oe_highlight" states="post_bidding"/>
+                  <button name="action_submit_to_verify_bid_selection" type="object" string="Submit to Verify Bid Selection" confirm="Are you sure?"
+                    class="oe_highlight" states="bid_selection"/>
+                  <button name="action_verify_bid_selection" type="object" string="Verify Bid Selection" confirm="Are you sure?"
+                    class="oe_highlight" states="waiting_bid_selection_ver"/>
+                  <button name="action_confirm_bid_selection" type="object" string="Confirm Bid Selection" confirm="Are you sure?"
+                    class="oe_highlight" states="waiting_bid_selection_con"/>
+                  <button name="action_approve_bid_selection" type="object" string="Approve Bid Selection" confirm="Are you sure?"
+                    class="oe_highlight" states="waiting_bid_selection_app"/>
+                  <button name="action_create_contract_agreement" type="object" string="Create a Contract/Agreement" confirm="Are you sure?"
+                    class="oe_highlight" attrs="{'invisible': ['|',('state', '!=', 'done'),('agreement_contract_no','!=',False)]}"/>
+                  <button name="action_cancel" type="object" string="Cancel" states="draft,waiting_for_verification,waiting_for_approval" confirm="Are you sure?"/>
+                  <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+              </header>
+              <sheet>
+                <div class="oe_button_box" name="button_box">
+                  <button class="oe_stat_button" name="action_view_vendor" type="object" icon="fa-users">
+                      <field string="Vendors" name="vendor_count" widget="statinfo"/>
+                  </button>
+                </div>
+                <div class="o_td_label">
+                    <label for="name" string="Bid"/>
+                </div>
+                <div>
+                  <h1>
+                    <field name="name"/>
+                  </h1>
+                </div>
+                <group>
+                  <group>
+                    <field name="bid_ref" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="bid_name" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="date_created" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="purchasing_officer" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="pr_id" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                  </group>
+                  <group>
+                    <field name="bid_opening_date" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="bid_closing_date" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="wbs_budget" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="bom_budget" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="price_ceiling" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="target_price" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    <field name="invitation_acceptance" invisible="1"/>
+                    <field name="invitation_sent" invisible="1"/>
+                    <field name="check_date_prebid_postbid" invisible="1"/>
+                  </group>
+                </group>
+                <notebook>
+                  <page name="scope_of_work" string="Scope of Work">
+                    <group>
+                      <field name="scope_of_work" attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                    </group>
+                    <separator string="Project/s Involved:"/>
+                    <field name="scope_line" widget="section_and_note_one2many" mode="tree"
+                      attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}">
+                      <tree editable="bottom" string="Scope of Work" default_order="id">
+                        <field name="project"/>
+                        <field name="location"/>
+                      </tree>
+                    </field>
+                      <group>
+                        <group>
+                          <div>
+                            <separator string="Description"/>
+                            <field name="scope_description" widget="html" class="oe_inline" placeholder="Scope of work description..."
+                              attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"/>
+                          </div>
+                        </group>
+                        <group>
+                          <div>
+                            <separator string="Pre-bid Documents"/>
+                            <field name="pre_bid_documents_id" class="oe_inline" widget="many2many_checkboxes"/>
+                          </div>
+                        </group>
+                      </group>
+                  </page>
+                  <page name="vendors" string="Vendors">
+                    <field name="vendor_line" widget="section_and_note_one2many" mode="tree,form"
+                      attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}"
+                      context="{'default_bid_id': id}">
+                      <tree string="Vendors" default_order="is_kicked" decoration-muted="is_kicked==True">
+                        <field name="partner_id"/>
+                        <field name="contact_id"/>
+                        <field name="mobile"/>
+                        <field name="invitation" readonly="1"/>
+                        <field name="acceptance"/>
+                        <field name="is_kicked" invisible="1"/>
+                        <button name="action_kick" string="Remove" type="object" attrs="{'invisible': [('is_kicked', '=', True)]}" class="oe_highlight"/>
+                        <field name="bid_id" invisible="1"/>
+                      </tree>
+                      <form string="Vendors">
+                        <sheet>
+                          <group>
+                            <field name="partner_id"/>
+                            <field name="contact_id"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                            <field name="bid_id" invisible="1"/>
+                          </group>
+                        </sheet>
+                      </form>
+                    </field>
+                  </page>
+                  <page name="technical_evaluation" string="Technical Evaluation">
+                    <group string="Technical Evaluation"/>
+                    <field name="evaluation_line" no_label="1"
+                        widget="section_and_note_one2many"
+                        mode="tree"
+                        context="{'default_type': 'technical'}"
+                        attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}">
+                      <tree editable="bottom" string="Technical Evaluation">
+                        <control>
+                          <create name="add_product_control" string="Add a criteria"/>
+                          <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                          <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                        </control>
+                        <field name="type" invisible="1"/>
+                        <field name="display_type" invisible="1"/>
+                        <field name="sequence" widget="handle"/>
+                        <field name="criteria"/>
+                        <field name="name" widget="section_and_note_text"/>
+                        <field name="weight"/>
+                        <field name="offer"/>
+                      </tree>
+                    </field>
+                  </page>
+                  <page name="commercial_evaluation" string="Commercial Evaluation">
+                    <field name="commercial_evaluation_line"
+                        no_label="1"
+                        widget="section_and_note_one2many"
+                        mode="tree"
+                        context="{'default_type': 'commercial'}"
+                        attrs="{'readonly': [('state', 'not in', ['draft','waiting_for_verification','waiting_for_approval'])]}">
+                      <tree editable="bottom" string="Commercial Evaluation">
+                        <control>
+                          <create name="add_product_control" string="Add a criteria"/>
+                          <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                          <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                        </control>
+                        <field name="type" invisible="1"/>
+                        <field name="display_type" invisible="1"/>
+                        <field name="sequence" widget="handle"/>
+                        <field name="criteria"/>
+                        <field name="name" widget="section_and_note_text"/>
+                        <field name="weight"/>
+                        <field name="offer"/>
+                      </tree>
+                    </field>
+                  </page>
+                  <page name="bid_selection" string="Bid Selection"
+                    states="bid_selection,waiting_bid_selection_ver,waiting_bid_selection_con,waiting_bid_selection_app,done"
+                    attrs="{'readonly': [('state', 'not in', ['bid_selection','waiting_bid_selection_ver','waiting_bid_selection_con','waiting_bid_selection_app'])]}">
+                    <group>
+                      <field name="vendor_id" options="{'no_quick_create':True,'no_create_edit':True}"
+                        attrs="{'readonly': [('state', 'not in', ['bid_selection','waiting_bid_selection_ver','waiting_bid_selection_con','waiting_bid_selection_app'])]}"/>
+                      <field name="date_selected"
+                        attrs="{'readonly': [('state', 'not in', ['bid_selection','waiting_bid_selection_ver','waiting_bid_selection_con','waiting_bid_selection_app'])]}"/>
+                      <field name="agreement_contract_no" readonly="1" force_save="1"/>
+                      <field name="start_date"
+                        attrs="{'readonly': [('state', 'not in', ['bid_selection','waiting_bid_selection_ver','waiting_bid_selection_con','waiting_bid_selection_app'])]}"/>
+                      <field name="end_date"
+                        attrs="{'readonly': [('state', 'not in', ['bid_selection','waiting_bid_selection_ver','waiting_bid_selection_con','waiting_bid_selection_app'])]}"/>
+                    </group>
+                  </page>
+                </notebook>
+              </sheet>
+              <div class="oe_chatter">
+                  <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                  <field name="activity_ids" widget="mail_activity"/>
+                  <field name="message_ids" widget="mail_thread"/>
+              </div>
+            </form>
+          </field>
+      </record>
+
+      <record id="pr_bid_view_tree" model="ir.ui.view">
+          <field name="name">purchase.bid.view.tree</field>
+          <field name="model">purchase.bid</field>
+          <field name="arch" type="xml">
+              <tree string="Bids">
+                  <field name="name"/>
+                  <field name="bid_ref"/>
+                  <field name="bid_name"/>
+                  <field name="company_id"/>
+                  <field name="date_created" optional="hide"/>
+                  <field name="bid_opening_date"/>
+                  <field name="bid_closing_date"/>
+                  <field name="purchasing_officer"/>
+                  <field name="state"/>
+                  <field name="check_date_prebid_postbid" invisible="1"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="pr_bid_form_action" model="ir.actions.act_window">
+          <field name="name">Bids</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">purchase.bid</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="pr_bid_view_tree"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Create a bid.
+            </p>
+          </field>
+      </record>
+
+      <record id="view_kick_out_reason_wizard" model="ir.ui.view">
+        <field name="name">kick.out.reason.wizard.view</field>
+        <field name="model">kick.out.reason</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+          <form>
+            <field name="name" class="oe_inline" placeholder="Define your reasons ..."/>
+            <footer>
+               <button name="action_confirm_kick" string="Remove" type="object" class="oe_highlight"/>
+               <button string="Cancel" class="btn btn-default" special="cancel"/>
+            </footer>
+          </form>
+        </field>
+      </record>
+
+      <record id="pre_bid_documents_view_tree" model="ir.ui.view">
+          <field name="name">pre.bid.documents.view.tree</field>
+          <field name="model">pre.bid.documents</field>
+          <field name="arch" type="xml">
+              <tree string="Pre-bid Documents">
+                  <field name="name"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="pre_bid_documents_action" model="ir.actions.act_window">
+          <field name="name">Pre-bid Documents</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">pre.bid.documents</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="pre_bid_documents_view_tree"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Create a pre-bid documents.
+            </p>
+          </field>
+      </record>
+
+      <record id="evaluation_criteria_view_tree" model="ir.ui.view">
+          <field name="name">evaluation.criteria.view.tree</field>
+          <field name="model">evaluation.criteria</field>
+          <field name="arch" type="xml">
+              <tree string="Evaluation Criteria">
+                  <field name="name"/>
+                  <field name="weight"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="evaluation_criteria_action" model="ir.actions.act_window">
+          <field name="name">Evaluation Criteria</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">evaluation.criteria</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="evaluation_criteria_view_tree"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Create evaluation criteria.
+            </p>
+          </field>
+      </record>
+
+      <record id="purchase_bid_vendor_form" model="ir.ui.view">
+          <field name="name">purchase.bid.vendor.view.form</field>
+          <field name="model">purchase.bid.vendor</field>
+          <field name="arch" type="xml">
+            <form string="Vendors">
+              <sheet>
+                <div class="oe_button_box" name="button_box">
+                  <button class="oe_stat_button" name="action_view_evaluator" context="{'create_evaluator': True}" type="object" icon="fa-edit">
+                      <field string="Evaluator" name="evaluator_count" widget="statinfo"/>
+                  </button>
+                </div>
+                <div>
+                  <h1><field name="partner_id"/></h1>
+                </div>
+                <group>
+                  <group>
+                    <field name="contact_id"/>
+                    <field name="phone"/>
+                    <field name="mobile"/>
+                    <field name="email" widget="email"/>
+                    <field name="kick_out_reason" string="Reasons to remove" attrs="{'invisible': [('is_kicked', '=', False)]}"/>
+                  </group>
+                  <group>
+                    <field name="invitation" readonly="1"/>
+                    <label for="acceptance" class="oe_inline"/>
+                    <div>
+                      <field name="acceptance" class="oe_inline"/>
+                      <field name="acceptance_date" class="oe_inline"/>
+                    </div>
+                    <label for="prebid_attendance" class="oe_inline"/>
+                    <div>
+                      <field name="prebid_attendance" class="oe_inline" widget="boolean_toggle"/>
+                      <field name="date_attended" class="oe_inline"/>
+                    </div>
+                    <label for="non_disc_agreement" class="oe_inline"/>
+                    <div>
+                      <field name="non_disc_agreement" class="oe_inline" widget="boolean_toggle"/>
+                      <field name="date_aggreed" class="oe_inline"/>
+                    </div>
+                    <field name="is_kicked" invisible="1"/>
+                  </group>
+                </group>
+                <separator string="Pre-bid Documents"/>
+                <group>
+                  <group>
+                    <field name="deadline_of_submission"/>
+                  </group>
+                </group>
+                <field name="pre_bid_documents_id" widget="many2many_checkboxes" domain="[('id','in',pre_bid_documents_available_id)]"/>
+                <field name="pre_bid_documents_available_id" widget="many2many_checkboxes" invisible="1"/>
+                <notebook>
+                  <page name="bid_info" string="Bid Info">
+                    <div>
+                      <h1><field name="bid_id" readonly="1" force_save="1"/></h1>
+                    </div>
+                    <group>
+                      <group>
+                        <field name="name" invisible="1"/>
+                        <field name="bid_ref"/>
+                        <field name="bid_name"/>
+                        <field name="date_created"/>
+                        <field name="purchasing_officer"/>
+                      </group>
+                      <group>
+                        <field name="bid_opening_date"/>
+                        <field name="bid_closing_date"/>
+                      </group>
+                    </group>
+                  </page>
+                  <page name="technical_evaluation" string="Technical Evaluation">
+                    <group>
+                      <group>
+                        <field name="technical_eval_status"/>
+                      </group>
+                    </group>
+                    <group string="Technical Evaluation"/>
+                    <field name="evaluation_line" no_label="1"
+                        widget="section_and_note_one2many"
+                        mode="tree">
+                      <tree editable="bottom" string="Technical Evaluation" create="false" delete="false">
+                        <field name="type" invisible="1"/>
+                        <field name="display_type" invisible="1"/>
+                        <field name="sequence" widget="handle" invisible="1"/>
+                        <field name="criteria" readonly="1" force_save="1"/>
+                        <field name="name" widget="section_and_note_text" readonly="1" force_save="1"/>
+                        <field name="weight" readonly="1" force_save="1"/>
+                        <field name="offer"/>
+                        <field name="score" readonly="1" force_save="1"/>
+                      </tree>
+                    </field>
+                    <group string="Other Comments">
+                       <field name="other_comments" nolabel="1"/>
+                    </group>
+                    <group name="recommendation" string="Recommendation">
+                      <field name="for_clarification"/>
+                      <field name="for_negotiation"/>
+                    </group>
+                    <group>
+                      <group>
+                        <label for="prepared_by" class="oe_inline"/>
+                        <div>
+                          <field name="prepared_by" class="oe_inline"/>
+                          <field name="prepared_date" class="oe_inline"/>
+                        </div>
+                        <label for="reviewed_by" />
+                        <div>
+                          <field name="reviewed_by" class="oe_inline"/>
+                          <field name="reviewed_date" class="oe_inline"/>
+                        </div>
+                        <label for="approved_by" />
+                        <div>
+                          <field name="approved_by" class="oe_inline"/>
+                          <field name="approved_date" class="oe_inline"/>
+                        </div>
+                      </group>
+                    </group>
+                  </page>
+                  <page name="commercial_evaluation" string="Commercial Evaluation">
+                    <group>
+                      <group>
+                        <field name="commercial_eval_status"/>
+                      </group>
+                    </group>
+                    <group string="Commercial Evaluation"/>
+                    <field name="commercial_evaluation_line"
+                        no_label="1"
+                        widget="section_and_note_one2many"
+                        mode="tree">
+                      <tree editable="bottom" string="Commercial Evaluation" create="false" delete="false">
+                        <field name="type" invisible="1"/>
+                        <field name="display_type" invisible="1"/>
+                        <field name="sequence" widget="handle" invisible="1"/>
+                        <field name="criteria" readonly="1" force_save="1"/>
+                        <field name="name" widget="section_and_note_text" readonly="1" force_save="1"/>
+                        <field name="weight" readonly="1" force_save="1"/>
+                        <field name="offer"/>
+                        <field name="score" readonly="1" force_save="1"/>
+                      </tree>
+                    </field>
+                    <group string="Other Comments">
+                       <field name="c_other_comments" nolabel="1"/>
+                    </group>
+                    <group name="commercial_recommendation" string="Recommendation">
+                      <field name="c_for_clarification" string="For clarification"/>
+                      <field name="c_for_negotiation" string="For negotiation"/>
+                    </group>
+                    <group>
+                      <group>
+                        <label for="c_prepared_by" class="oe_inline"/>
+                        <div>
+                          <field name="c_prepared_by" class="oe_inline"/>
+                          <field name="c_prepared_date" class="oe_inline"/>
+                        </div>
+                        <label for="c_reviewed_by" />
+                        <div>
+                          <field name="c_reviewed_by" class="oe_inline"/>
+                          <field name="c_reviewed_date" class="oe_inline"/>
+                        </div>
+                        <label for="c_approved_by" />
+                        <div>
+                          <field name="c_approved_by" class="oe_inline"/>
+                          <field name="c_approved_date" class="oe_inline"/>
+                        </div>
+                      </group>
+                    </group>
+                  </page>
+                  <page name="bid_summary" string="Bid Summary">
+                    <group string="Description"/>
+                    <field name="bid_summary_line"
+                        no_label="1"
+                        widget="section_and_note_one2many"
+                        mode="tree">
+                      <tree editable="bottom" string="Bid Summary">
+                        <control>
+                          <create name="add_product_control" string="Add an item"/>
+                          <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                          <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                        </control>
+                        <field name="display_type" invisible="1"/>
+                        <field name="sequence" widget="handle"/>
+                        <field name="name" widget="section_and_note_text"/>
+                        <field name="amount"/>
+                      </tree>
+                    </field>
+                    <group>
+                      <field name="negotiated_amount"/>
+                      <field name="lead_time"/>
+                    </group>
+                    <group string="Terms of Payment"/>
+                    <field name="terms_of_payment_line"
+                        no_label="1"
+                        widget="section_and_note_one2many"
+                        mode="tree">
+                      <tree editable="bottom" string="Terms of Payment">
+                        <control>
+                          <create name="add_product_control" string="Add an item"/>
+                          <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                          <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                        </control>
+                        <field name="display_type" invisible="1"/>
+                        <field name="sequence" widget="handle"/>
+                        <field name="name" widget="section_and_note_text"/>
+                        <field name="payment_percent" sum="Total"/>
+                      </tree>
+                    </field>
+                  </page>
+                </notebook>
+              </sheet>
+              <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                <field name="activity_ids" widget="mail_activity"/>
+                <field name="message_ids" widget="mail_thread"/>
+              </div>
+            </form>
+          </field>
+      </record>
+
+      <record id="purchase_bid_vendor_tree" model="ir.ui.view">
+          <field name="name">purchase.bid.vendor.view.tree</field>
+          <field name="model">purchase.bid.vendor</field>
+          <field name="arch" type="xml">
+              <tree string="Vendors">
+                <field name="partner_id"/>
+                <field name="contact_id"/>
+                <field name="mobile"/>
+                <field name="invitation"/>
+                <field name="acceptance"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="purchase_bid_vendor_action" model="ir.actions.act_window">
+          <field name="name">Vendors</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">purchase.bid.vendor</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="purchase_bid_vendor_tree"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Create a pre-bid documents.
+            </p>
+          </field>
+      </record>
+
+      <record id="vendor_evaluation_template_form" model="ir.ui.view">
+          <field name="name">vendor.evaluation.template.view.form</field>
+          <field name="model">vendor.evaluation.template</field>
+          <field name="arch" type="xml">
+            <form string="Vendor Evaluation Template">
+              <sheet>
+                <group>
+                  <field name="name" />
+                </group>
+                <group name="technical_evaluation" string="Technical Evaluation"/>
+                <field name="technical_evaluation_line"
+                    no_label="1"
+                    widget="section_and_note_one2many"
+                    mode="tree"
+                    context="{'default_type': 'technical'}">
+                  <tree editable="bottom" string="Technical Evaluation">
+                    <control>
+                      <create name="add_product_control" string="Add a criteria"/>
+                      <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                      <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                    </control>
+                    <field name="type" invisible="1"/>
+                    <field name="display_type" invisible="1"/>
+                    <field name="sequence" widget="handle"/>
+                    <field name="criteria"/>
+                    <field name="name" widget="section_and_note_text"/>
+                    <field name="weight"/>
+                  </tree>
+                </field>
+                <group name="commercial_evaluation" string="Commercial Evaluation"/>
+                <field name="commercial_evaluation_line"
+                      no_label="1"
+                      widget="section_and_note_one2many"
+                      mode="tree"
+                      context="{'default_type': 'commercial'}">
+                  <tree editable="bottom" string="Commercial Evaluation">
+                    <control>
+                      <create name="add_product_control" string="Add a criteria"/>
+                      <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                      <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                    </control>
+                    <field name="type" invisible="1"/>
+                    <field name="display_type" invisible="1"/>
+                    <field name="sequence" widget="handle"/>
+                    <field name="criteria"/>
+                    <field name="name" widget="section_and_note_text"/>
+                    <field name="weight"/>
+                  </tree>
+                </field>
+              </sheet>
+            </form>
+          </field>
+      </record>
+
+      <record id="vendor_evaluation_template_tree" model="ir.ui.view">
+          <field name="name">vendor.evaluation.template.view.tree</field>
+          <field name="model">vendor.evaluation.template</field>
+          <field name="arch" type="xml">
+              <tree string="Vendor Evaluation Template">
+                <field name="name"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="vendor_evaluation_template_action" model="ir.actions.act_window">
+          <field name="name">Vendor Evaluation Template</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">vendor.evaluation.template</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="vendor_evaluation_template_tree"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Create a vendor evaluation template.
+            </p>
+          </field>
+      </record>
+
+      <record id="vendor_evaluator_form" model="ir.ui.view">
+          <field name="name">vendor.evaluator.view.form</field>
+          <field name="model">vendor.evaluator</field>
+          <field name="arch" type="xml">
+            <form string="Evaluator">
+              <sheet>
+                <div>
+                  <h1><field name="bid_id" readonly="1"/></h1>
+                </div>
+                <group>
+                  <field name="evaluator_id"/>
+                  <field name="type"/>
+                </group>
+                <group name="evaluation_line" string="Evaluation"/>
+                <field name="evaluation_line"
+                      no_label="1"
+                      widget="section_and_note_one2many"
+                      mode="tree"
+                      context="{'default_type': type}">
+                  <tree editable="bottom" create="false" delete="false" string="Evaluation">
+                    <field name="type" invisible="1"/>
+                    <field name="display_type" invisible="1"/>
+                    <field name="criteria" readonly="1" force_save="1"/>
+                    <field name="name" readonly="1" force_save="1" widget="section_and_note_text"/>
+                    <field name="weight" readonly="1" force_save="1"/>
+                    <field name="offer" readonly="1" force_save="1"/>
+                    <field name="score"/>
+                    <field name="evaluation_id" invisible="1"/>
+                  </tree>
+                </field>
+              </sheet>
+            </form>
+          </field>
+      </record>
+
+      <record id="vendor_evaluator_tree" model="ir.ui.view">
+          <field name="name">vendor.evaluator.view.tree</field>
+          <field name="model">vendor.evaluator</field>
+          <field name="arch" type="xml">
+              <tree string="Evaluator">
+                <field name="evaluator_id"/>
+                <field name="type"/>
+                <field name="bid_id"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="vendor_evaluator_action" model="ir.actions.act_window">
+          <field name="name">Evaluator</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">vendor.evaluator</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="vendor_evaluator_tree"/>
+          <field name="domain">[]</field>
+          <field name="context">{}</field>
+          <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+              Add evaluator.
+            </p>
+          </field>
+      </record>
+
+      <record id="contracts_and_agreements_form" model="ir.ui.view">
+          <field name="name">contracts.and.agreements.view.form</field>
+          <field name="model">contracts.and.agreements</field>
+          <field name="inherit_id" ref="contracts_and_agreements.contracts_and_agreements_form"/>
+          <field name="arch" type="xml">
+            <field name="ref_no" position="after">
+              <field name="bid_id" readonly="1"/>
+            </field>
+          </field>
+      </record>
+
+      <menuitem action="pr_bid_form_action" id="menu_pr_bid_form_action" parent="purchase.menu_procurement_management" sequence="5"/>
+      <menuitem id="menu_evaluation_criteria" parent="purchase.menu_purchase_config" action="evaluation_criteria_action" sequence="3"/>
+      <menuitem id="menu_pre_bid_documents" parent="purchase.menu_purchase_config" action="pre_bid_documents_action" sequence="4"/>
+      <menuitem id="menu_vendor_evaluation_template" parent="purchase.menu_purchase_config" action="vendor_evaluation_template_action" sequence="5"/>
+
+    </data>
+</odoo>

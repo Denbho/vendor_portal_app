@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="assets_common" name="billing_statement pdf assets" inherit_id="web.report_assets_common">
+    <xpath expr="." position="inside">
+        <link rel="stylesheet" type="text/scss" href="/skit_customer_portal/static/src/css/report.css"/>
+    </xpath>
+</template>
+
+	<template id="internal_layout_custom" inherit_id="web.internal_layout">
+		<xpath expr="//div[@class='header']" position="replace">
+        	<div class="header">
+            	<div class="row">
+                	<div class="col-3">
+                    	<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 70px;" alt="Logo"/>
+                	</div>
+            	</div>
+        	</div>
+        </xpath>
+    </template>
+    
+	<template id="report_billing_statement">
+		<t t-call="web.html_container"> 
+			<t t-call="skit_customer_portal.internal_layout_custom">  
+				<div class="page">
+					<div class="text_center"><h4>BILLING STATEMENT</h4></div>
+					<div class="row">
+		                <div class="col-8">
+			                <t>
+		                    	<div t-esc="docs.partner_id"
+		                        	t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+	            			</t> 
+		                </div>
+		                <div class="col-4">
+		                    <table class="table-borderless top_left_table">
+			                    <tr>
+			                        <td>
+			                        	<span>STATEMENT NO.</span>
+			                            <span class="float_right"><t t-esc="docs.soa_number"></t></span>
+			                        </td>
+			                    </tr>
+			                     <tr>
+			                        <td>
+			                           <span>STATEMENT DATE</span>
+			                           <span class="float_right"><t t-esc="docs.soa_date"></t></span>
+			                        </td>
+			                    </tr>
+			                  	<tr>
+			                        <td>
+			                           <span>CUSTOMER NUMBER</span>
+			                           <span class="float_right"><t t-esc="docs.customer_number"></t></span>
+			                        </td>
+			                    </tr>
+			                    <tr>
+			                    	<td>
+			                           <span>SO NUMBER</span>
+			                           <span class="float_right"><t t-esc="docs.so_number"></t></span>
+			                        </td>
+			                    </tr>
+			                    <tr>
+			                        <td>
+			                           <span>AMOUNT DUE</span>
+			                           <span class="float_right"><t t-esc="docs.total_amount_due"></t></span>
+			                        </td>
+			                    </tr>
+			                    <tr>
+			                       	<td>
+			                            <span>PAYMENT DUE DATE</span>
+			                           <span class="float_right"><t t-esc="docs.soa_due_date"></t></span>
+			                           
+			                        </td>
+			                    </tr>
+		                	</table>
+		                </div>
+            		</div>
+					<div class="heading_panel_dark text_center">ACCOUNT INFORMATION</div>
+					<table width="90%" class="margin_left_10">
+						<colgroup>
+						    <col style="width: 40%" />
+						    <col style="width: 10%" />
+						    <col style="width: 30%" />
+					  	</colgroup>
+					  	<tr>
+					    	<td>Property </td>
+					    	<td class="text_right">:</td>
+					    	<td class="text_right"><t t-esc="docs.property_id.name"></t></td> 
+					  	</tr>
+
+					  	<tr>
+					    	<td>Purchase Amount </td>
+					    	<td class="text_right">:</td>
+					     	<td class="text_right"><t t-esc="docs.property_sale_id.tcp"></t></td> 
+					  	</tr>
+						<tr>
+							<td>Financing </td>
+						  	<td class="text_right">:</td>
+						  	<td class="text_right"><t t-esc="docs.property_sale_id.financing_type"></t></td> 
+						</tr>
+					</table>
+					<div class="heading_panel_dark text_center">STATEMENT SUMMARY</div>
+					<table width="90%" class="margin_left_10">
+						<colgroup>
+					    	<col style="width: 40%" />
+					    	<col style="width: 10%" />
+					    	<col style="width: 30%" />
+					  	</colgroup>
+					  	<tr>
+					    	<td>Past Due Amount </td>
+					    	<td class="text_right">:</td>
+					    	<td class="text_right"><t t-esc="docs.past_due"></t></td> 
+					  	</tr>
+					  	<tr>
+					    	<td>plus: Penalty </td>
+					    	<td class="text_right">:</td>
+					    	<td class="text_right"><t t-esc="docs.penalty"></t></td> 
+					  	</tr>
+					   	<tr>
+					    	<td>plus: Current Amount Due </td>
+					    	<td class="text_right">:</td>
+					    	<td class="text_right"><t t-esc="docs.current_amount"></t></td> 
+					  	</tr>
+					  	<tr>
+					  		<td><br></br></td>
+					  	</tr>
+					   	<tr>
+					    	<td><strong>TOTAL AMOUNT DUE</strong></td>
+					    	<td class="text_right">:</td>
+					    	<td class="text_right"><t t-esc="docs.total_amount_due"></t></td> 
+					  	</tr>
+					</table>
+					<div class="heading_panel_dark text_center">PAYMENT INSTRUCTION</div>
+					<span>Payment can be made at the following: </span>
+					<table width="100%" class="margin_left_10">
+						<colgroup>
+					    	<col style="width: 27%" />
+					    	<col style="width: 63%" />
+					  	</colgroup>
+					 	<tr>
+					    	<td class="padding_left_15">For Cash and Check Payment</td>
+					    	<td>Prima Casa-Sorsogon</td>
+					  	</tr>
+					   	<tr>
+					    	<td class="padding_left_15 v_align_top">Payment Facilities </td>
+					    	<td>
+					    		ONLINE - Go to www.lumina.com.ph. Scroll down to 'E-Services,' click 'Buyer' and
+					    		select Lumina Online Payment Portal
+					    		<br></br>
+					    		OTC - Bayad Center, Cebuana, ECPay, 7-Eleven, LBC (Biller: E-Prime Business
+					    		Solutions Inc.)
+							    <br></br>
+							    BANK - AllBank, AUB, BDO, PNB, Security Bank, Union Bank / e-WALLET - Gcash,
+							    AllEasy (Biller: Prima Casa Land and Houses Inc.)
+							    <br></br>
+							    REMITTANCE CENTER - PNB Overseas Bills Payment System (OBPS), RCBC Telepay,
+							    Optimum Remit (Biller: Prima Casa Land and Houses Inc.)
+					    	</td>
+					  	</tr>
+					</table>
+					<div class="margin_left_10">
+						<h5>Questions About Your Bill</h5>
+						<p>
+							Please verify the charges posted in your Statement of Account. Should you have question, please call Admin Dept of Prima
+							Casa-Sorsogon through our contact center (02) 3226-3552 local 1585 or email us at luminacollections@lumina homes.com.ph. It
+							is agreed and understood that if no complaint is received within 20 days from statement date, said statement and all
+							transactions therein shall be considered correct and any claim against the developer shall be waived.
+						</p>
+					</div>
+					<div class="margin_left_10">
+						Note:
+						<br></br>
+						1. Kindly settle the said amount on or before due date to avoid additional penalty charges.
+						<br></br>
+						2. Please disregard if payment has been made.
+						<br></br>
+						3. Computation is valid as of CURRENT month.
+					</div>
+					<hr></hr>
+					<div><h6 class="text_center"><strong>PAYMENT CENTER/ BANK COPY</strong></h6></div>
+					<div class="row">
+		                <div class="col-6">
+			                <t>
+		                    	<div t-esc="docs.partner_id"
+		                        	t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+	            			</t> 
+		                </div>
+		                <div class="col-6">
+		                    <span>Please make all checks payable to PRIMA CASA</span><br></br>
+						   	<span>LAND &amp; HOUSES, INC., INDICATE YOUR SALES</span><br></br>
+						   	<span>ORDER NUMBER AND NAME at the back of check</span>    
+		                </div>
+            		</div>
+					<table class="table-bordered border_1px margin_10 border_collapse" width="90%">
+						<thead>
+					    	<tr>
+					       		<th class="text-left border_1px"><span>CUSTOMER NUMBER</span></th>
+					         	<th class="text-left border_1px"><span>STATEMENT No.</span></th>
+					         	<th class="border_bottom border_top"><span>PAYMENT DUE DATE</span></th>
+					         	<th class="text-left amt_th border_bottom border_top border_right border_left_0"><span>AMOUNT</span></th>
+					   		</tr>
+					  	</thead>
+					   	<tbody class="font_14">
+							<tr>
+			            		<td class="v_align_center border_1px"><t t-esc="docs.customer_number"></t></td>
+			                  	<td class="v_align_center border_1px"><t t-esc="docs.soa_number"></t></td>   
+			                  	<td class="border_1px">
+			                  		<table class="table-borderless">
+				                   		<tr>
+				                   			<td>Due Immediately</td>
+				                   			<td></td>
+				            			</tr>
+						               	<tr>
+							               	<td><t t-esc="docs.soa_due_date"></t></td>
+							               	<td></td>
+						               	</tr>
+			               				<tr></tr>
+						              	<tr>
+						                	<td class="font_16">TOTAL AMOUNT DUE</td>
+						                	<td></td>
+						               </tr>
+			           				</table>
+			         			</td>
+			         			<td class="border_1px">
+			         				<table class="table-borderless">
+				                   		<tr>
+				                   			<td></td>
+				                   			 <td>0.00</td>
+				            			</tr>
+						               	<tr>
+							               	<td></td>
+							               	 <td><t t-esc="docs.total_amount_due"></t></td>
+						               	</tr>
+			               				<tr></tr>
+						              	<tr>
+						                	<td></td>
+						                	<td><t t-esc="docs.total_amount_due"></t></td> 
+						               </tr>
+			           				</table>
+			         			</td>
+			        		</tr>
+			            	<tr>
+			             		<td class="border_1px"></td>
+			                  	<td class="border_1px"></td>   
+			                	<td class="border_right_0 border_top border_bottom">No. of Unpaid Months:</td> 
+			                	<td class="border_top border_bottom border_right"></td> 
+					  		</tr>
+						</tbody>
+					</table> 
+   				</div>
+			</t> 
+		</t>  
+	</template>
+</odoo>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data >
+        <record forcecreate="True" id="ir_cron_send_po_notification_action" model="ir.cron">
+            <field name="name">PO Notifications</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="state">code</field>
+            <field name="code">model.send_po_notifications()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+        
+        <record id="mail_template_vendor_po_notifications" model="mail.template">
+            <field name="name">Vendor: PO Notification</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Purchase Order</field>
+            <field name="email_from">${object.company_id.partner_id.email_formatted|safe}</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+				<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+				<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+				<tbody>
+    				<!-- HEADER -->
+				    <tr>
+				        <td align="center" style="min-width: 590px;">
+				            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+				                <tr><td valign="middle">
+				                    <span style="font-size: 10px;">Purchase Order</span><br/>
+				                    <span style="font-size: 20px; font-weight: bold;">
+				                        ${object.name}
+				                    </span>
+				                </td><td valign="middle" align="right">
+				                    <img src="/logo.png?company=${object.company_id.id}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" alt="${object.company_id.name}"/>
+				                </td></tr>
+				                <tr><td colspan="2" style="text-align:center;">
+				                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:16px 0px 16px 0px;"/>
+				                </td></tr>
+				            </table>
+				        </td>
+				    </tr>
+				    <!-- CONTENT -->
+				    <tr>
+				        <td align="center" style="min-width: 590px;">
+				            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+				                <tr><td valign="top" style="font-size: 13px;">
+				                    <div>
+				                        <p class="po_mt2">Dear ${object.partner_id.name},</p> <br></br>
+				                        % if (ctx.get('late_values')):
+				                        % set late_data = ctx.get('late_values')
+				                        	% if late_data.get('count') is greaterthan(0):
+							                     <p class="po_mt2">We have issued in your favor and you have accepted a <span style="color: #B40F2B;font-weight: bold;">total of ${late_data.get('count')} </span> purchase orders (POs) as of late. This is a reminder of the following delivery commitments for these POs:</p>
+							                % endif
+				                        % endif
+				                        % if (ctx.get('today_values')):
+				                        % set today_data = ctx.get('today_values')
+				                        	% if today_data.get('count') is greaterthan(0):
+				                        	<p class="po_mt2">You have a <span style="color: #B40F2B;font-weight: bold;">total of ${today_data.get('count')} </span> purchase orders due for delivery <span style="color: #B40F2B;font-weight: bold;">TODAY.</span></p>
+				                        	% endif
+				                        % endif
+				                        % if (ctx.get('future_values')):
+				                        % set future_data = ctx.get('future_values')
+				                        	% if future_data.get('count') is greaterthan(0):
+				                        	<p class="po_mt2">This is a reminder of your commitment to deliver materials covered by a <span style="color: #B40F2B;font-weight: bold;">total of ${future_data.get('count')} </span> purchase orders <span style="color: #B40F2B;font-weight: bold;">in (${future_data.get('days')}) days.</span></p>
+				                        	% endif
+				                        % endif
+								        <br></br>
+										<div class="my_po_form_popup">
+								        <table class="table table-bordered" style="line-height: 2em;">
+								  			<thead>
+								  				<tr>
+								  					<th>Company Name</th>
+								  					<th>PO Number</th>
+								  					<th>Expected Delivery Date</th>
+								  					<th>PO Amount</th>
+								  					<th>Deliver To</th>
+								  				</tr>
+								  			</thead>
+								  			<tbody>
+								  				<tr style="background: none;">
+								  					<td class="po_del_col">${object.company_id.name}</td>
+								  					<td class="po_del_col"><a class="noti_blue" href="/my/purchase/${object.id}?#{keep_query()}">${object.name}</a></td>
+								  					<td class="po_del_col">${format_date(object.expected_delivery_date)} </td>
+								  					<td class="po_del_col">${format_amount(object.amount_total, object.company_id.currency_id)}</td>
+								  					<td class="po_del_col">
+								  					% if object.location_id
+							                        	${object.location_id.name}
+							                        % endif
+							                        </td>
+								  				</tr>
+								  			</tbody>
+								  		</table>
+								  		</div>
+								        <p class="po_mt2">Delivery instructions and contact details of authorized receiver are indicated in the respective POs.</p>
+								        <br></br>
+								        % if (ctx.get('late_values')):
+				                        % set late_data = ctx.get('late_values')
+									    % if late_data.get('count') is greaterthan(0):
+									          <p>We expect your delivery to arrive on the date indicated above. Should there be issues with this delivery, please contact us at procurement.sourcing@camella.com.ph.</p>
+									    % endif
+								        % endif
+								        % if (ctx.get('today_values')):
+				                        % set today_data = ctx.get('today_values')
+									    % if today_data.get('count') is greaterthan(0):
+											<p>Please disregard this message if delivery has been made.</p>
+										% endif
+										% endif
+										% if (ctx.get('future_values')):
+				                        % set future_data = ctx.get('future_values')
+				                        % if future_data.get('count') is greaterthan(0):
+											<p>Please advise us immediately at procurement.sourcing@camella.com.ph should there be issues with these POs.</p>
+										% endif
+										% endif 
+										<br></br>
+								        <p style="margin-bottom: 0;">Regards,</p>
+								        <p>Vendor Hub</p>
+				                    </div>
+				                </td></tr>
+				                <tr><td style="text-align:center;">
+				                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+				                </td></tr>
+				            </table>
+				        </td>
+				    </tr>
+				    <!-- FOOTER -->
+				    <tr>
+				        <td align="center" style="min-width: 590px;">
+				            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+				                <tr><td valign="middle" align="left">
+				                    ${object.company_id.name}
+				                </td></tr>
+				                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+				                    ${object.company_id.phone}
+				                    % if object.company_id.email
+				                        | <a href="'mailto:%s' % ${object.user_id.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
+				                    % endif
+				                    % if object.company_id.website
+				                        | <a href="'%s' % ${object.user_id.company_id.website}" style="text-decoration:none; color: #454748;">
+				                        ${object.company_id.website}
+				                    </a>
+				                    % endif
+				                </td></tr>
+				            </table>
+				        </td>
+				    </tr>
+				</tbody>
+			</table>
+			</td></tr>
+			<!-- POWERED BY -->
+			<tr><td align="center" style="min-width: 590px;">
+			    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+			      <tr><td style="text-align: center; font-size: 13px;">
+			        Powered by <a target="_blank" href="https://www.odoo.com?utm_source=db&amp;utm_medium=portalinvite" style="color: #875A7B;">Odoo</a>
+			      </td></tr>
+			    </table>
+			</td></tr>
+		</table>
+            </field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+        
+    </data>
+</odoo>

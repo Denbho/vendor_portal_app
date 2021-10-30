@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="customer_portal_login" inherit_id="auth_signup.login" name="Sign up - Forgot and Change Password">
+      	<xpath expr="//div[hasclass('justify-content-between')]/a[1]" position="replace"></xpath>
+  		<xpath expr="//div[hasclass('justify-content-between')]/a[1]" position="replace"></xpath>
+	</template>
+
+	<template id="replace_footer" inherit_id="website.footer_custom" name="Footer">
+  		<xpath expr="//div[@id='footer']" position="replace">
+        </xpath>
+    </template>
+    
+	<template id="layout_footer_copyright" inherit_id="website.layout" name="Footer Copyright">
+        <xpath expr="//div[hasclass('o_footer_copyright')]" position="replace">
+        </xpath>
+    </template>
+
+    <template id="frontend_layout_customer_portal" name="Frontend Layout" inherit_id="web.layout">
+        <xpath expr="//body" position="attributes">
+	       <attribute name="t-att-style">body_stylename</attribute>
+	    </xpath>
+     </template> 
+     
+	<!-- Add Background Image to Login Page -->
+	<template id="login_layout_inherit_customer_portal" inherit_id="website.login_layout">
+		<xpath expr="//div[@class='oe_website_login_container']" position="replace">
+			<t t-set="body_bg_image" t-value="website.image_url(website, 'body_bg_image')"/>
+			<t t-set="body_bg_color" t-value="website.body_bg_color" />
+			<t t-if="body_bg_image">
+				<t t-set="body_stylename" t-value="'background-image: url('+body_bg_image+');'"/>
+				<t t-set="body_classname" t-value="'body_bg'"/>
+			</t>
+			<t t-elif="body_bg_color">
+				<t t-set="body_stylename" t-value="'background-color:'+body_bg_color+';'"/>
+			</t>
+			<t t-set="no_footer" t-value="True"/>
+			<div class="oe_website_login_container" t-raw="0"></div>
+	   	</xpath>
+	</template>
+	
+    <template id="login" inherit_id="web.login" name="Customer Portal Login">    
+		<xpath expr="//t[@t-call='web.login_layout']" position="replace">
+			<t t-call="web.login_layout">
+	     		<form class="oe_login_form oe_login_form_portal mr-5" role="form" t-attf-action="/web/login" method="post" onsubmit="this.action = this.action + location.hash">
+	         		<t t-call="skit_customer_portal.view_privacy_policy_popup"></t>
+	         		<t t-call="skit_customer_portal.view_terms_and_condition_popup"></t>
+	                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+					<!-- <t t-set="bg_color" t-value="website.background_color or 'gray'" /> -->
+					<t t-set="bg_color" t-value="website.login_panel_bg_color or 'gray'" />
+					<div class="login_check_portal rounded" t-att-style="'background-color:' + bg_color + ';'">
+					 	 <div class="justify-content-between mt-2 d-flex small">
+			           		<em><a class="text-muted font-large">Logging in as:</a></em>
+			      		</div>
+					 	<div class="form-group field-login" style="width: 100%;">
+		                    <input type="radio" value="customer" id="is_customer" name="portal" checked="true"/>
+	                        <label class="form-check-label" for="is_customer" style="margin-left: 5px;">
+	                            <a class="text-muted">
+	                                Customer
+	                            </a>
+	                        </label>
+	                        <input type="radio" value="vendor" id="is_vendor" name="portal"
+	                            style="margin-left: 16px;"/>
+	                        <label class="form-check-label" for="is_vendor" style="margin-left: 5px;">
+	                            <a class="text-muted">
+	                                Vendor
+	                            </a>
+	                        </label>
+		                </div>
+					</div>
+					<br></br>
+  					<div class="login_content_portal rounded" t-att-style="'background-color:' + bg_color + ';'">
+		                <div class="form-group field-login">
+		                    <input type="text" placeholder="E-mail" name="login" t-att-value="login" id="login" t-attf-class="form-control #{'form-control-sm' if form_small else ''} font-large" required="required" autofocus="autofocus" autocapitalize="off"/>
+		                </div>
+	
+		                <div class="form-group field-password">
+		                    <input type="password" placeholder="Password" name="password" t-att-value="password" id="password" t-attf-class="form-control #{'form-control-sm' if form_small else ''} font-large" required="required" autocomplete="current-password" t-att-autofocus="'autofocus' if login else None" maxlength="4096"/>
+		                </div>
+		                
+		                <div class="form-group field-otp" t-if="show_otp">
+			                <input type="text" placeholder="Enter OTP" name="otp" t-att-value="otp" id="otp" class="form-control #{'form-control-sm' if form_small else ''} font-large" autofocus="autofocus"
+			                    autocapitalize="off"  required="required" t-att-readonly="'readonly' if only_passwords else None"/>
+			         	</div>
+			         	<div class="justify-content-between mt-2 d-flex small">
+					<!--
+			        		<em><a class="text-white font-large" t-if="signup_enabled" t-attf-href="/web/signup?{{ keep_query() }}"></a></em>
+				         	<div class="form-group form-field o_website_form_required_custom lg_wt">
+		                        <label class="form-check-label lg_mr5" for="terms_and_condition">
+		                            <em><a class="text-white font-large" data-toggle="modal" data-target="#modal_terms_and_condition" t-attf-href="/web/signup?{{ keep_query() }}">
+		                                Terms &amp; Conditions
+		                            </a></em>
+		                        </label>
+		                        <label class="form-check-label" for="privacy_policy">
+		                            <em><a class="text-white font-large" data-toggle="modal" data-target="#modal_privacy_policy" t-attf-href="/web/signup?{{ keep_query() }}">
+		                                Privacy Policy
+		                            </a></em>
+		                        </label>
+					</div>
+					-->
+					<p class="text-muted">
+					By supplying the information via this vendor portal and clicking the checkbox, I affirm that I have read, understood and hereby accept the 
+					<br></br>
+						<!--<a class="clr_skit text-light" data-toggle="modal"-->
+						<em><a class="text-dark" data-toggle="modal"
+						data-target="#modal_terms_and_condition" t-attf-href="#">
+						Terms &amp; Conditions
+						</a></em>
+						and the terms of the Vendor Hub
+						<!--<a class="clr_skit text-light" data-toggle="modal"-->
+						<em><a class="text-dark" data-toggle="modal"
+						data-target="#modal_privacy_policy" t-attf-href="#">
+						Privacy Policy
+						</a></em>
+						and I hereby consent to the collection, use, storage, processing, retention and disclosure of all the 
+						personal information (hereafter, "Personal Information") I may have provided herein. I likewise consent to the disclosure of the 
+						Personal Information by the Company to its subsidiaries, affiliates, banks, financial institutions and third party service utility providers.
+					</p>
+			         	</div>
+					<div class="form-check">
+					<input type="checkbox" id="agree" required="required" class="form-check-input"></input>
+					<label class="form-check-label text-muted" for="agree">I agree</label>
+					</div>
+					<!--<div id="reg_agree" class="col-lg-4 col-md-2 signup_agree">
+					<input type="checkbox" id="agree" t-attf-name="agree" required="required" t-attf-class="form-control agree reg_agree_input" t-attf-id="agree">I agree</input>                                                       
+					</div>--> 
+		                <div t-attf-class="clearfix oe_login_buttons text-center mb-1 {{'pt-2' if form_small else 'pt-3'}}">
+		                    <button type="submit" class="btn btn-info btn-block transparent_bg font-weight_bold font-large border-dark text-dark">Log in</button>
+		                    <t t-if="debug">
+		                        <button type="submit" name="redirect" value="/web/become" class="btn btn-link btn-sm btn-block">Log in as superuser</button>
+		                    </t>
+		                    <div class="o_login_auth"/>
+		                </div>
+		                
+		                <p class="alert alert-danger" t-if="error" role="alert">
+		                    <t t-esc="error"/>
+		                </p>
+		                <p class="alert alert-success" t-if="message" role="status">
+		                    <t t-esc="message"/>
+		                </p>
+		                
+		                <div class="clearfix text-center mb-1" t-if="show_otp">
+		                    <span id="resend_otp" class="btn btn-primary btn-block font-weight_bold font-large border-0 transparent_bg">Resend OTP</span>
+		                </div>
+		                
+		                <div class="justify-content-between mt-2 d-flex small">
+			           		<em><a class="text-muted font-large" t-if="reset_password_enabled" t-attf-href="/web/reset_password?{{ keep_query() }}">Forgot Password</a></em>
+			      		</div>
+			           	
+	                	<input type="hidden" name="redirect" t-att-value="redirect"/>
+  					</div>
+	     		</form>
+   			</t>
+		</xpath>
+	</template>
+	
+	<template id="view_privacy_policy_popup" name="privacy policy popup">
+   		<!-- modal relative to the actions privacy policy -->
+     	<div role="dialog" class="modal fade privacy_policy_modal" id="modal_privacy_policy">
+     		<div class="modal-dialog">
+          		<div class="modal-content">
+          			<t t-set="current_website" t-value="request.env['website'].get_current_website()"></t>
+            		<header class="modal-header">
+                        <h4 class="modal-title"><span t-raw="current_website.privacy_policy_title"/></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                    </header>
+                    <main class="modal-body">
+	                  	<span t-raw="current_website.privacy_policy_body"/>
+                    </main>
+                </div>
+            </div>
+        </div>
+	</template>
+	
+	<template id="view_terms_and_condition_popup" name="Terms and Condition Modal">
+   		<!-- Modal relative to the actions Terms and Condition -->
+     	<div role="dialog" class="modal fade terms_and_condition_modal" id="modal_terms_and_condition">
+     		<div class="modal-dialog">
+          		<div class="modal-content">
+          			<t t-set="current_website" t-value="request.env['website'].get_current_website()"></t>
+            		<header class="modal-header">
+                        <h4 class="modal-title"><span t-raw="current_website.terms_and_condition_title"/></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                    </header>
+                    <main class="modal-body">
+	                  	<span t-raw="current_website.terms_and_condition_body"></span>
+                    </main>
+                </div>
+            </div>
+        </div>
+	</template>
+	
+	<template id="otp_login" name="Customer Portal OTP Login">    
+		
+			<t t-call="web.login_layout">
+	     		<form class="oe_login_form oe_login_form_portal mr-5" role="form" t-attf-action="/web/login" method="post" onsubmit="this.action = this.action + location.hash">
+	         		
+	                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+					
+					<t t-set="bg_color" t-value="website.login_panel_bg_color or 'gray'" />
+					
+  					<div class="login_content_portal rounded" t-att-style="'background-color:' + bg_color + ';'">
+		            <!-- <div class="login_content_portal rounded"> -->
+		                <div class="form-group field-login">
+		                    <input type="text" placeholder="E-mail" name="login" t-att-value="login" id="login" t-attf-class="form-control #{'form-control-sm' if form_small else ''} font-large" required="required" autofocus="autofocus" autocapitalize="off"/>
+		                </div>
+	
+		                <div class="form-group field-password">
+		                    <input type="password" placeholder="Password" name="password" t-att-value="password" id="password" t-attf-class="form-control #{'form-control-sm' if form_small else ''} font-large" required="required" autocomplete="current-password" t-att-autofocus="'autofocus' if login else None" maxlength="4096"/>
+		                </div>
+		                
+		                <div class="form-group field-otp">
+			                <input type="text" placeholder="Enter OTP" name="otp" t-att-value="otp" id="otp" class="form-control #{'form-control-sm' if form_small else ''} font-large" autofocus="autofocus"
+			                    autocapitalize="off"  required="required" t-att-readonly="'readonly' if only_passwords else None"/>
+			         	</div>
+			         	
+		                <div t-attf-class="clearfix oe_login_buttons text-center mb-1 {{'pt-2' if form_small else 'pt-3'}}">
+		                    <button type="submit" class="btn btn-primary btn-block transparent_bg font-weight_bold font-large border-white login_otp_btn">Log in</button>
+		                    
+		                    
+		                </div>
+		                
+		                <p class="alert alert-danger" t-if="error" role="alert">
+		                    <t t-esc="error"/>
+		                </p>
+		                <p class="alert alert-success" t-if="message" role="status">
+		                    <t t-esc="message"/>
+		                </p>
+		                
+		                <div class="clearfix text-center mb-1" t-if="show_otp">
+		                    <span id="resend_otp" class="btn btn-primary btn-block font-weight_bold font-large border-0 transparent_bg">Resend OTP</span>
+		                </div>
+		                
+		               
+			           
+	                	<input type="hidden" name="redirect" t-att-value="redirect"/>
+  					</div>
+	     		</form>
+   			</t>
+		
+	</template>
+	
+</odoo>

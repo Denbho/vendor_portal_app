@@ -1,0 +1,664 @@
+
+@media only screen and (max-width: 767px) {
+.oe_login_form_portal{
+	margin: 5% auto !important;
+    max-width: 80%;
+    padding-top: 50%;
+}
+.login_content_portal #login,
+.login_content_portal #password{
+	font-size: 13px;
+}
+.login_form_btn{
+	font-size: 14px;
+    width: auto;
+    margin: 0 auto;
+}
+.login_check_portal .justify-content-between a{
+	font-size: 12px;
+}
+.login_content_portal .justify-content-between a{
+	font-size: 12px;
+}
+.login_content_portal .oe_login_buttons button{
+	font-size: 12px;
+}
+/*********start code for - "/my/home" page*******/
+.o_portal_my_home h3{
+	font-size: 15px;
+}
+.o_portal_docs a{
+	font-size: 13px;
+}
+.o_portal_my_details{
+	margin-top:5%;
+}
+.o_portal_my_details h4{
+	font-size: 14px;
+}
+.o_portal_my_details address{
+	font-size: 13px;
+}
+/*********end code for - "/my/home" page*******/
+/********start code - "/my/property_sales" page********/
+#so_header .welcome-text{
+	font-size: 14px;
+}
+#so_header .cus-text{
+	font-size: 15px;
+}
+#so_header .over-all-header img{
+	height: 40%;
+}
+#so_header .over-all h3{
+	font-size: 15px;
+	margin-bottom: 5% !important;
+}
+#so_header .over-all{
+	max-height: 100vh;
+	padding:20px;
+}
+#so_header .element-div{
+	padding:4px;
+	font-size: 14px;
+}
+#sod_grid{
+	padding:10px;
+}
+#sod_grid #sod_left_grid #top-grid img{
+	width: 75px;
+	height: 75px;
+	margin: 0px !important;
+}
+.customer_panel{
+	float: left;
+    max-width: 75%;
+}
+.customer_panel .common-text1{
+	font-size: 13px;
+}
+.customer_panel .common-text2{
+	font-size: 14px;
+}
+#sod_grid #sod_left_grid #top-grid{
+	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+	min-height: auto;
+	padding: 2%;
+}
+#sod_grid #sod_left_grid #top-grid .row{
+	margin:0%;
+}
+.m_parent_div{
+	display: flex;
+	width: 25%;
+}
+.m_parent_div div{
+	margin: auto;
+}
+#sod_grid #bottom-grid{
+	padding: 2%;
+}
+#sod_grid #bottom-grid .sales-order-content{
+	margin:0%;
+	padding: 0%;
+}
+.sales-order-word{
+	font-size: 13px;
+	width: 50%;
+}
+#sod_grid #bottom-grid .sales-order-content .sales-order-number{
+	width: 50%;
+    float: left;
+    font-size: 13px;
+}
+.left-property,.right-property{
+	max-width: 50%;
+	font-size: 13px;
+}
+#sod_grid #bottom-grid .property-content-header .property-content{
+	font-size: 15px;
+}
+.property-content h3,#introduction h3,
+#details h5{
+	font-size: 15px;
+}
+#sod_right_grid{
+	margin-top: 1rem;
+	padding: 15px !important;
+}
+#sod_right_grid #introduction h2{
+	font-size: 15px;
+}
+#so_date div{
+	max-width: 100%;
+	flex: 0 0 100%;
+}
+.portal_btn{
+	font-size: 12px;
+	width: fit-content;
+    margin: 0 auto;
+}
+#so_date strong{
+	font-size: 13px;
+	display: inline-block;
+    padding-bottom: 4% !important;
+}
+.amount_detail_table{
+	width: 90% !important;
+    margin: 0 auto;
+}
+.amount_detail_table > tbody > tr > td:first-child{
+	padding-left: 0px;
+}
+.amount_detail_table > tbody > tr > td:last-child{
+	padding-right: 0px;
+}
+.amount_detail_table > tbody > tr > td:first-child span,
+.amount_detail_table > tbody > tr > td:last-child span{
+	font-size: 13px;
+}
+#details{
+	font-size: 15px;
+	overflow-x: scroll;
+}
+table.table_past_due_breakdown{
+	width: 100%;
+	margin: 0% 0% 6%;
+	padding: 0%;
+}
+table.table_past_due_breakdown th{
+	font-size: 11px;
+    padding: 5px;
+}
+table.table_past_due_breakdown td{
+	font-size:11px;
+}
+.download_billing_stmt,#details button{
+	font-size: 11px;
+    width: fit-content;
+    margin: 0 auto;
+    height: auto !important;
+}
+.payment_summary_card{
+	padding:0px;
+}
+.portal_container h3{
+	font-size: 15px;
+}
+.paymnt_summary_tbl1{
+	width: 95%;
+    margin: 15% auto !important;
+	font-size: 13px;
+}
+.payment_mode_header{
+	margin:0% !important;
+	padding: 2%;
+}
+.payment_mode_header div{
+	flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0%;
+}
+.payment_mode_header div h4{
+	font-size: 15px;
+}
+.paymnt_summary_tbl2{
+	width:100%;
+	padding: 2% !important;
+    display: inline-block;
+	margin: 0rem;
+	font-size: 13px;
+}
+.m_large_fnt{
+	font-size: 15px;
+}
+.document_card{
+	padding:0%;
+}
+.first_document_tbl th{
+	font-size: 13px;
+}
+.downloadable_tbl th{
+	font-size: 13px;
+}
+.property_so_panel{
+	width:100%;
+}
+.card_container{
+	padding:0%;
+}
+.m_pd_0{
+	padding:0% !important;
+}
+.v_history_btn{
+	font-size: 11px;
+    padding: 3px 3px;
+}
+.inner_doc_tbl span{
+	font-size: 13px;
+}
+.checkmark_cell{
+	width:25%;
+}
+.inner_doc_tbl ul.checkmark li{
+	font-size: 12px;
+}
+.inner_doc_tbl ul.checkmark li:before{
+	font-size: 15px;
+}
+.mbl_br_hide,.mbl_tr_hide{
+	display:none;
+}
+.mbl_btn{
+	font-size: 11px;
+    padding: 5px 6px;
+}
+.downloadable_tbl{
+	font-size: 13px;
+}
+#introduction{
+	padding-left: 0%;
+}
+.doc_notes_cell{
+	font-size: 13px;
+	width: 35%;
+}
+.doc_detail_cell{
+	width: 65%;
+}
+.progress_row{
+	width: inherit;
+	padding: 2%;
+	margin: 0 auto;
+}
+.progress_divider_row{
+    /* display: table; */
+    width: 100%;
+}
+.progress_divider_row #downpayment_progress,
+.progress_divider_row #amortization_progress{
+	font-size: 10px;
+}
+#downpayment_progress_1{
+	white-space: nowrap;
+}
+#informations strong,#informations span{
+	font-size: 13px;
+}
+.shortcut_icon_ul{
+	z-index: 1;
+	width: 11%;
+    left: 83%;
+    background: #ffffff;
+    padding: 2%;
+    border-radius: 3px;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
+.shortcut_icon_ul li{
+	/* width:33.3%;
+	text-align: center; */
+}
+.shortcut_icon_ul li > a > span.fa{
+	font-size: 20px;
+}
+.paid_amt{
+	font-size: 14px;
+}
+.ticket_panel .navbar-brand{
+	font-size: 15px;
+}
+.ticket_panel .alert{
+	font-size: 12px;
+}
+.send_message_container .tab{
+	width:100%;
+}
+.send_message_container .tab button{
+	font-size: 13px;
+	padding: 2% 4%;
+}
+.send_message_container button{
+	font-size: 11px;
+    padding: 5px 6px;
+}
+.ticket_panel table th,.ticket_panel table td{
+	font-size: 13px;
+}
+.log_note_tabcontent .o_portal_chatter_message .o_portal_chatter_message_title h5,
+.log_note_tabcontent .o_portal_chatter_message .o_portal_chatter_message_title p,
+.chatter_msg_div .o_portal_chatter_message .o_portal_chatter_message_title h5,
+.chatter_msg_div .o_portal_chatter_message .o_portal_chatter_message_title p{
+	font-size: 11px;
+}
+.log_note_tabcontent .o_portal_chatter_message img,
+.chatter_msg_div .o_portal_chatter_message img{
+	width: 35px;
+    height: 35px;
+}
+.media-body p{
+	font-size: 11px;
+}
+.log_note_tabcontent .o_portal_chatter_message .js_publish_btn,
+.chatter_msg_div .o_portal_chatter_message .js_publish_btn{
+	font-size: 10px;
+	padding: 3px 6px;
+}
+/******end code - "/my/property_sales" page**********/
+/*******start code - for privacy policy modal*******/
+#modal_privacy_policy{
+	left:0% !important;
+	top:20%;
+	height: 65vh;
+}
+/*******end code - for privacy policy modal*******/
+/*******start code - "/my/account" edit page********/
+.profile-avatar-image img{
+	height:25%;
+	margin-top: 1rem;
+}
+.profile-avatar-image{
+	width:25%;
+	margin: 0 auto;
+}
+.p_name_code div{
+	font-size: 13px;
+	text-align: center;
+}
+.edit_profile_container h4{
+	font-size: 14px;
+}
+.profile_col{
+	padding:0%;
+}
+.profile_col div .col-form-label,.profile_col > div > div{
+	font-size: 13px;
+	float:left;
+}
+.profile_col div .col-form-label{
+	width: 38%;
+	margin-right:2%;
+}
+.profile_col > div > div{
+	padding:0%;
+	width: 60%;
+}
+.address_non_editable{
+	width:100%;
+}
+.first_hdr_td{
+	width:50%;
+}
+.second_hdr_td{
+	width:25%;
+}
+.address_non_editable div .address_section{
+	margin:0% !important;
+}
+.profile_col .form-group{
+	display: inline-table;
+	width:100%;
+	margin: 0 auto;
+}
+.profile_col .col-form-label{
+	padding:0%;
+}
+address div{
+	line-height: 23px;
+}
+.address_lbl_div{
+	width: 38%;
+    padding: 0%;
+    float:left;
+}
+.address_lbl_div .col-form-label{
+	width:100% !important;
+}
+.address_sec_div{
+	margin-left: 0% !important;
+	padding:0% !important;
+	width: 60%;
+	float:left;
+}
+.edit_profile_container input,
+.edit_profile_container select{
+	width:60% !important;
+	font-size: 13px;
+	height: 27px;
+	margin-bottom: 5%;
+}
+/* .profile_input{
+	display:inline-block;
+} */
+.select2-drop{
+	font-size: 13px;
+}
+.res_country_dropdown,
+.res_state_dropdown,
+.res_nationality_dropdown,
+.res_emy_cntry{
+	font-size: 13px;
+	width:60%;
+	margin-bottom: 5%;
+}
+.address_tag{
+	margin-left: 0% !important;
+}
+.update_customer{
+	font-size: 12px;
+    padding: 5px 8px;
+}
+.profile-avatar-image .avatar-edit{
+	right: 0;
+    bottom: 0;
+    top: auto;
+}
+/*******end code - "/my/account" edit page********/
+/*******start code - "view history" popup******/
+#modal_history{
+	top:20%;
+}
+#modal_history .modal-dialog{
+	width:80%;
+	margin:0 auto;
+}
+#modal_history .modal-dialog .modal-header h4{
+	font-size: 15px;
+}
+#modal_history table td{
+	width:100%;
+	display: block;
+}
+#modal_history table td a{
+	font-size: 12px;
+}
+#modal_history .modal-body{
+	overflow-y: scroll;
+    height: 65vh;
+}
+/*******end code - "view history" popup********/
+/*******start code - helpdesk page***********/
+#helpdesk_navbar .navbar button{
+	font-size: 13px;
+    padding: 3px 7px;
+}
+#helpdesk_navbar .navbar .navbar-brand{
+	font-size: 13px;
+}
+#helpdesk_navbar #o-helpdesk-teams-navbar-collapse .dropdown{
+	margin-top:2%;
+	margin-left:0% !important;
+}
+#helpdesk_navbar .navbar{
+	margin-bottom:3%;
+}
+.helpdesk_right_sec button{
+	font-size: 13px;
+	padding: 5px 6px;
+}
+.helpdesk_right_sec .dropdown-menu{
+	min-width: 50%;
+}
+.ticket_head{
+	padding-left:0% !important;
+}
+.ticket_head h4{
+	font-size: 15px;
+	text-align: center;
+}
+#helpdesk_ticket_form .col-form-label{
+	font-size: 13px;
+	text-align: left;
+    width: 100%;
+}
+#helpdesk_ticket_form input[type='file']{
+	font-size: 12px;
+}
+#helpdesk_ticket_form .text-danger{
+	font-size: 11px;
+}
+/*******end code - helpdesk page***********/
+/*******start code - "submit document" button popup***********/
+.submit_doc_modal .o_message_count,.submit_doc_modal .o_message_counter{
+	font-size: 13px;
+}
+.submit_doc_modal textarea{
+	font-size: 13px;
+}
+.submit_doc_modal button{
+	font-size: 11px;
+    padding: 3px 12px;
+}
+.submit_doc_modal h5{
+	font-size: 12px;
+}
+.submit_doc_modal p{
+	font-size: 11px;
+}
+.submit_doc_modal .o_portal_chatter_puslished_date{
+	font-size: 11px !important;
+}
+/*******end code - "submit document" button popup***********/
+/*******start code - "appointment page"*************/
+.skit_cal_appt .o_page_header{
+	font-size: 15px;
+}
+.skit_cal_appt .js_publish_btn{
+	font-size: 11px;
+    padding: 4px 6px;
+}
+.skit_cal_appt .dropdown-menu{
+	min-width: auto;
+}
+.skit_cal_appt .table .o_calendar_days{
+	font-size: 12px;
+}
+.skit_cal_appt h3{
+	font-size: 13px;
+}
+.skit_cal_appt .table th,.skit_cal_appt .table td{
+	padding: 5px;
+	font-size: 11px;
+}
+.skit_cal_appt p{
+	font-size: 12px;
+}
+.skit_cal_appt ul li{
+	font-size: 12px;
+}
+.skit_appt_form ul.wizard li{
+	font-size: 11px;
+	padding: 0 5px 0 20px;
+}
+.mbl_ml_0{
+	margin-left:0% !important;
+}
+.appt_form_container{
+	padding: 6%;
+	margin-top: 0% !important;
+}
+.appt_form_container h2{
+	font-size: 14px;
+}
+.appt_header{
+	margin-left: 0% !important;
+    padding-left: 6%;
+}
+.skit_appt_form{
+	padding:0% !important;
+}
+.appt_form_container p{
+	font-size: 12px;
+}
+.appointment_submit_form .form-group{
+	padding: 0% !important;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+.appointment_submit_form .col-form-label,
+.appointment_submit_form div{
+	padding: 0% !important;
+	font-size: 12px;
+}
+.appointment_submit_form .form-control{
+	font-size: 12px;
+}
+.appt_form_container .portal_btn_div{
+	margin-left: auto;
+    margin-right: 0;
+}
+.appt_form_container .portal_btn_div button{
+	font-size: 12px;
+}
+.skit_appt_form .o_page_header{
+	height: auto !important;
+	margin-bottom: 1%;
+}
+.o_website_calendar_appointment .o_page_header{
+	font-size: 15px;
+}
+#appointment label{
+	font-size: 12px;
+}
+#calendarType{
+	font-size: 12px;
+}
+.o_website_appoinment_form button{
+	font-size: 12px;
+}
+.scheduled_appt_tbl h3{
+	font-size: 15px;
+}
+.appointment_table th,.appointment_table td{
+	font-size: 12px;
+}
+/*******end code - "appointment page"*************/
+/*******start code - body background image****************/
+.body_bg{
+	background-size: contain;
+	position: relative;
+	background-position: top;
+	background-color: #ffffff;
+}
+/*******end code - body background image****************/
+}
+
+
+/*******Start - Tablet view*********/
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+.o_portal_wrap .row .o_portal_my_details{
+	float:right;
+}
+.profile-avatar-image img{
+	height:auto;
+}
+}
+/*******End - Tablet view*********/
+
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+#sod_grid #sod_left_grid #top-grid img{
+	width: 100px;
+	height: 110px;
+}
+
+} 

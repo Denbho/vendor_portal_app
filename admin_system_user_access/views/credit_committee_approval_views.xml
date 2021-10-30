@@ -1,0 +1,137 @@
+<odoo>
+    <data>
+        <template id="admin_system_user_access_assets_backend" name="Archive assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/admin_system_user_access/static/src/js/view.js"/>
+        </xpath>
+
+    </template>
+        <record id="property_sale_credit_committee_approval_view_form_inherited" model="ir.ui.view">
+            <field name="name">property.sale.credit.committee.approval.inherited</field>
+            <field name="model">property.sale.credit.committee.approval</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_sale_credit_committee_approval_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='request_approve']" position="attributes">
+                    <attribute name="groups">admin_system_user_access.group_approved_credit_committee_approval</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_sale_credit_committee_approval_view_tree_inherited" model="ir.ui.view">
+            <field name="name">property.sale.credit.committee.approval.inherited</field>
+            <field name="model">property.sale.credit.committee.approval</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_sale_credit_committee_approval_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_sale_credit_committee_approval_open_view_tree" model="ir.ui.view">
+            <field name="name">property.sale.credit.committee.approval.open.view.tree</field>
+            <field name="model">property.sale.credit.committee.approval</field>
+            <field name="arch" type="xml">
+                <tree string="Credit committee Approval Tree">
+                    <field name="property_sale_id"/>
+                    <field name="so_date"/>
+                    <field name="so_number"/>
+                    <field name="partner_id"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="brand"/>
+                    <field name="block_lot"/>
+                    <field name="note"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="property_admin_monitoring.property_sale_credit_committee_approval_open_action" model="ir.actions.act_window">
+            <field name="view_id" ref="property_sale_credit_committee_approval_open_view_tree"/>
+        </record>
+
+        <record id="property_admin_monitoring.property_sale_credit_committee_approval_action" model="ir.actions.act_window">
+            <field name="view_id" ref="property_admin_monitoring.property_sale_credit_committee_approval_view_tree"/>
+        </record>
+
+        <!--Level4 Import/Export Project Disable Tree-->
+        <record id="property_subdivision_phase_level4_tree" model="ir.ui.view">
+            <field name="name">property.subdivision.phase.level4.tree</field>
+            <field name="model">property.subdivision.phase</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_subdivision_phase_view_tree"/>
+            <field name="groups_id" eval="[(6, 0, [ref('property_admin_monitoring.group_property_supervisor')])]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="import">0</attribute>
+                    <attribute name="export_xlsx">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Level4 Import/Export Unit Details Disable Tree-->
+        <record id="property_detail_level4_tree" model="ir.ui.view">
+            <field name="name">property.detail.level4.tree</field>
+            <field name="model">property.detail</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_detail_view_tree"/>
+            <field name="groups_id" eval="[(6, 0, [ref('property_admin_monitoring.group_property_supervisor')])]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="import">0</attribute>
+                    <attribute name="export_xlsx">false</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--All Access archive/Unarchive Project Disable Form-->
+        <record id="property_subdivision_phase_all_levels_form" model="ir.ui.view">
+            <field name="name">property.subdivision.phase.all.form</field>
+            <field name="model">property.subdivision.phase</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_subdivision_phase_view_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('property_admin_monitoring.group_property_user'),ref('group_admin_account_officer_staff'),ref('group_admin_account_officer_leader'),ref('property_admin_monitoring.group_property_supervisor'),ref('property_admin_monitoring.group_property_admin')])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="archive">0</attribute>
+                    <attribute name="unarchive">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--All Access archive/Unarchive Unit Details Disable Form-->
+        <record id="property_detail_all_levels_form" model="ir.ui.view">
+            <field name="name">property.detail.all.form</field>
+            <field name="model">property.detail</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_detail_view_form"/>
+            <field name="groups_id" eval="[(6, 0, [ref('property_admin_monitoring.group_property_user'), ref('group_admin_account_officer_staff'), ref('group_admin_account_officer_leader'), ref('property_admin_monitoring.group_property_supervisor'), ref('property_admin_monitoring.group_property_admin')])]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="archive">0</attribute>
+                    <attribute name="unarchive">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_admin_sale_view_form" model="ir.ui.view">
+            <field name="name">property.admin.sale.form</field>
+            <field name="model">property.admin.sale</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_admin_sale_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sub_stage_id']" position="replace"/>
+                <label for="ready_for_contracted_sale" position="before">
+                    <field name="sub_stage_id" domain="[('sub_parent_id', '=', stage_id)]"
+                           widget="statusbar" options="{'clickable': '1'}"
+                           attrs="{'invisible':[('check_loan_status', '=', True)]}"/>
+                </label>
+                <xpath expr="//field[@name='if_type']" position="before">
+                    <field name="loan_sub_stage_id"
+                           domain="[('sub_parent_id.name', 'in', ['Loan Released', 'Loan Releasing'])]"
+                           widget="statusbar" options="{'clickable': '1'}"
+                           attrs="{'invisible':[('financing_type', 'not in', ['BNK','RTB'])]}"/>
+                    <field name="check_loan_status" invisible="1"/>
+                </xpath>
+                <xpath expr="//button[@name='%(property_admin_monitoring.property_sale_validate_submitted_docs_action_wizard)d']" position="attributes">
+                    <attribute name="groups">admin_system_user_access.group_confirm_validate_docs</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

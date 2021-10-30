@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <!-- Evaluation Criterial -->
+
+      <record id="sample_evaluation_criteria" model="evaluation.criteria">
+          <field name="name">Sample Criteria</field>
+          <field name="weight">1</field>
+      </record>
+
+      <!-- Evaluation Template -->
+
+      <record id="bidding_evaluation_template" model="vendor.evaluation.template">
+          <field name="name">Bidding</field>
+          <field name="template_purpose">bid</field>
+          <field name="technical_valuation_weight">1</field>
+          <field name="commercial_valuation_weight">1</field>
+          <field name="technical_evaluation_line" model="vendor.evaluation.line" eval="[(5, 0, 0),
+              (0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'technical',
+                  'weight': 1}),
+          ]"/>
+          <field name="commercial_evaluation_line" model="vendor.evaluation.line" eval="[(5, 0, 0),
+              (0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'commercial',
+                  'weight': 1}),
+          ]"/>
+      </record>
+
+      <record id="accreditation_evaluation_template" model="vendor.evaluation.template">
+          <field name="name">Accreditation</field>
+          <field name="template_purpose">vendor_accreditation</field>
+          <field name="vendor_accreditation">True</field>
+          <field name="technical_valuation_weight">1</field>
+          <field name="commercial_valuation_weight">1</field>
+          <field name="technical_evaluation_line" model="vendor.evaluation.line" eval="[(5, 0, 0),
+              (0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'technical',
+                  'weight': 1}),
+          ]"/>
+          <field name="commercial_evaluation_line" model="vendor.evaluation.line" eval="[(5, 0, 0),
+              (0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'commercial',
+                  'weight': 1}),
+          ]"/>
+      </record>
+
+      <record id="regular_monthly_evaluation_template" model="vendor.evaluation.template">
+          <field name="name">Regular - Monthly</field>
+          <field name="template_purpose">vendor_regular_evaluation</field>
+          <field name="type_of_evaluation">monthly</field>
+          <field name="technical_valuation_weight">1</field>
+          <field name="commercial_valuation_weight">1</field>
+          <field name="technical_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'technical',
+                  'weight': 1}],
+          ]"/>
+          <field name="commercial_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'commercial',
+                  'weight': 1}],
+          ]"/>
+      </record>
+
+      <record id="regular_quarterly_evaluation_template" model="vendor.evaluation.template">
+          <field name="name">Regular - Quarterly</field>
+          <field name="template_purpose">vendor_regular_evaluation</field>
+          <field name="type_of_evaluation">quarterly</field>
+          <field name="technical_valuation_weight">1</field>
+          <field name="commercial_valuation_weight">1</field>
+          <field name="technical_evaluation_line" model="vendor.evaluation.line" eval="[(5, 0, 0),
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'technical',
+                  'weight': 1}],
+          ]"/>
+          <field name="commercial_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'commercial',
+                  'weight': 1}],
+          ]"/>
+      </record>
+
+      <record id="regular_annual_evaluation_template" model="vendor.evaluation.template">
+          <field name="name">Regular - Annual</field>
+          <field name="template_purpose">vendor_regular_evaluation</field>
+          <field name="type_of_evaluation">annual</field>
+          <field name="technical_valuation_weight">1</field>
+          <field name="commercial_valuation_weight">1</field>
+          <field name="technical_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'technical',
+                  'weight': 1}],
+          ]"/>
+          <field name="commercial_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'commercial',
+                  'weight': 1}],
+          ]"/>
+      </record>
+
+      <record id="regular_semi_annual_evaluation_template" model="vendor.evaluation.template">
+          <field name="name">Regular - Semi Annual</field>
+          <field name="template_purpose">vendor_regular_evaluation</field>
+          <field name="type_of_evaluation">semi_annual</field>
+          <field name="technical_valuation_weight">1</field>
+          <field name="commercial_valuation_weight">1</field>
+          <field name="technical_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'technical',
+                  'weight': 1}],
+          ]"/>
+          <field name="commercial_evaluation_line" model="vendor.evaluation.line" eval="[[5, 0, 0],
+              [0, 0, {
+                  'criteria': ref('admin_purchase_bid.sample_evaluation_criteria'),
+                  'type': 'commercial',
+                  'weight': 1}],
+          ]"/>
+      </record>
+
+    </data>
+</odoo>

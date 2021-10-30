@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="view_full_profile_form" name="Full Profile Form">
+		<t t-call="website.layout">
+	   		<div class="container">
+	        	<div class="card">
+		    		<div class="card-body" id="view_full_profile">
+		    			<form id="view_full_profile_form_new" action="/view_profile/update_contact/" method="post" class="s_website_form_vendor_profile view_full_profile_form" enctype="multipart/form-data" data-model_name="res.partner">
+		    				<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+			    			<div class="vendor_portal_container vreg_container">
+			              		<t t-call="skit_vendor_portal.vendor_profile_header_details"></t>
+					            <br></br>
+					            <br></br>
+					            <br></br>
+					     		<div class="tab">
+						  			<span id="contact" class="tablinks active my_profile_edit_form_ca" >Contacts &amp; Address</span>
+						  			<span id="product" class="tablinks my_profile_edit_form_ca" >Products &amp; Services</span>
+						   			<span t-if="is_show_other" id="other" class="tablinks my_profile_edit_form_ca" >Other</span>
+								</div>
+								<div class="tabcontent contact_tabcontent" style="display:block">
+   									<br></br>
+   									<br></br>
+	   								<t t-call="skit_vendor_portal.contact_details"></t>
+								</div>
+								<div class="tabcontent product_tabcontent">
+	  								<br></br>
+	  								<br></br>
+	  								<t t-call="skit_vendor_portal.product_details"></t>
+								</div>
+					            <div t-if="is_show_other" class="tabcontent other_tabcontent">
+						            <br></br>
+						            <br></br>
+					            	<t t-call="skit_vendor_portal.other_details"></t>
+								</div>	 
+			       			</div>
+		         		</form>
+		    		</div>
+		    	</div>
+			</div>
+			<div id="vp_page_loading">
+				<div id="vp_loading-image">
+					<img src="/web/static/src/img/spin.png" style="animation: fa-spin 1s infinite steps(12);"></img>
+					<br></br><br></br>
+					<span id="loading-text">Please wait..</span>
+				</div>
+			</div>
+	 	</t>
+	</template>
+	
+	<template id="vendor_profile_header_details">
+		<div class="row row-no-margin mt-2">
+       		<div class="form-group col-md-2 col-sm-2">
+         		<span>Business Type </span>
+         	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+         		 <span class="font-weight-normal"><t t-esc="partner.business_type"></t></span>
+         	</div>
+       	</div>
+        <div class="row row-no-margin mt-2">
+        	<div class="form-group col-md-2 col-sm-2">
+        		<span>Business Name </span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		 <span class="font-weight-normal"><t t-esc="partner.name"></t></span>
+        	</div>
+        	<div class="form-group col-md-2 col-sm-2">
+        		<span>Business Owner</span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		<span class="font-weight-normal"><t t-esc="partner.business_name"></t></span>
+        	</div>
+        	<div class="form-group col-md-2 col-sm-2">
+        		<span>Industry</span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+				<span class="font-weight-normal"><t t-esc="partner.industry_id.name"></t></span>
+        	</div>
+        	<div class="form-group col-md-2 col-sm-2">
+        		<span>TIN </span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		<span class="font-weight-normal"><t t-esc="partner.vat"></t></span>
+        	</div>
+        	<div class="form-group form-field col-md-2 col-sm-2">
+        		<span>Phone </span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		<div class="row phone_row_edit" >
+	        		<div class="col-md-9 col-sm-9" style="width: 80%;">
+	        			<span class="font-weight-normal phone_span"><t t-esc="partner.phone"></t></span>
+	        		</div>
+	        		<div class="col-md-1 col-sm-1" style="width: 20%;">
+	        			<i class="fa fa-pencil-square-o font-large attach_fcur" id="edit_phone"></i>
+	        		</div>
+        		</div>
+        		 <div class="row phone_row_save d-none" >
+        			<div class="form-group col-md-10 col-sm-10">
+		        		<div class="input-icons">
+		        			<i class="fa fa-save icon attach_fcur" id="save_phone"></i>
+		        			<input type="tel" name="phone" id="phone" t-attf-class="form-control o_website_form_input vphone number_field" t-att-value="partner.phone"/>
+        		 		</div>
+	        		</div>
+	        	</div>
+        	</div>
+        	<div class="form-group form-field col-md-2 col-sm-2">
+        		<span>E-mail</span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		<div class="row email_row_edit enable_edit" >
+	        		<div class="col-md-9 col-sm-9"  style="width: 80%;">
+	        			<span class="font-weight-normal email_span"><t t-esc="partner.email"></t></span>
+	        		</div>
+	        		<div class="col-md-1 col-sm-1" style="width: 20%;">
+	        			<i class="fa fa-pencil-square-o font-large attach_fcur" id="edit_email"></i>
+	        		</div>
+        		</div>
+        		<div class="row email_row_save d-none form-field enable_save" >
+        			<div class="form-group col-md-10 col-sm-10">
+		        		<div class="input-icons">
+		           			<i class="fa fa-save icon attach_fcur" id="save_email"></i>
+		                  	<input type="email" name="email" id="email" required="required" t-attf-class="form-control o_website_form_input" t-att-value="partner.email"/>
+		        		</div>
+	        		</div>
+	        	</div>
+        	</div>
+        	<div class="form-group form-field col-md-2 col-sm-2">
+        		<span>Mobile</span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		<div class="row mobile_row_edit enable_edit" >
+	        		<div class="col-md-9 col-sm-9" style="width: 80%;">
+	        			<span class="font-weight-normal mobile_span"><t t-esc="partner.mobile"></t></span>
+	        		</div>
+	        		<div class="col-md-1 col-sm-1" style="width: 20%;">
+	        			<i class="fa fa-pencil-square-o font-large attach_fcur" id="edit_mobile"></i>
+	        		</div>
+        		</div>
+        		 <div class="row mobile_row_save d-none form-field enable_save" >
+        			<div class="form-group col-md-10 col-sm-10">
+		        		<div class="input-icons">
+		        			<i class="fa fa-save icon attach_fcur" id="save_mobile"></i>
+		        			<input type="tel" name="mobile" id="mobile" t-attf-class="form-control vmobile number_field" t-att-value="partner.mobile"/>
+		        		</div>
+	        		</div>
+	        	</div>
+        	</div>
+        	
+        	<div class="form-group form-field col-md-2 col-sm-2">
+        		<span>Website Link</span>
+        	</div>
+        	<div class="form-group col-md-4 col-sm-4">
+        		<div class="row website_row_edit enable_edit" >
+	        		<div class="col-md-9 col-sm-9" style="width: 80%;">
+	        			<span class="font-weight-normal website_span"><t t-esc="partner.website"></t></span>
+	        		</div>
+	        		<div class="col-md-1 col-sm-1" style="width: 20%;">
+	        			<i class="fa fa-pencil-square-o font-large attach_fcur" id="edit_website"></i>
+	        		</div>
+        		</div>
+        		 <div class="row website_row_save d-none form-field enable_save" >
+        			<div class="form-group col-md-10 col-sm-10">
+		        		<div class="input-icons">
+		        			<i class="fa fa-save icon attach_fcur" id="save_website"></i>
+		        			<input type="text" name="website" id="website"  t-attf-class="form-control" t-att-value="partner.website"/>
+		        		</div>
+	        		</div>
+	        	</div>
+        	</div>
+        </div>
+       
+        <div class="row row-no-margin mt-2">
+        	<div class="form-group col-md-2 col-sm-2">
+        		<span>Head Office Address</span>
+        	</div>
+        	<div class="form-group col-md-9 col-sm-9" style="width: 80%;">
+        		<address class="align-items-baseline">
+                   		<div>
+                       		<span t-if="partner.street">
+                       			<t t-set="street_val" t-value="partner.street"></t>
+                       			<span t-esc="street_val+','"/>
+                       		</span>
+                       		<span t-if="partner.street2">
+	                       		<t t-set="street2_val" t-value="partner.street2"></t>
+	                       		<span t-esc="street2_val+','"/>
+                       		</span>
+                          	<span t-if="partner.barangay_id">
+                           		<t t-set="barangay_val" t-value="partner.barangay_id.name"></t>
+                           		<span t-esc="barangay_val+','"/>
+                        	</span>
+                          	<span t-if="partner.city" >
+                          		<t t-set="city_val" t-value="partner.city"></t>
+                           		<span t-esc="city_val+','"/>
+                         	</span>
+                         	<span t-if="partner.province_id" >
+                         		<t t-set="province_val" t-value="partner.province_id.name"></t>
+                           		<span t-esc="province_val+','"/>
+                        	</span>
+                            <span t-if="partner.state_id" >
+                            	<t t-set="state_id_val" t-value="partner.state_id.name"></t>
+                            	<span t-esc="state_id_val+','"/>
+                          	</span>
+                          	 <span t-if="partner.zip" >
+                            	<t t-set="zip_val" t-value="partner.zip"></t>
+                            	<span t-esc="zip_val+','"/>
+                          	</span>
+                            <span t-if="partner.country_id" >
+                            	<span t-field="partner.country_id"/>
+                         	</span>
+                   		</div>
+               		</address>
+        	</div>
+        	<div class="form-group col-md-1 col-sm-1" style="width: 20%;">
+        		<i class="fa fa-pencil-square-o edit_head_office_address font-large attach_fcur" t-att-id="partner.id" ></i>
+        	</div>
+        </div>
+         <div class="row row-no-margin">
+        	<span id="o_website_form_result"></span>
+        </div>
+	</template>
+	
+	<template id="contact_details">
+		<div class="row row-no-margin mt-2 vso_address_panel">
+          	<div class="form-group col-md-11 col-sm-11">
+          		<span>Site Office Address</span>
+          	</div>
+          	<div align="center" class="form-group col-md-1 col-sm-1">
+          		<i class="fa fa-plus-circle plus_icon site_plus_view"></i>
+          	</div>
+          	<div class="form-group col-md-12 col-sm-12">
+          		<div class="site_office_address">
+          			<t t-call="skit_vendor_portal.site_office_address_view"></t>
+          		</div>
+          	</div>
+	 	</div>
+		<div class="row row-no-margin mt-2 vcontact_person_panel">
+      		<div class="col-lg-11 col-md-11">
+    			<div class="common-text1 p-1">
+              		<h4>Contact Person/s </h4>
+            	</div>
+    		</div>
+		 	<div align="center" class="form-group col-md-1 col-sm-1">
+		 		<i class="fa fa-plus-circle plus_icon contact_plus_view"></i>
+			</div>
+		  	<div class="form-group col-md-12 col-sm-12">
+		  		<div class="vendor_contact_person">
+		  			<t t-call="skit_vendor_portal.vendor_contact_person_view"></t>
+		     	</div>
+		 	</div>
+      	</div>
+      	<div class="row row-no-margin mt-2 vaffiliated_contact_panel">
+        	<div class="col-md-11 col-sm-11">
+         		<div class="common-text1 p-1">
+              		<h4>Affiliated/Subsidiary Companies:</h4>
+                </div>
+      		</div>
+		    <div align="center" class="form-group col-md-1 col-sm-1">
+				<i class="fa fa-plus-circle plus_icon affiliated_contact_plus_view"></i>
+		    </div>
+		   	<div class="form-group col-md-12 col-sm-12 ">
+		  		<div class="vendor_affiliated_contact">
+		    		<t t-call="skit_vendor_portal.vendor_affiliated_contact_view"></t>
+		  		</div>
+		   	</div>
+      	</div>
+	</template>
+	
+	<template id="product_details">
+		<div class="row row-no-margin mt2">
+   			<div class="col-lg-6 col-md-6">
+   			 	<div class="common-text1 p-1">
+                     <h4>Product Categories</h4>
+                 </div>
+   			</div>
+   			<div class="col-lg-6 col-md-6">
+   			 	<div class="common-text1 p-1">
+                     <i class="fa fa-pencil-square-o float-right attach_fcur" id="edit_product_type"></i>
+                     <i class="fa fa-save float-right d-none attach_fcur" id="save_product_type"></i>
+                 </div>
+   			</div>
+          	<div class="vendor_product_category">
+          		<div class="product_category_div product_classification_ids">
+	           		<t t-foreach="product_classifications" t-as="prod_cat">
+	           			<t t-if="((prod_cat) in (partner.product_classification_ids))">
+	           				<div class="product_category">
+		            			<input disabled="true" checked="checked" id="category_id" type="checkbox" name="product_classification_id" t-att-categ_id="prod_cat.id" t-att-value="prod_cat.id" t-attf-class="form-control vinput pc_checkbox_input"/>
+		            			<span class="product_categ_name"><t t-esc="prod_cat.name"/></span>
+		            		</div>
+	           			</t>
+	           			<t t-else="">
+		            		<div class="product_category">
+		            			<input disabled="true" id="category_id" type="checkbox" name="product_classification_id" t-att-categ_id="prod_cat.id" t-att-value="prod_cat.id" t-attf-class="form-control vinput pc_checkbox_input"/>
+		            			<span class="product_categ_name"><t t-esc="prod_cat.name"/></span>
+		            		</div>
+	            		</t>
+	           		</t>
+          		</div>
+          		<div class="product_category_others">
+	           		<input id="has_other_category" disabled="true" type="checkbox" t-att-checked="partner.has_other_category" t-att-value="partner.has_other_category" name="has_other_category" t-attf-class="form-control vinput pc_checkbox_other"/>
+	           		<span class="pc_others_span">Others:</span>
+					<input id="other_categories" disabled="true" type="text" name="other_categories" t-att-value="partner.other_categories" placeholder="Please specify" t-attf-class="form-control others_category_input"/>	            </div>
+          	</div>
+     	</div>
+        <div class="row row-no-margin mt-2 vpro_product_service_panel">
+   			<div class="col-md-11 col-sm-11">
+   			 	<div class="common-text1 p-1">
+                     <h4>Key Products &amp; Services Offered:</h4>
+                 </div>
+   			</div>
+           	<div align="center" class="form-group col-md-1 col-sm-1">
+           		<i id="0" class="fa fa-plus-circle plus_icon product_service_plus_view"></i>
+           	</div>
+           	<div class="form-group col-md-12 col-sm-12">
+           		<div class="vendor_product_service_offered">
+           			<t t-call="skit_vendor_portal.vendor_product_service_offered_view"></t>
+           		</div>
+           	</div>
+           	<div class="" id="pro_dvExcel"></div>
+			<div class="form-group d-none col-md-3 col-sm-3">
+				<input type="file" id="product_import" class="product_import" multiple="multiple"/>
+				<span class="span_view product_importfile"></span>
+			</div>
+			<div class="form-group col-md-6 col-sm-6">
+			    <button id="product_import_button" type="button" class="pull-left a-submit btn btn-primary product_import_button">Import</button>
+			    <div class="download_ptemplate">
+			        <a class="pimport_temp" href="/skit_vendor_portal/static/src/file/keyproduct_import.xlsx">
+			              <span class="download_products"><i class="fa fa-download"></i><span class="span_import">Import Template</span></span>
+			        </a>
+			    </div>
+			</div>
+      	</div>
+   		<div class="row row-no-margin mt-2">
+   			<div class="col-md-11 col-sm-11">
+   				<div class="common-text1 p-1">
+                     <h4>Other Remarks:</h4>
+                 </div>
+   			</div>
+   			<div class="col-md-1 col-sm-1">
+   			<div class="common-text1 p-1">
+                     <i class="fa fa-pencil-square-o float-right" id="edit_remarks"></i>
+                     <i class="fa fa-save float-right d-none" id="save_remarks"></i>
+                 </div>
+                 </div>
+   			<div class="form-group col-md-12 col-sm-12">
+   				<textarea rows="5" readonly="1" class="form-control remarks_text" t-attf-name="comment" id="comment" ><t t-if="partner" t-esc="partner.comment"></t></textarea>
+   			</div>
+   		</div>
+	</template>
+	
+	<template id="other_details">
+		<div class="row row-no-margin mt-2">
+      		<div class="form-group col-md-3 col-sm-3">
+          		<span class="col-form-label">Customer Number</span>
+  			</div>
+	     	<div class="form-group col-md-3 col-sm-3">
+	      		<span class="font-weight-normal"><t t-esc="partner.partner_assign_number"></t></span>
+	        </div>
+	      	<div class="form-group col-md-3 col-sm-3">
+	        	<span>Marital Status</span>
+	       	</div>
+	      	<div class="form-group col-md-3 col-sm-3">
+	      		<span class="font-weight-normal" t-field="partner.marital"></span>
+	        </div>
+	    	<div class="form-group col-md-3 col-sm-3">
+	    		<span>Date of Birth</span>
+	        </div>
+	      	<div class="form-group col-md-3 col-sm-3">
+	     		<span class="font-weight-normal" t-field="partner.date_of_birth" t-options="{'widget': 'date'}"></span>
+	        </div>
+	      	<div class="form-group col-md-3 col-sm-3">
+	     		<span>Nationality (Country)</span>
+	       	</div>
+	      	<div class="form-group col-md-3 col-sm-3">
+	      		<span class="font-weight-normal"><t t-esc="partner.nationality_country_id.name"></t></span>
+	        </div>
+	       	<div class="form-group col-md-3 col-sm-3">
+				<span>Age</span>
+	      	</div>
+	     	<div class="form-group col-md-3 col-sm-3">
+	      		<span class="font-weight-normal"><t t-esc="partner.age"></t></span>
+	     	</div>
+	    	<div class="form-group col-md-3 col-sm-3">
+	   			<span>Employment (Country)</span>
+	      	</div>
+	     	<div class="form-group col-md-3 col-sm-3">
+	  			<span class="font-weight-normal"><t t-esc="partner.employment_country_id.name"></t></span>
+	    	</div>
+	      	<div class="form-group col-md-3 col-sm-3">
+				<span>Gender</span>
+	       	</div>
+          	<div class="form-group col-md-3 col-sm-3">
+            	<span class="font-weight-normal" t-field="partner.gender"></span>
+          	</div>
+            <div class="form-group col-md-3 col-sm-3">
+            	<span>Job Title</span>
+          	</div>
+          	<div class="form-group col-md-3 col-sm-3">
+            	<span class="font-weight-normal"><t t-esc="partner.title.name"></t></span>
+          	</div>
+	        <div class="form-group col-md-3 col-sm-3">
+	    		<span>Religion</span>
+	       	</div>
+          	<div class="form-group col-md-3 col-sm-3">
+            	<span class="font-weight-normal"><t t-esc="partner.religion_id.name"></t></span>
+          	</div>
+	       	<div class="form-group col-md-3 col-sm-3">
+	    		<span>Job Position</span>
+	       	</div>
+          	<div class="form-group col-md-3 col-sm-3">
+           		<span class="font-weight-normal"><t t-esc="partner.function"></t></span>
+          	</div>
+	   		<div class="form-group col-md-3 col-sm-3">
+	    		<span>Secondary Mobile No.</span>
+	        </div>
+          	<div class="form-group col-md-3 col-sm-3">
+      			<span class="font-weight-normal"><t t-esc="partner.mobile2"></t></span>
+          	</div>
+	     	<div class="form-group col-md-3 col-sm-3">
+	   			<span>Monthly Income</span>
+	       	</div>
+          	<div class="form-group col-md-3 col-sm-3">
+    			<span class="font-weight-normal"><t t-esc="partner.monthly_income"></t></span>
+          	</div>
+           	 <div class="form-group col-md-3 col-sm-3">
+          		<span>Residential Address</span>
+          	</div>
+	  		<div class="form-group col-md-3 col-sm-3">
+	    		<div>
+       				<address class="align-items-baseline">
+                   		<div>
+                       		<div t-if="partner.street"><span class="font-weight-normal" t-field="partner.street"/></div>
+                       		<div t-if="partner.street2"><span class="font-weight-normal" t-field="partner.street2"/></div>
+	                         <div t-if="partner.barangay_id">
+	                             <span class="font-weight-normal" t-field="partner.barangay_id.name"/>
+	                         </div>
+	                         <div t-if="partner.city">
+	                             <span class="font-weight-normal" t-field="partner.city"/> 
+	                         </div>
+	                         <div t-if="partner.province_id">
+	                             <span class="font-weight-normal" t-field="partner.province_id"/>
+	                         </div>
+	                         <div t-if="partner.state_id or partner.zip">
+	                             <span class="font-weight-normal" t-field="partner.state_id"/> <span class="font-weight-normal" t-field="partner.zip"/>
+	                         </div>
+	                         <div t-if="partner.country_id">
+	                             <span class="font-weight-normal" t-field="partner.country_id"/>
+	                         </div>
+                   		</div>
+               		</address>
+	            </div> 
+	     	</div> 
+          	<div class="form-group col-md-3 col-sm-3">
+           		<span>Employment Status</span>
+          	</div>
+          	<div class="form-group col-md-3 col-sm-3">
+         		<span class="font-weight-normal"><t t-esc="partner.employment_status_id.name"></t></span>
+          	</div>
+	   	</div>
+   		<br></br>
+   		<br></br>
+    	<div class="row row-no-margin">
+  			<div class="form-group col-md-6 col-sm-6">
+         		<div class="font-weight-normal  font-large">Social Media Accounts</div>
+          	</div>
+      	</div>
+         <div class="row row-no-margin">
+          	<div class="form-group col-md-2 col-sm-2">
+          		<span>Twitter</span>
+          	</div>
+          	<div class="form-group col-md-4 col-sm-4">
+         		<span class="font-weight-normal"><t t-esc="partner.social_twitter"></t></span>
+          	</div>
+      	</div>
+    	<div class="row row-no-margin">
+  			<div class="form-group col-md-2 col-sm-2">
+          		<span>Facebook</span>
+          	</div>
+          	<div class="form-group col-md-4 col-sm-4">
+   				<span class="font-weight-normal"><t t-esc="partner.social_facebook"></t></span>
+          	</div>
+     	</div>
+    	<div class="row row-no-margin">
+        	<div class="form-group col-md-2 col-sm-2">
+        		<span>LinkedIn</span>
+          	</div>
+          	<div class="form-group col-md-4 col-sm-4">
+        		<span class="font-weight-normal"><t t-esc="partner.social_linkedin"></t></span>
+          	</div>
+     	</div>
+       	<div class="row row-no-margin">
+   			<div class="form-group col-md-2 col-sm-2">
+         		<span>Youtube</span>
+          	</div>
+          	<div class="form-group col-md-4 col-sm-4">
+      			<span class="font-weight-normal"><t t-esc="partner.social_youtube"></t></span>
+          	</div>
+   		</div>
+    	<div class="row row-no-margin">
+     		<div class="form-group col-md-2 col-sm-2">
+           		<span>Instagram</span>
+          	</div>
+          	<div class="form-group col-md-4 col-sm-4">
+        		<span class="font-weight-normal"><t t-esc="partner.social_instagram"></t></span>
+          	</div> 
+   		</div>
+	</template>	
+	
+	<template id="head_office_address_creation_popup" name="Head Office Address Creation">
+        <div role="dialog" id="head_office_address_creation" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <!-- <form role="form" id="head_office_address"> -->
+                   <form id="view_head_office_address" name="head_address_section" action="/view_profile/create_site_address" method="post" class="s_website_form_vendor_profile view_site_office_address" enctype="multipart/form-data">
+                
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Head Office Address</h4>
+                            <button type="button" id="head_office_close_btn" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+                        		<div class="form-group col-md-12 col-sm-12">
+						            <span class="display_none">Partner Id<span class="required_span">*</span></span>
+						            <input type="text" id="partner_id" name="partner_id" required="required" t-attf-class="form-control mt-2 display_none" t-att-value="partner_id"/>
+						        </div>
+						       	<div class="form-group col-md-6 col-sm-6 form-field o_website_form_required">
+			                    	<label class="col-form-label" for="country_id">Country</label>
+						            <select id="scountry_id" name="country_id" placeholder="Country" required="1" t-attf-class="form-control scountry_id mt-2 o_website_form_input">
+											<option value=""></option>
+											<t t-foreach="countries or []" t-as="country">
+												<option t-att-value="country.id" t-att-selected="country.id == partner.country_id.id if partner else false" placeholder="Country">
+													<t t-esc="country.name" />
+												</option>
+											</t>
+									</select>
+						        </div>
+						        
+						        <div class="form-group col-md-6 col-sm-6 form-field ">
+			                 		<label class="col-form-label" for="state_id">Region</label>
+						            <select id="sstate_id" name="state_id" placeholder="Region" t-attf-class="form-control sstate_id mt-2 o_website_form_input">
+											<option value=""></option>
+											<t t-foreach="states" t-as="state">
+												<option t-att-value="state.id" t-att-data-country_id="state.country_id.id" t-att-selected="state.id == partner.state_id.id" placeholder="Region">
+													<t t-esc="state.name" />
+												</option>
+											</t>
+									</select>
+						        </div>
+						        
+						        <div class="form-group col-md-6 col-sm-6 form-field ">
+			                    	<label class="col-form-label" for="province_id">Province</label>
+						            <select id="sprovince_id" name="province_id" placeholder="Province" required="1" t-attf-class="form-control sprovince_id mt-2 o_website_form_input">
+										<t t-foreach="province" t-as="prov">
+											<option t-att-value="prov.id" t-att-data-state_id="prov.state_id.id" t-att-selected="prov.id == partner.province_id.id if partner else false" placeholder="Province">
+												<t t-esc="prov.name" />
+											</option>
+										</t>
+									</select>
+						        </div>
+						        
+						        <div class="form-group col-md-6 col-sm-6 form-field">
+			                    	<label class="col-form-label" for="city_id">City</label>
+					            	<select id="scity_id" name="city_id" placeholder="City" t-attf-class="form-control scity_id mt-2 o_website_form_input">
+										<option value=""></option>
+										<t t-foreach="cities" t-as="city">
+											<option t-att-value="city.id" t-att-data-province_id="city.province_id.id" t-att-selected="city.id == partner.city_id.id if partner else false" placeholder="City">
+												<t t-esc="city.name" />
+											</option>
+										</t>
+									</select>
+						        </div>
+						        
+						        <div class="form-group col-md-6 col-sm-6 form-field o_website_form_required">
+						            <label class="col-form-label" for="zip">Zip Code</label>
+						            <input type="text" id="zip" name="zip" required="1" t-attf-class="form-control mt-2 _number o_website_form_input" t-att-value="zip_code"/>
+						        </div>
+						        
+						        <div class="form-group col-md-6 col-sm-6 form-field ">
+			                    	<label class="col-form-label" for="barangay_id">Barangay</label>
+						            <select id="sbarangay_id" name="barangay_id" placeholder="Barangay" t-attf-class="form-control sbarangay_id mt-2 o_website_form_input">
+										<option value="">select...</option>
+										<t t-foreach="barangaies" t-as="barangay">
+											<option t-att-value="barangay.id" t-att-data-city_id="barangay.city_id.id" t-att-selected="barangay.id == partner.barangay_id.id if partner else false" placeholder="Barangay">
+												<t t-esc="barangay.name" />
+											</option>
+										</t>
+									</select>
+						        </div>
+						        
+						        <div class="form-group col-md-6 col-sm-6 form-field o_website_form_required">
+			                    	  <label class="col-form-label" for="street2">Subdivision</label>
+						            <input type="text" id="s_street2" name="street2" required="1" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="street2"/>
+						        </div>
+						        
+						        <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="street">House/Floor No., Building Name/Street</label>
+						            <input type="text" id="s_street" name="street" required="required" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="street"/>
+						        </div>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" id="site_save" class="btn btn-secondary o_website_form_send popup_save popup_save_btn">Save</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>		
+	
+	<!-- Start Site Office Address  -->	
+	<template id="site_office_address_view" name="Site Office Address">
+		<div class="vr_form_site_office_address">
+		<table id="profile_site_tables" name="site_address_section" class="site_office_ids vendor_tables site_office_address">
+			<thead>
+				<th>Office Name</th>
+				<th>House/Floor No., Bldg. Name/St.</th>
+				<th>Subdivision</th>
+				<th>Barangay</th>
+				<th>City</th>
+				<th>Province</th>
+				<th>Region</th>
+				<th>Zip Code</th>
+				<th>Country</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<t t-set="site_address_exist" t-value="partner.child_ids.filtered(lambda r:r.type=='other')"></t>
+				<t t-if="not site_address_exist">
+					<tr id="site_empty_row" class="site_address_tr empty-row-height">
+					 	<td class="s_name"></td>
+						<td class="s_street"></td>
+						<td class="s_street2"></td>
+						<td class="s_barangay_id"></td>
+						<td class="s_city_id"></td>
+						<td class="s_province_id"></td>
+						<td class="s_state_id"></td>
+						<td class="s_zipcode"></td>
+						<td class="s_country_id"></td>
+						<td align="center">
+						</td>
+					</tr>
+				</t>
+				<tr t-foreach="partner.child_ids.filtered(lambda r:r.type=='other')" t-as="child_id" class="site_address_tr" t-att-id="child_id.id">
+					<td class="s_name"><t t-esc="child_id.name"></t></td>
+					<td class="s_street"><t t-esc="child_id.street"></t></td>
+					<td class="s_street2"><t t-esc="child_id.street2"></t></td>
+					<td class="s_barangay_id"><t t-esc="child_id.barangay_id.name"></t></td>
+					<td class="s_city_id"><t t-esc="child_id.city_id.name"></t></td>
+					<td class="s_province_id"><t t-esc="child_id.province_id.name"></t></td>
+					<td class="s_region_id"><t t-esc="child_id.continent_region_id.name"></t></td>
+					<td class="s_zipcode"><t t-esc="child_id.zip"></t></td>
+					<td class="s_country_id"><t t-esc="child_id.country_id.name"></t></td>
+					<td class="edit_delete" align="center">
+						<span t-att-id="child_id.id" class="site_edit_view"><i class="fa fa-pencil-square-o span_icon isite_edit"></i></span>
+						<span t-att-id="child_id.id" class="site_delete_view"><i class="fa fa-trash span_icon isite_delete"></i></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</template>
+	
+	<template id="site_address_creation_popup_view" name="Site Office Address Creation">
+        <div role="dialog" id="site_address_creation" class="modal site_address_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+               	<form id="view_site_office_address" name="site_address_section" action="/view_profile/create_site_address" method="post" class="s_website_form_vendor_profile view_site_office_address" enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Site Office Address</h4>
+                            <button type="button" id="profile_site_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+                        		<div class="form-group col-md-12 col-sm-12 display_none">
+						            <span class="display_none">Partner Id<span class="required_span">*</span></span>
+						            <input type="text" id="partner_id" name="partner_id" required="required" t-attf-class="form-control mt-2 display_none" t-att-value="partner_id"/>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12 d-none">
+						            <span>Type<span class="required_span">*</span></span>
+						            <input type="text" id="type" name="type" required="required" t-attf-class="form-control mt-2" t-att-value="'other'"/>
+						        </div>
+						        
+	                            <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="name">Office Name</label>
+						            <input type="text" id="s_name" name="name" required="required" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="name"/>
+						        </div>
+						        
+			                    <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="country_id">Country</label>
+						            <select id="scountry_id" name="country_id" placeholder="Country" t-attf-class="form-control scountry_id mt-2 o_website_form_input" required="1">
+										<t t-foreach="countries" t-as="coun">
+												<t t-if="country_id == coun.id">
+													<option t-att-value="coun.id" t-att-selected="true" placeholder="Country">
+															<t t-esc="coun.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<t t-if="country_id == 0">
+														<option t-att-value="coun.id" t-att-selected="coun.code == 'PH'" placeholder="Country">
+															<t t-esc="coun.name" />
+														</option>
+													</t>
+													<t t-else="">
+														<option t-att-value="coun.id" placeholder="Country">
+															<t t-esc="coun.name" />
+														</option>
+													</t>
+												</t>
+										</t>
+									</select>
+						        </div>
+						         <div class="form-group col-md-6 col-sm-6 form-field">
+						         	<label class="col-form-label" for="state_id">Region</label>
+						            <select id="sstate_id" name="state_id" t-attf-class="form-control sstate_id mt-2 o_website_form_input">
+										<option value=""></option>
+											<t t-foreach="states" t-as="state">
+												<t t-if="state_id == state.id">
+													<option t-att-value="state.id" t-att-data-country_id="state.country_id.id" t-att-selected="true" placeholder="Region">
+														<t t-esc="state.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="state.id" t-att-data-country_id="state.country_id.id" placeholder="Region">
+														<t t-esc="state.name" />
+													</option>
+												</t>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6 form-field">
+			                    	<label class="col-form-label" for="province_id">Province</label>
+						            <select id="sprovince_id" name="province_id" t-attf-class="form-control sprovince_id mt-2 o_website_form_input">
+										<option value=""></option>
+											<t t-foreach="province" t-as="p">
+												<t t-if="province_id == p.id">
+													<option t-att-value="p.id" t-att-data-state_id="p.state_id.id" t-att-selected="true" placeholder="Province">
+														<t t-esc="p.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="p.id" t-att-data-state_id="p.state_id.id" placeholder="Province">
+														<t t-esc="p.name" />
+													</option>
+												</t>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6 form-field">
+			                    	<label class="col-form-label" for="city_id">City</label>
+						            <select id="scity_id" name="city_id" placeholder="City" t-attf-class="form-control scity_id mt-2 o_website_form_input">
+										<option value=""></option>
+											<t t-foreach="cities" t-as="city">
+												<t t-if="city_id == city.id">
+													<option t-att-value="city.id" t-att-data-province_id="city.province_id.id" t-att-selected="true" placeholder="City">
+														<t t-esc="city.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="city.id" t-att-data-province_id="city.province_id.id" placeholder="City">
+														<t t-esc="city.name" />
+													</option>
+												</t>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6 form-field o_website_form_required">
+						        	<label class="col-form-label" for="zip">Zip Code</label>
+						            <input type="text" id="zip" name="zip" t-attf-class="form-control mt-2 _number o_website_form_input" t-att-value="zip_code" required="required"/>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6 form-field">
+			                    	<label class="col-form-label" for="barangay_id">Barangay</label>
+						            <select id="sbarangay_id" name="barangay_id" placeholder="Barangay" t-attf-class="form-control sbarangay_id mt-2 o_website_form_input">
+										<option value=""></option>
+										<t t-foreach="barangaies" t-as="b">
+												<t t-if="barangay_id == b.id">
+													<option t-att-value="b.id" t-att-data-city_id="b.city_id.id" t-att-selected="true" placeholder="Barangay">
+														<t t-esc="b.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="b.id" t-att-data-city_id="b.city_id.id" placeholder="Barangay">
+														<t t-esc="b.name" />
+													</option>																 
+												</t>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6 form-field o_website_form_required">
+			                    	 <label class="col-form-label" for="street2">Subdivision</label>
+						            <input type="text" id="s_street2" name="street2" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="street2" required="required"/>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="street">House/Floor No., Building Name/Street</label>
+						            <input type="text" id="s_street" name="street" required="required" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="street"/>
+						        </div>
+					        </div>
+					         <div class="row row-no-margin mt-2">
+					        	<span id="o_website_form_result"></span>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" id="site_save" class="btn btn-secondary o_website_form_send popup_save popup_save_btn">Save</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template> 
+	<!-- End site office address  -->		
+	
+	<!-- Start Contact Person  -->	
+	<template id="vendor_contact_person_view" name="Vendor Contact Person">
+		<div class="vr_form_vendor_contact_person_view">
+		<table id="profile_contact_tables" class="contact_person_ids vendor_tables vendor_contact_person" name="contact_person_section">
+			<thead>
+				<th>Name</th>
+				<th>Department</th>
+				<th>Position</th>
+				<th>Phone</th>
+				<th>Mobile</th>
+				<th>Email</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<t t-set="contact_address_exist" t-value="partner.child_ids.filtered(lambda r:r.type=='contact')"></t>
+				<t t-if="not contact_address_exist">
+					<tr id="contact_empty_row" class="contact_person_tr empty-row-height">
+						 <td class="c_name"></td>
+						 <td class="c_department"></td>
+						 <td class="c_position"></td>
+						 <td class="c_phone"></td>
+						 <td class="c_mobile"></td>
+						 <td class="c_email"></td>
+						 <td align="center">
+						 </td>
+					</tr>
+				</t>
+				<tr t-foreach="partner.child_ids.filtered(lambda r:r.type=='contact')" t-as="child_id" t-att-id="child_id.id" class="contact_person_tr">
+					<td class="name"><t t-esc="child_id.name"></t></td>
+					<td class="department"><t t-esc="child_id.department"></t></td>
+					<td class="position"><t t-esc="child_id.function"></t></td>
+					<td class="phone"><t t-esc="child_id.phone"></t></td>
+					<td class="mobile"><t t-esc="child_id.mobile"></t></td>
+					<td class="email"><t t-esc="child_id.email"></t></td>
+					 <td align="center">
+						 <span t-att-id="child_id.id" class="contact_edit_view"><i class="fa fa-pencil-square-o span_icon icontact_edit"></i></span>
+						 <span t-att-id="child_id.id" class="contact_delete_view"><i class="fa fa-trash span_icon icontact_delete"></i></span>
+					 </td>
+				 </tr>
+			</tbody>
+		</table>
+		</div>
+	</template>	
+	
+	<template id="vendor_contact_person_popup_view" name="Vendor Contact Person Creation">
+        <div role="dialog" id="contact_person_creation" class="modal contact_person_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+            	<form id="view_contact_person" name="contact_person_section" action="/view_profile/create_site_address" method="post" class="s_website_form_vendor_profile view_site_office_address" enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Contact Person/s</h4>
+                            <button type="button" id="profile_contact_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+	                            <div class="form-group col-md-12 col-sm-12">
+						            <span class="display_none">Partner Id<span class="required_span">*</span></span>
+						            <input type="text" id="partner_id" name="partner_id" required="required" t-attf-class="form-control mt-2 display_none" t-att-value="partner_id"/>
+						        </div>
+						         <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="name">Name</label>
+						            <input type="text" id="name" name="name" required="1" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="name"/>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6">
+						            <label class="col-form-label" for="name">Department</label>
+						            <input type="text" id="department"  name="department" t-attf-class="form-control mt-2" t-att-value="department"/>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6">
+						            <label class="col-form-label" for="name">Position</label>
+						            <input type="text" id="function" name="function" t-attf-class="form-control mt-2" t-att-value="function"/>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6">
+			                    	<label class="col-form-label" for="mobile">Phone</label>
+						            <input type="text" id="phone" name="phone" t-attf-class="form-control mt-2 _number number_field" t-att-value="phone"/>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6 form-field o_website_form_required">
+						        	<label class="col-form-label" for="mobile">Mobile</label>
+						            <input type="text" id="mobile" required="required" name="mobile" t-attf-class="form-control mt-2 _number o_website_form_input number_field" t-att-value="mobile"/>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="email">Email</label>
+						            <input type="email" id="email" required="required" name="email" t-attf-class="form-control mt-2 o_website_form_input" t-att-value="email"/>
+						        </div>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" id="contact_save" class="btn btn-secondary o_website_form_send popup_save popup_save_btn">Save</button>
+                        	</div>
+                        </footer>
+                    </div>
+               </form>
+            </div>
+        </div>
+	</template> 
+	<!-- End Contact Person  -->
+	
+	<!-- Start Affiliated Companies  -->
+	<template id="vendor_affiliated_contact_view" name="Vendor Affiliated Companies">
+		<div class="vr_form_vendor_affiliated_contact_view">
+		<table id="profile_affiliated_tables" class="affiliated_contact_ids vendor_tables vendor_affiliated_contact" name="affiliated_company_section">
+			<thead>
+				<th>Company Name</th>
+				<th>Relationship</th>
+				<th>Email</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<t t-set="affiliated_address_exist" t-value="partner.affiliated_contact_ids"></t>
+				<t t-if="not affiliated_address_exist">
+					<tr id="affiliated_empty_row" class="affiliat_tr empty-row-height">
+						 <td class="affiliated_name"></td>
+						 <td class="affiliated_relationship"></td>
+						 <td class="affiliated_email"></td>
+						 <td align="center">
+						 </td>
+					</tr>
+				</t>
+				<tr t-foreach="partner.affiliated_contact_ids" t-as="affiliated_contact_id" t-att-id="affiliated_contact_id.id" class="affiliat_tr">
+					<td class="name"><t t-esc="affiliated_contact_id.name"></t></td>
+					<td class="relationship"><t t-esc="affiliated_contact_id.relationship"></t></td>
+					<td class="email"><t t-esc="affiliated_contact_id.email"></t></td>
+					 <td align="center">
+						<span t-att-id="affiliated_contact_id.id" class="company_edit_view"><i class="fa fa-pencil-square-o span_icon icompany_edit"></i></span>
+						<span t-att-id="affiliated_contact_id.id" class="company_delete_view"><i class="fa fa-trash span_icon icompany_delete"></i></span>
+					 </td>
+				 </tr>
+			</tbody>
+		</table>
+		</div>
+	</template>
+
+	<template id="vendor_affiliated_contact_popup_view" name="Vendor Contact Person Creation">
+        <div role="dialog" id="affiliated_contact_creation" class="modal affiliated_contact_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+               <form id="view_affiliated_companies" name="affiliated_company_section" action="/view_profile/create_affiliated_contact" method="post" class="s_website_form_vendor_profile view_site_office_address" enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Affiliated/Subsidiary Companies</h4>
+                            <button type="button" id="profile_affiliated_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin affiliated_div">
+	                            <div class="form-group col-md-12 col-sm-12">
+						            <span class="display_none">Partner Id<span class="required_span">*</span></span>
+						            <input type="text" id="partner_id" name="partner_id" required="required" t-attf-class="form-control mt-2 display_none" t-att-value="partner_id"/>
+						        </div>
+	                            <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="name">Company Name</label>
+						            <input type="text" id="affiliat_name" required="required" name="name" t-attf-class="form-control mt-2 affiliated_name o_website_form_input" t-att-value="name"/>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+			                    	<label class="col-form-label" for="relationship">Relationship</label>
+						            <input type="text" id="affiliat_relationship" required="required" name="relationship" t-attf-class="form-control mt-2 affiliated_relationship o_website_form_input" t-att-value="relationship"/>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12 form-field o_website_form_required">
+						            <label class="col-form-label" for="email">Email</label>
+						            <input type="email" id="affiliat_email" required="required" name="email" t-attf-class="form-control mt-2 affiliated_email o_website_form_input" t-att-value="email"/>
+						        </div>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" id="affiliated_save" class="btn btn-secondary popup_save popup_save_btn">Save</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+	<!-- End Affiliated Companies  -->
+	
+	<!-- Key Product Service -->
+	
+	<template id="vendor_product_service_offered_view" name="Key Products and Serivces Offered">
+		<div class="vr_form_vendor_product_service_offered_view">
+		<table id="profile_product_tables" name="product_service_section" class="product_service_ids po_service_table vendor_tables vendor_product_service_offered">
+			<thead>
+				<th>Product/Service Name</th>
+				<th>Product/Service Description</th>
+				<th>Product Classification</th>
+				<th>Price</th>
+				<th>UOM</th>
+				<th>Attach Photo</th>
+				<th>File</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr id="product_empty_row" t-att-class="'pro_service_row kps_empt empty-row-height' if(len(partner.product_service_offered_line.ids) == 0) else 'pro_service_row kps_empt empty-row-height v_display_none'">
+						 <td name="product_service" class="p_name"></td>
+						 <td name="name" class="p_desc"></td>
+						 <td name="product_classification_id" class="p_category_id"></td>
+						 <td name="price" class="p_price"></td>
+						 <td name="uom" class="p_uom"></td>
+						 <td name="image_1920" class="p_photo"></td>
+						 <td name="image_1920" class="p_photo"></td>
+						 <td align="center">
+						 </td>
+				</tr>
+				<tr t-foreach="partner.product_service_offered_line" t-as="product_service_id" t-attf-id="pro_line#{product_service_id.id}" class="vproduct_service_tr pro_service_row">
+					 <td name="product_service"><t t-esc="product_service_id.product_service"></t></td>
+					 <td name="name"><t t-esc="product_service_id.name"></t></td>
+					 <td name="product_classification_id"><t t-esc="product_service_id.product_classification_id.name"></t></td>
+					 <td name="price"><t t-esc="product_service_id.price" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/></td>
+					 <td name="uom"><t t-esc="product_service_id.uom_id.name" /></td>
+					 <td align="center" name="image_1920">
+						<span t-if="product_service_id.image_1920" t-att-ps_id="product_service_id.id" action="" class="span_view vproduct_photo_view"><i class="fa fa-eye span_eye_icon iproduct_photo_view"></i> View</span>
+					 </td>
+					 <td align="center" name="attachment_ids">
+					 	<t t-set="attachment" t-value="request.env['ir.attachment'].sudo().search([('res_id', '=', product_service_id.id), ('res_model', '=', 'product.service.offered')])" />
+			  			<t t-if="len(attachment) > 0">
+			  				<t t-if="len(attachment) == 1">
+			  					<span class="span_view d-none product_file" t-att-attachment="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><t t-esc="attachment.name"/></span>
+								<t t-if="attachment.mimetype == 'application/pdf'">
+									<span class="span_view prod_file_view po_cursor" action="/show/product_document" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><i class="fa fa-eye span_eye_icon iproduct_file_view"></i> View</span>
+								</t>
+								<t t-else="">
+									<a class="al_txt_none" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id">
+										<span class="span_view" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><i class="fa fa-download span_eye_icon iproduct_file_view"></i> </span>
+									</a>
+								</t>
+			  				</t>
+			  				<t t-else="">
+			  					<span t-att-ps_id="product_service_id.id" class="span_view show_attachment_view po_cursor" action="/show/product/attach/popup"><i class="fa fa-eye span_eye_icon iproduct_file_view"></i> View</span>
+			  				</t>
+			  			</t>
+					 </td>
+					 <td align="center">
+						 <i t-att-id="product_service_id.id" class="fa fa-pencil-square-o span_icon product_edit_view kproduct_edit"></i>
+			  			 <i t-att-id="product_service_id.id" action="/delete/pro_service_line" class="fa fa-trash span_icon product_delete_view kproduct_delete"></i>
+			  		 </td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</template>
+	
+	<template id="show_product_attached_files" name="Preview">
+        <div role="dialog" id="dl_file_view" class="modal dl_file_view_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog" style="width: 80%; max-width: 100%; margin: 0% 10% 0% 10%;">
+                <form role="form" style="height:100%">
+                    <div class="modal-content" style="height:100%">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Preview</h4>
+                            <button type="button" class="close dl_pdf_close" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin" style="height:100%">
+						        <div class="form-group col-lg-12 dl_image_attach">
+						        	<iframe class="mt32 o_viewer_pdf" width="100%" height="100%"  t-attf-src="/web/static/lib/pdfjs/web/viewer.html?file=/web/content/#{attachment.id}" />
+						        </div>
+					        </div>
+                        </main>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+	
+	<template id="show_product_attachments_template" name="Multi Attachment">
+        <div role="dialog" id="multi_attach_view" class="modal multi_attach_view_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Attachment</h4>
+                            <button type="button" class="close multi_attach_close" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin">
+	                            <t t-foreach="attachments" t-as="attachment">
+						        	<t t-if="attachment.mimetype == 'application/pdf'">
+										<div style="width: 100%" class="span_view prod_file_view po_cursor vp_fs16" action="/show/product_document" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><t t-esc="attachment.name" /></div>
+									</t>
+									<t t-else="">
+										<div style="width: 100%">
+											<a class="al_txt_none" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id">
+												<span class="span_view vp_fw400" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><t t-esc="attachment.name" /></span>
+											</a>
+										</div>
+									</t>
+									<br></br>	
+						        </t>
+					        </div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" class="btn btn-secondary js_goto_event multi_attach_close">Ok</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+	
+	<template id="new_product_service_line">
+		<t t-foreach="pro_service_line" t-as="pro_service">
+			<tr t-attf-id="pro_line#{pro_service.id}" class="vproduct_service_tr pro_service_row vp_recent_item">
+				<td name="product_service"><t t-esc="pro_service.product_service"></t></td>
+				<td name="name"><t t-esc="pro_service.name"></t></td>
+				<td name="product_classification_id"><t t-esc="pro_service.product_classification_id.name"></t></td>
+				<td name="price"><t t-esc="pro_service.price" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/> </td>
+			  	<td name="uom"><t t-esc="pro_service.uom_id.name"></t></td>
+			  	<td align="center" name="image_1920">
+					<span t-if="pro_service.image_1920" t-att-ps_id="pro_service.id" class="span_view vproduct_photo_view"><i class="fa fa-eye span_eye_icon iproduct_photo_view"></i> View</span>
+				</td>
+				<td align="center" name="attachment_ids">
+			  		<t t-set="attachment" t-value="request.env['ir.attachment'].sudo().search([('res_id', '=', pro_service.id), ('res_model', '=', 'product.service.offered')])" />
+			  		<t t-if="len(attachment) > 0">
+			  			<t t-if="len(attachment) == 1">
+			  				<span class="span_view d-none product_file" t-att-attachment="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><t t-esc="attachment.name"/></span>
+							<t t-if="attachment.mimetype == 'application/pdf'">
+								<span class="span_view prod_file_view po_cursor vp_fs16" action="/show/product_document" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><i class="fa fa-eye span_eye_icon iproduct_file_view"></i> View</span>
+							</t>
+							<t t-else="">
+								<a class="al_txt_none" t-att-href="'/attachment/download?attachment_id=%i' % attachment.id">
+									<span class="span_view vp_fw400" t-att-id="attachment.id" t-attf-file_data="data:#{attachment.mimetype};base64,#{attachment.datas}"><i class="fa fa-download span_eye_icon iproduct_file_view"></i> </span>
+								</a>
+							</t>
+			  			</t>
+			  			<t t-else="">
+			  				<span t-att-ps_id="pro_service.id" class="span_view show_attachment_view po_cursor" action="/show/product/attach/popup"><i class="fa fa-eye span_eye_icon iproduct_file_view"></i> View</span>
+			  			</t>
+			  			
+			  		</t>
+			  	</td>
+			  	<td class="po_del_col po_td_wd">
+			  		<i t-att-id="pro_service.id" t-att-partner_id="partner_id" class="fa fa-pencil-square-o span_icon product_edit_view kproduct_edit"></i>
+			  		<i t-att-id="pro_service.id" t-att-partner_id="partner_id" action="/delete/pro_service_line" class="fa fa-trash span_icon product_delete_view kproduct_delete"></i>
+			  	</td>
+			 </tr>
+		 </t>
+	</template>
+	
+	<template id="product_service_offered_popup_view" name="Key Products and Serivces Offered Creation">
+        <div role="dialog" id="product_service_offered_creation" class="modal product_service_popup" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+            	<form id="product_service_form" name="product_service_section" action="/view_profile/create_product_service" method="post" class="s_website_form_vendor_profile" enctype="multipart/form-data">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <h4 class="modal-title">Key Products &amp; Services Offered</h4>
+                            <button type="button" id="profile_ps_offered_close" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body">
+                        	<div class="row row-no-margin new_product_form_popup">
+	                            <div class="form-group col-md-8 col-sm-8 product_service_div">
+						             <span>Product/Service Name<span class="required_span">*</span></span>
+						            <input type="text" id="product_service" name="product_service" required="required" t-attf-class="form-control mt-2" t-att-value="product_service"/>
+						        </div>
+						        <div class="form-group col-md-4 col-sm-4 product_image_attach">
+						        	<div class="product_image">
+						        		<t t-if="partner">
+						        			<t t-if="partner.image_1920">
+						        				<img class="vproducts-pic" t-att-src="website.image_url(partner, 'image_1920')"/>
+						        			</t>
+						        			<t t-else="">
+						        				<img class="vproducts-pic" src="/skit_vendor_portal/static/src/img/prod_img.png" placeholder="Click the icon to attach a photo"/>
+						        			</t>
+						        		</t>
+						        		<t t-else="">
+						        			<img class="vproducts-pic" src="/skit_vendor_portal/static/src/img/prod_img.png" placeholder="Click the icon to attach a photo"/>
+						        		</t>
+						        	</div>
+						        	<div class="prod_img_icon">
+								       <i id="vproduct_attach_icon" class="fa fa-paperclip vproduct_attach_icon" style="cursor:pointer"></i>
+								       <input id="vpro-pic-upload" class="vpro-pic-upload" style="display:none" type="file" accept="image/*"/>
+								    </div>
+						        </div>
+						        <div class="form-group col-md-12 col-sm-12">
+			                    	<span>Product/Service Description<span class="required_span">*</span></span>
+						            <textarea rows="3" id="pname" required="required" class="form-control mt-2 product_desc" t-attf-name="name"><t t-esc="name" /></textarea>
+						        </div>
+						        <div class="form-group col-md-6 col-sm-6">
+						            <span>Product Classification<span class="required_span">*</span></span>
+						            <select id="product_classification_id" name="product_classification_id" required="required" t-attf-class="form-control mt-2">
+										<option value=""></option>
+											<t t-foreach="product_classifications" t-as="pro">
+												<t t-if="product_classification_id == pro.id">
+													<option t-att-value="pro.id" t-att-selected="true" placeholder="Product Classification">
+														<t t-esc="pro.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="pro.id" placeholder="Product Classification">
+														<t t-esc="pro.name" />
+													</option>
+												</t>
+											</t>
+									</select>
+						        </div>
+						        <div class="form-group col-md-3 col-sm-3">
+						         	<span>Price<span class="required_span">*</span></span>
+						            <input type="text" id="p_price" name="price" required="1" t-attf-class="form-control mt-2 _price number_field" t-att-value="price"/>
+						        </div>
+						        <div class="form-group col-md-3 col-sm-3">
+						        	 <span>Unit of Measure<span class="required_span">*</span></span>
+						            <select id="uom_id" name="uom_id" required="1"  t-attf-class="form-control mt-2">
+										<option value=""></option>
+											<t t-foreach="product_uom" t-as="pu">
+												<t t-if="uom_id == pu.id">
+													<option t-att-value="pu.id" t-att-selected="true" placeholder="UoM">
+														<t t-esc="pu.name" />
+													</option>
+												</t>
+												<t t-else="">
+													<option t-att-value="pu.id" placeholder="UoM">
+														<t t-esc="pu.name" />
+													</option>
+												</t>
+											</t>
+									</select>
+						        </div>
+								<div class="form-group col-md-6 col-sm-6">
+									<div class="upload_file_div">
+			              			 	<span class="upload_file attach_fcur">Attach File <i id="product_attach_upload" class="fa fa-upload product_attach_upload"></i></span>
+			              			</div>
+			              		</div>
+			              		
+			              		<div class="form-group col-md-12 col-sm-12">
+			              			<t t-if="file_attached">
+			              				<div class="product_attachments">
+				              				<input type="file" id="product_attach_input" class="product_attach_input d-none" multiple="multiple"/>
+				              				<ul id="product_attach_fileList" class="product_attach_fileList">
+				              					<t t-foreach="file_attachments" t-as="attachment">
+				              						<li t-att-id="attachment['id']" t-att-data="attachment['pfile_name']" t-attf-file_data="data:#{attachment['type']};base64,#{attachment['pfile_content']}"><t t-esc="attachment['pfile_name']" /><span class="remove-list" onclick="return this.parentNode.remove()"><i class="fa fa-trash span_icon"></i></span></li>
+				              					</t>
+				              				</ul>
+				              				<p class="pro_attach_p d-none">Click the upload icon to add a file</p>
+				              			</div>
+			              			</t>
+			              			<t t-if="not file_attached">
+				              			<div class="product_attachments">
+				              				<input type="file" id="product_attach_input" class="product_attach_input d-none" multiple="multiple"/>
+				              				<ul id="product_attach_fileList" class="product_attach_fileList"></ul>
+				              				<p class="pro_attach_p">Click the upload icon to add a file</p>
+				              			</div>
+			              			</t>
+			              		</div>
+					        </div>
+                       	</main>
+                       	<footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" t-att-partner_id="partner_id" t-att-ps_id="ps_id" action="/save/pro_service" id="ps_offered_save" class="btn btn-secondary js_goto_event popup_save">Save</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+</odoo>

@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+<!--        <record id="property_admin_sale_view_form_inherited" model="ir.ui.view">-->
+<!--            <field name="name">property.admin.sale.form.inherited</field>-->
+<!--            <field name="model">property.admin.sale</field>-->
+<!--            <field name="inherit_id" ref="property_admin_monitoring.property_admin_sale_view_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//button[@name='%(property_admin_monitoring.property_sale_validate_submitted_docs_action_wizard)d']" position="attributes">-->
+<!--                    <attribute name="groups">admin_system_user_access.group_confirm_validate_docs</attribute>-->
+<!--                    <attribute name="domain">[('check_user','=', True)]</attribute>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="property_sale_validate_submitted_docs_inherited" model="ir.ui.view">
+            <field name="name">property.sale.validate.submitted.docs.form.inherited</field>
+            <field name="model">property.sale.validate.submitted.docs</field>
+            <field name="inherit_id" ref="property_admin_monitoring.property_sale_validate_submitted_docs"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='process_validated_docs']" position="attributes">
+                    <attribute name="groups">admin_system_user_access.group_confirm_validate_docs</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

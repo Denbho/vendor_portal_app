@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="po_notification_template" name="PO Notifiction Form">
+		<t t-call="website.layout">
+	    	<div class="container">
+	    		<div class="o_portal container mt-3">				    
+					<div class="row align-items-center bg-white no-gutters sks_form_outline">
+				    	<div class="sks_form_outline1" style="box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%); border-top: none; border-radius: 0px; width: 100%; display: inline-flex;padding-left: 0;">
+					        <div class="col" style="padding: 0px;">
+					            <ol class="o_portal_submenu breadcrumb mb-0 py-2 flex-grow-1" style="padding-left: 15px; font-size: 20px; font-weight: bold;">
+	            					<li class="breadcrumb-item" ><a href="/my/home" aria-label="Home" title="Home"><i class="fa fa-home"></i></a></li>
+									<li class="breadcrumb-item ">
+										<a href="/my/purchase?">My Purchase Orders</a>
+									</li>
+									<li class="breadcrumb-item ">
+										<a href="/my/purchase?">Notifications</a>
+									</li>
+									<li class="breadcrumb-item active">
+										<t t-esc="status" />
+									</li>
+        						</ol>
+					        </div>
+				        </div>
+				   </div>
+				</div>
+	        	<div>
+		    		<div id="po_notification">
+		    			<div class="card po_bnone po_delivery_form">
+						  	<div class="card-header menu_noti_status" style="padding: 0% 0% 0% 0.5%; margin: 0% 2%; box-shadow: 0 0.5rem 0.5rem rgb(0 0 0 / 10%);">
+							  	<div class="row">
+							  		<div class="col-lg-10">
+							  			<h4 class="menu_noti_title"><span>Notifications</span></h4>
+							  		</div>
+							  		<div class="col-lg-2">
+							  			<label class="po_status_label">Status </label>
+							  			<t t-if="status == 'Late'">
+							  				<span class="po_late_not"><t t-esc="status" /></span>
+							  			</t>
+							  			<t t-if="status == 'Today'">
+							  				<span class="po_today_not"><t t-esc="status" /></span>
+							  			</t>
+							  			<t t-if="status == 'Future'" >
+							  				<span class="po_future_not"><t t-esc="status" /></span>
+							  			</t>
+							  		</div>
+							  	</div>
+						  	</div>
+						  	<div class="card-body menu_noti_body">
+						  		<t t-foreach="po_datas" t-as="po_data" >
+						  			<div class="accordion_noti"><t t-esc="po_data['key']" />
+						  				<i class="fa fa-angle-down po_noti_icon" />
+						  			</div>
+						  			<div class="panel_noti">
+						  				<div class="panel_center_noti">
+									  	<p class="po_mt2">Dear<![CDATA[&nbsp;]]><t t-esc="po_data['vendor_name']" />,</p>
+		                        		<t t-if="status == 'Late'">
+		                        			<p class="po_mt2">We have issued in your favor and you have accepted a <span class="po_txt_active">total of <t t-esc="po_data['count']" /> </span> purchase orders (POs) as of late. This is a reminder of the following delivery commitments for these POs:</p>
+		                        		</t>
+		                        		<t t-if="status == 'Today'">
+							  				<p class="po_mt2">You have a <span class="po_txt_active">total of <t t-esc="po_data['count']" /> </span> purchase orders due for delivery <span class="po_txt_active">TODAY.</span></p>
+							  			</t>
+							  			<t t-if="status == 'Future'" >
+							  				<p class="po_mt2">This is a reminder of your commitment to deliver materials covered by a <span class="po_txt_active">total of <t t-esc="po_data['count']" /> </span> purchase orders <span class="po_txt_active">in (<t t-esc="po_data['days']" />) days.</span></p>
+							  			</t>
+							  			<div class="my_po_form_popup">
+		                        		<table class="col-lg-12 po_del_table" style="line-height: 2em;">
+		  									<thead>
+		  										<tr>
+		  											<th>Company Name</th>
+		  											<th>PO Number</th>
+		  											<th>Expected Delivery Date</th>
+		  											<th>PO Amount</th>
+		  											<th>Deliver To</th>
+		  										</tr>
+		  									</thead>
+		  									<tbody>
+		  										<t t-foreach="po_data['orders']" t-as="order">
+		  											<tr>
+		  												<td class="po_del_col"><t t-esc="order.company_id.name" /></td>
+		  												<td class="po_del_col"><a class="noti_blue" t-attf-href="/my/purchase/#{order.id}?#{keep_query()}"><t t-esc="order.name"/></a></td>
+		  												<td class="po_del_col"><span t-field="order.expected_delivery_date" t-options="{'widget': 'date'}"/></td>
+		  												<td class="po_del_col"><span t-field="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/> </td>
+		  												<td class="po_del_col"><t t-esc="order.location_id.name" /></td>
+		  											</tr>
+		  										</t>
+		  									</tbody>
+		  								</table>
+		  								</div>
+		                        		<p class="po_mt2">Delivery instructions and contact details of authorized receiver are indicated in the respective POs.</p>
+		                        		<t t-if="status == 'Late'">
+		                        			<p>We expect your delivery to arrive on the date indicated above. Should there be issues with this delivery, please contact us at procurement.sourcing@camella.com.ph.</p>
+		                        		</t>
+		                        		<t t-if="status == 'Today'">
+							  				<p>Please disregard this message if delivery has been made.</p>
+							  			</t>
+							  			<t t-if="status == 'Future'" >
+							  				<p>Please advise us immediately at procurement.sourcing@camella.com.ph should there be issues with these POs.</p>
+							  			</t>
+		                        		<p style="margin-bottom: 0;">Regards,</p>
+		                        		<p>Vendor Hub</p>
+		                        		</div>
+									</div>
+						  		</t>
+						  	</div>
+					  	</div>
+		    		</div>
+		    	</div>
+		    </div>
+		</t>
+	</template>
+	
+	<template id="po_reminder_popup" name="PO Reminder">
+        <div role="dialog" id="reminder_popup_modal" class="modal" tabindex="-1" t-ignore="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <form role="form">
+                    <div class="modal-content">
+                        <header class="modal-header">
+                            <button type="button" class="close close_reminer_popup" aria-label="Close">×</button>
+                        </header>
+                        <main class="modal-body po_pd">
+                        	<div class="row row-no-margin reminder_modal_main">
+                        			<div class="late_notification">
+                        				<t t-if="(late_values['count']) > 0">
+                        					<t t-set="noti_value" t-value="late_values" />
+                        					<t t-call="skit_website_my_po.reminder_noti_template" />
+                        				</t>
+                        			</div>
+                        			<div class="today_notification">
+                        				<t t-if="(today_values['count']) > 0">
+                        					<t t-set="noti_value" t-value="today_values" />
+                        					<t t-call="skit_website_my_po.reminder_noti_template" />
+                        				</t>
+                        			</div>
+                        			<div class="future_notification" style="width: 100%;">
+                        				<t t-if="(future_values['count']) > 0">
+                        					<t t-set="noti_value" t-value="future_values" />
+                        					<t t-call="skit_website_my_po.reminder_noti_template" />
+                        				</t>
+                        			</div> 
+                        	</div>
+                        </main>
+                        <footer class="modal-footer">
+                        	<div class="form-group col-md-12 col-sm-12 popup_footer_div">
+                            	<button type="button" class="btn btn-secondary js_goto_event popup_save close_reminer_popup k_btn_my_po_form_popup">Okay</button>
+                        	</div>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+	</template>
+	
+	<template id="reminder_noti_template">
+		<h5>
+			<t t-if="noti_value['status'] == 'Late'">
+				Past Deliveries :
+		    </t>
+		    <t t-if="noti_value['status'] == 'Today'">
+		        Today Deliveries :
+			</t>
+			<t t-if="noti_value['status'] == 'Future'" >
+				Upcoming Deliveries :
+			</t>
+		</h5>
+		<div class="reminder_center_noti">
+			 <p class="po_mt2">Dear<![CDATA[&nbsp;]]><t t-esc="noti_value['vendor_name']" />,</p> 
+		        <t t-if="noti_value['status'] == 'Late'">
+		        	<p class="po_mt2">We have issued in your favor and you have accepted a <span class="po_txt_active">total of <t t-esc="noti_value['count']" /> </span> purchase orders (POs) as of late. This is a reminder of the following delivery commitments for these POs:</p>
+		        </t>
+		        <t t-if="noti_value['status'] == 'Today'">
+					<p class="po_mt2">You have a <span class="po_txt_active">total of <t t-esc="noti_value['count']" /> </span> purchase orders due for delivery <span class="po_txt_active">TODAY.</span></p>
+				</t>
+				<t t-if="noti_value['status'] == 'Future'" >
+					<p class="po_mt2">This is a reminder of your commitment to deliver materials covered by a <span class="po_txt_active">total of <t t-esc="noti_value['count']" /> </span> purchase orders <span class="po_txt_active">in (<t t-esc="noti_value['days']" />) days.</span></p>
+				</t>
+				<div class="my_po_form_popup">
+		        <table class="col-lg-12 po_del_table" style="line-height: 2em;">
+		  			<thead>
+		  				<tr>
+		  					<th>Company Name</th>
+		  					<th>PO Number</th>
+		  					<th>Expected Delivery Date</th>
+		  					<th>PO Amount</th>
+		  					<th>Deliver To</th>
+		  				</tr>
+		  			</thead>
+		  			<tbody>
+		  				<t t-foreach="noti_value['orders']" t-as="order">
+		  					<tr style="background: none;">
+		  						<td class="po_del_col"><t t-esc="order.company_id.name" /></td>
+		  						<td class="po_del_col"><a class="noti_blue" t-attf-href="/my/purchase/#{order.id}?#{keep_query()}"><t t-esc="order.name"/></a></td>
+		  						<td class="po_del_col"><span t-field="order.expected_delivery_date" t-options="{'widget': 'date'}"/></td>
+		  						<td class="po_del_col"><span t-field="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/> </td>
+		  						<td class="po_del_col"><t t-esc="order.location_id.name" /></td>
+		  					</tr>
+		  				</t>
+		  			</tbody>
+		  		</table>
+		  		</div>
+		        <p class="po_mt2">Delivery instructions and contact details of authorized receiver are indicated in the respective POs.</p>
+		        <t t-if="noti_value['status'] == 'Late'">
+		            <p>We expect your delivery to arrive on the date indicated above. Should there be issues with this delivery, please contact us at procurement.sourcing@camella.com.ph.</p>
+		        </t>
+		        <t t-if="noti_value['status'] == 'Today'">
+					<p>Please disregard this message if delivery has been made.</p>
+				</t>
+				<t t-if="noti_value['status'] == 'Future'" >
+					<p>Please advise us immediately at procurement.sourcing@camella.com.ph should there be issues with these POs.</p>
+				</t>
+		        <p style="margin-bottom: 0;">Regards,</p>
+		        <p>Vendor Hub</p>
+		</div>
+	</template>
+	
+</odoo>
