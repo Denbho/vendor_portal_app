@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="countered_wizard_form" model="ir.ui.view">
+            <field name="name">countered.wizard.form</field>
+            <field name="model">edts.countered.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="countering_notes"/>
+                    </group>
+                    <footer>
+                        <button name="countered_action_proceed" string="Proceed" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

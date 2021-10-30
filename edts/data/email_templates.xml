@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_edts_status_update_requestor" model="mail.template">
+            <field name="name">EDTS - Status Update Requestor</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - ${object.status}</field>
+            <field name="lang">${object.requestor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.requestor.name},</b></p>
+                <p>
+                    Your <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> is now <b>${object.edts_status_label}.</b> <br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${object.edts_company_id.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_status_update_dept_head" model="mail.template">
+            <field name="name">EDTS - Status Update Dept. Head</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.approver.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - ${object.status}</field>
+            <field name="lang">${object.requestor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.approver.name},</b></p>
+                <p>
+                    <b>${object.requestor.name}'s</b> request for <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> is now <b>${object.edts_status_label}.</b> <br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${object.edts_company_id.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_status_update_acctg" model="mail.template">
+            <field name="name">EDTS - Status Update Acctg</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.processor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - ${object.status}</field>
+            <field name="lang">${object.requestor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.processor.name},</b></p>
+                <p>
+                    <b>${object.requestor.name}'s</b> request for <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> is now <b>${object.edts_status_label}.</b> <br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${object.edts_company_id.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_cron_edts_for_approval_dept_head" model="mail.template">
+            <field name="name">EDTS Cron - For Approval Dept. Head</field>
+            <field name="model_id" ref="edts.model_res_users"/>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="subject">EDTS Pending for Approval</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.name},</b></p>
+                <p>
+                    The following EDTS is pending for your approval. <br/>
+                    For more information, refer to the EDTS links below.
+
+                    <br/><br/>
+                    <b>EDTS List:</b>
+                    <br/>
+
+                    % for record in ctx['records']:
+                    <a href="${ctx['base_url']}/web#id=${record.id}&amp;view_type=form&amp;view_id=${ctx['view_id']}&amp;model=account.move">${record.name}</a><br/>
+                    %endfor
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_cron_edts_for_validation_acctg" model="mail.template">
+            <field name="name">EDTS Cron - For Validation Acctg</field>
+            <field name="model_id" ref="edts.model_res_users"/>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="subject">EDTS Pending for Validation</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.name},</b></p>
+                <p>
+                    The following EDTS is pending for your validation. <br/>
+                    For more information, refer to the EDTS links below.
+
+                    <br/><br/>
+                    <b>EDTS List:</b>
+                    <br/>
+
+                    % for record in ctx['records']:
+                    <a href="${ctx['base_url']}/web#id=${record.id}&amp;view_type=form&amp;view_id=${ctx['view_id']}&amp;model=account.move">${record.name}</a><br/>
+                    %endfor
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_cron_edts_for_processing_finance" model="mail.template">
+            <field name="name">EDTS Cron - For Processing Finance</field>
+            <field name="model_id" ref="edts.model_res_users"/>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="subject">EDTS Pending for Processing Finance</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.name},</b></p>
+                <p>
+                    The following EDTS is pending for your action. <br/>
+                    For more information, refer to the EDTS links below.
+
+                    <br/><br/>
+                    <b>EDTS List:</b>
+                    <br/>
+
+                    % for record in ctx['records']:
+                    <a href="${ctx['base_url']}/web#id=${record.id}&amp;view_type=form&amp;view_id=${ctx['view_id']}&amp;model=account.move">${record.name}</a><br/>
+                    %endfor
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_for_approval_dept_head" model="mail.template">
+            <field name="name">EDTS - For Approval Dept. Head</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.approver.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - For Approval</field>
+            <field name="lang">${object.approver.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.approver.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> is <b>pending for your approval.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${object.requestor.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_for_validation_acctg" model="mail.template">
+            <field name="name">EDTS - For Validation Acctg.</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.processor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - For Validation</field>
+            <field name="lang">${object.processor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.processor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> is <b>pending for your validation.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${object.requestor.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <!-- Recall -->
+        <record id="email_template_edts_recalled_requestor" model="mail.template">
+            <field name="name">EDTS - Recalled</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Recalled</field>
+            <field name="lang">${object.requestor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.requestor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>recalled.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_recalled_dept_head" model="mail.template">
+            <field name="name">EDTS - Recalled</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.approver.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Recalled</field>
+            <field name="lang">${object.approver.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.approver.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>recalled.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_recalled_acctg" model="mail.template">
+            <field name="name">EDTS - Recalled</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.processor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Recalled</field>
+            <field name="lang">${object.processor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.processor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>recalled.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <!-- Return -->
+        <record id="email_template_edts_returned_requestor" model="mail.template">
+            <field name="name">EDTS - Returned</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Returned</field>
+            <field name="lang">${object.requestor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.requestor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>returned.</b><br/>
+                    Reason for return is <b>${object.wizard_reason}.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_returned_dept_head" model="mail.template">
+            <field name="name">EDTS - Returned</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.approver.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Returned</field>
+            <field name="lang">${object.approver.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.approver.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>returned.</b><br/>
+                    Reason for return is <b>${object.wizard_reason}.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_returned_acctg" model="mail.template">
+            <field name="name">EDTS - Returned</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.processor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Returned</field>
+            <field name="lang">${object.processor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.processor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>returned.</b><br/>
+                    Reason for return is <b>${object.wizard_reason}.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <!-- Reject -->
+        <record id="email_template_edts_rejected_requestor" model="mail.template">
+            <field name="name">EDTS - Rejected</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Rejected</field>
+            <field name="lang">${object.requestor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.requestor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>rejected.</b><br/>
+                    Reason for reject is <b>${object.wizard_reason}.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_rejected_dept_head" model="mail.template">
+            <field name="name">EDTS - Rejected</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.approver.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Rejected</field>
+            <field name="lang">${object.approver.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.approver.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>rejected.</b><br/>
+                    Reason for reject is <b>${object.wizard_reason}.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_rejected_acctg" model="mail.template">
+            <field name="name">EDTS - Rejected</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.processor.partner_id.email|safe}</field>
+            <field name="subject">${object.edts_subtype_label} &lt;${object.name}&gt; - Rejected</field>
+            <field name="lang">${object.processor.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>${object.processor.name},</b></p>
+                <p>
+                    <b>${object.edts_subtype_label} &lt;${object.name}&gt;</b> has been <b>rejected.</b><br/>
+                    Reason for reject is <b>${object.wizard_reason}.</b><br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>${ctx['sender']}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_payment_released" model="mail.template">
+            <field name="name">EDTS - Payment Released</field>
+            <field name="model_id" ref="edts.model_edts_payment_reference_line"/>
+            <field name="email_to">${object.account_move_id.vendor_id.email|safe}</field>
+            <field name="subject">${object.payment_doc} &lt;${object.ap_doc}&gt; - Payment Released</field>
+            <field name="lang">${object.account_move_id.vendor_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>Ma'am/Sir,</b></p>
+                <p>
+                    % if object.mode not in ['wire']:
+                        This is to inform you that payment for
+                        % if object.account_move_id.edts_purchase_id:
+                            <b>${object.account_move_id.edts_purchase_id.name} - </b>
+                        % endif
+                        <b>${object.ap_doc} - ${object.account_move_id.reason}</b> is ready for pickup.
+                    % else:
+                        This is to inform you that payment for
+                        % if object.account_move_id.edts_purchase_id:
+                            <b>${object.account_move_id.edts_purchase_id.name} - </b>
+                        % endif
+                        <b>${object.ap_doc} - ${object.account_move_id.reason}</b> was paid on <b>${object.released_date.strftime('%m/%d/%Y')}.</b>
+                    %endif
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>Finance Department</b> <br/>
+                    <b>${object.account_move_id.edts_company_id.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_billing_acknowledge" model="mail.template">
+            <field name="name">EDTS - Billing Acknowledge</field>
+            <field name="model_id" ref="edts.model_edts_payment_reference_line"/>
+            <field name="email_to">${object.account_move_id.vendor_id.email|safe}</field>
+            <field name="subject">${object.payment_doc} &lt;${object.ap_doc}&gt; - Billing Acknowledge</field>
+            <field name="lang">${object.account_move_id.vendor_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>Ma'am/Sir,</b></p>
+                <p>
+                    This is to acknowledge receipt of your <b>${object.ap_doc} - ${object.account_move_id.reason}.</b>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>Purchasing/Operations</b> <br/>
+                    <b>${object.account_move_id.edts_company_id.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_edts_billing_return" model="mail.template">
+            <field name="name">EDTS - Billing Return</field>
+            <field name="model_id" ref="edts.model_edts_payment_reference_line"/>
+            <field name="email_to">${object.account_move_id.vendor_id.email|safe}</field>
+            <field name="subject">${object.payment_doc} &lt;${object.ap_doc}&gt; - Billing Return</field>
+            <field name="lang">${object.account_move_id.vendor_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear <b>Ma'am/Sir,</b></p>
+                <p>
+                    This is to inform you the return of your <b>${object.ap_doc} - ${object.account_move_id.reason}.</b>
+                </p>
+
+                <br/>
+                <p>
+                    Sincerely,<br/>
+                    <b>Purchasing/Operations</b> <br/>
+                    <b>${object.account_move_id.edts_company_id.name}</b>
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_renewal_notification" model="mail.template">
+            <field name="name">EDTS - Renewal Notification</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">&lt;${object.name}&gt; ${object.journal_id.name} Renewal Notification</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear ${object.requestor.name},</p>
+                <p>
+                    This is to notify you that the record <b>${object.name}</b> with an EDTS subtype of <b>${object.edts_subtype_label}</b> and journal of <b>${object.journal_id.name}</b>
+                    will expire on <b>${object.valid_to}</b>.
+                    <br/>
+                    Kindly go to EDTS Application >
+                    % if object.edts_subtype == 'agency_contracts_accruals':
+                        Agency Contracts > Templates
+                    % endif
+                    % if object.edts_subtype == 'agency_contracts_monthly':
+                        Agency Contracts > Monthly
+                    % endif
+                    % if object.edts_subtype == 'recurring_transactions_accruals':
+                        Recurring Transactions > Templates
+                    % endif
+                    % if object.edts_subtype == 'recurring_transactions_monthly':
+                        Recurring Transactions > Monthly
+                    % endif
+                    > search for <b>${object.name}</b>
+                    <br/>
+                    and <b>renew</b> or <b>extend</b> the said record.
+                    <br/><br/>
+                    Thank you!
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_completed_notification" model="mail.template">
+            <field name="name">EDTS - Completed Notification</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">&lt;${object.name}&gt; ${object.journal_id.name} Completed Notification</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear ${object.requestor.name},</p>
+                <p>
+                    This is to notify you that the record <b>${object.name}</b> with an EDTS subtype of <b>${object.edts_subtype_label}</b> and journal of <b>${object.journal_id.name}</b>
+                    is already completed.
+                    <br/>
+                    The validity of the record ended on <b>${object.valid_to}</b>.
+                    <br/><br/>
+                    Thank you!
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_is_renewed_notification" model="mail.template">
+            <field name="name">EDTS - Renewed Notification</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">&lt;${object.name}&gt; ${object.journal_id.name} Renewed Notification</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear ${object.requestor.name},</p>
+                <p>
+                    This is to notify you that the record <b>${object.name}</b> with an EDTS subtype of <b>${object.edts_subtype_label}</b> and journal of <b>${object.journal_id.name}</b>
+                    has been renewed.
+                    <br/>
+                    The renewed record is <b>${object.new_renewal_id.name}</b> and is valid from <b>${object.new_renewal_id.valid_from}</b> until
+                    <b>${object.new_renewal_id.valid_to}</b>. Please process the renewed record to include it in processing the recurring invoices.
+                    <br/><br/>
+                    Thank you!
+                </p>
+            </field>
+        </record>
+
+        <record id="email_template_is_extended_notification" model="mail.template">
+            <field name="name">EDTS - Extended Notification</field>
+            <field name="model_id" ref="edts.model_account_move"/>
+            <field name="email_to">${object.requestor.partner_id.email|safe}</field>
+            <field name="subject">&lt;${object.name}&gt; ${object.journal_id.name} Extended Notification</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear ${object.requestor.name},</p>
+                <p>
+                    This is to notify you that the record <b>${object.name}</b> with an EDTS subtype of <b>${object.edts_subtype_label}</b> and journal of <b>${object.journal_id.name}</b>
+                    has been extended.
+                    <br/>
+                    The record is now until <b>${object.valid_to}</b>.
+                    <br/><br/>
+                    Thank you!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="rejected_wizard_form" model="ir.ui.view">
+            <field name="name">rejected.wizard.form</field>
+            <field name="model">edts.reason.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="is_remarks_required" invisible="1"/>
+                        <field name="rejection_id" options="{'no_create':True, 'no_open': True}" required="1"/>
+                        <field name="wizard_remarks" string='Rejection Remarks' attrs="{'required': [('is_remarks_required', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="reject_action_proceed" string="Ok" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="returned_wizard_form" model="ir.ui.view">
+            <field name="name">returned.wizard.form</field>
+            <field name="model">edts.reason.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="is_remarks_required" invisible="1"/>
+                        <field name="return_id" options="{'no_create':True, 'no_open': True}" required="1"/>
+                        <field name="wizard_remarks" string='Return Remarks' attrs="{'required': [('is_remarks_required', '=', True)]}"/>
+                    </group>
+                    <footer>
+                        <button name="return_action_proceed" string="Ok" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="accruals_or_monthly_extension_form" model="ir.ui.view">
+            <field name="name">accruals.or.monthly.extension.form</field>
+            <field name="model">edts.reason.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="is_remarks_required" invisible="1"/>
+                        <field name="extension_reason_id" options="{'no_create':True, 'no_open': True}" required="1"/>
+                        <field name="wizard_remarks" string='Extension Remarks' attrs="{'required': [('is_remarks_required', '=', True)]}"/>
+
+                        <field name="valid_from" readonly="1"/>
+                        <field name="valid_to"/>
+                    </group>
+                    <footer>
+                        <button name="extend_action_proceed" string="Proceed" confirm="Would you like to proceed?" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

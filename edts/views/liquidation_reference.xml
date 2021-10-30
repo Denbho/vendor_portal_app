@@ -1,0 +1,202 @@
+<odoo>
+    <data>
+        <record id="liquidation_reference_form" model="ir.ui.view">
+            <field name="name">liquidation.reference.form</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Liquidation Reference">
+                    <header>
+                    <field name="liquidation_reference_line_ids" invisible="1"/>
+                    <button name="submit_request" string="Submit" type="object" class="btn btn-primary"
+                            attrs="{'invisible' : ['|', ('name', '=', False), ('status', 'not in', ['draft'])]}"/>
+                    <button name="approve_request" string="Approve" type="object" class="btn btn-primary"
+                        attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_head'])]}"/>
+                   <button name="update_submission_status" string="Update Submission Status" type="object" class="btn btn-primary"
+                            attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_accounting']), ('submission_status', 'in', ['fully_submitted'])]}"/>
+                    <button name="update_liquidation_status" string="Update Liquidation Status" type="object" class="btn btn-primary"
+                            attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_accounting']), ('liquidation_status', 'in', ['fully_liquidated'])]}"/>
+                    <button name="validate_request" string="Validate" type="object" class="btn btn-primary"
+                        attrs="{'invisible' : ['|', '|', ('status', 'not in', ['waiting_for_accounting']), ('submission_status', 'not in', ['fully_submitted']), ('liquidation_status', 'not in', ['fully_liquidated'])]}"/>
+                    <button name="cancel_request" string="Cancel" type="object" class="btn btn-primary btn-danger"
+                            attrs="{'invisible' : [('status', 'not in', ['waiting_for_head', 'waiting_for_accounting'])]}"/>
+                    <button name="recall_request" string="Recall" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                            attrs="{'invisible' : [('status', 'not in', ['waiting_for_head', 'waiting_for_accounting'])]}"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="draft,waiting_for_head,waiting_for_accounting,validated"></field>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1 attrs="{'invisible' : [('name', '=', False)]}">
+                              <field name="name"/>
+                            </h1>
+                            <div attrs="{'invisible' : [('account_move_id', '=', False)]}">
+                                <label for='account_move_id'/>
+                                <field name='account_move_id'/>
+                            </div>
+                        </div>
+
+                        <group col="2">
+                            <group>
+                                <field name="request_date"/>
+                                <field name="company_id"/>
+                                <field name="company_code"/>
+                                <field name="requestor"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="amount"/>
+                                <field name="submission_status" readonly="1"/>
+                                <field name="liquidation_status" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Liquidation Lines">
+                                <field name="liquidation_reference_line_ids" attrs="{'readonly': [('status', 'in', ['validated'])]}">
+                                    <tree editable="bottom" string="Liquidation Lines">
+                                        <control>
+                                            <create name="add_line_control" string="Add line"/>
+                                        </control>
+
+                                        <field name="invoice_doc_number" required="1"/>
+                                        <field name="or_number" optional="show"/>
+                                        <field name="or_date" optional="show"/>
+                                        <field name="tin" optional="show"/>
+                                        <field name="payee" required="1"/>
+                                        <field name="liquidation_type_id" required="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="vat_sales"/>
+                                        <field name="input_tax"/>
+                                        <field name="gross_amount" required="1" sum="Gross Amount"/>
+                                        <button string="View" name="view_liquidation_line" icon="fa-eye" type="object"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Overage/Shortage Details" attrs="{'invisible' : ['|', ('liquidation_reference_line_ids', '=', []), ('total_liquidated_amount', '=', 0)]}">
+                                <group col="2">
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="amount" string="Budget Request"/>
+                                        <field name="total_liquidated_amount"/>
+                                        <separator/>
+                                        <field name="overage_shortage"/>
+                                        <separator/>
+                                        <field name="or_number_overage" attrs="{'readonly': [('status', 'in', ['validated'])]}"/>
+                                        <field name="voucher_reference_shortage" attrs="{'readonly': [('status', 'in', ['validated'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Tracking Details">
+                                <group col="2">
+                                    <group>
+                                        <field name="submitted_by"/>
+                                        <field name="submitted_date"/>
+                                        <separator/>
+                                        <field name="approved_by"/>
+                                        <field name="approved_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="received_by"/>
+                                        <field name="received_date"/>
+                                        <separator/>
+                                        <field name="audited_by"/>
+                                        <field name="audited_date"/>
+                                        <separator/>
+                                        <field name="validated_by"/>
+                                        <field name="validated_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Approval Signatures"
+                              attrs="{'invisible': ['&amp;', ('dept_head_signature', '=', False), ('accounting_signature', '=', False)]}">
+                            <group>
+                                <label colspan="2" for="dept_head_signature"
+                                       attrs="{'invisible': [('dept_head_signature', '=', False)]}"/>
+                                <div attrs="{'invisible': [('dept_head_signature', '=', False)], 'readonly' : True}">
+                                    <field name="approved_by"/>
+                                    <field colspan="2" name="dept_head_signature" widget="signature"/>
+                                    <separator/>
+                                </div>
+
+                                <label colspan="2" for="accounting_signature"
+                                       attrs="{'invisible': [('accounting_signature', '=', False)]}"/>
+                                <div attrs="{'invisible': [('accounting_signature', '=', False)], 'readonly' : True}">
+                                    <field name="validated_by"/>
+                                    <field colspan="2" name="accounting_signature" widget="signature"/>
+                                </div>
+                            </group>
+                        </page>
+                        </notebook>
+                        <group name="description" string="Description">
+                            <field name="description" nolabel="1" colspan="2" placeholder="Liquidation Reference Description"/>
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_tree" model="ir.ui.view">
+            <field name="name">liquidation.reference.tree</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Liquidation Reference" create="false">
+                    <field name="account_move_id"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="liquidation_status"/>
+                    <field name="submission_status"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_from_edts_tree" model="ir.ui.view">
+            <field name="name">liquidation.reference.from.edts.tree</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Liquidation Reference">
+                    <field name="account_move_id"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="liquidation_status"/>
+                    <field name="submission_status"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="liquidation_reference_action_window">
+            <field name="name">Liquidation Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">edts.liquidation.reference</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('liquidation_reference_tree')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('liquidation_reference_form')})]"/>
+            <field name="search_view_id" ref="edts_liquidation_details_search_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for Liquidation
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

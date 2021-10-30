@@ -1,0 +1,288 @@
+<odoo>
+    <data>
+        <!--EDTS BUTTONS-->
+        <record model="ir.ui.view" id="edts_form_view">
+            <field name="name">edts.invoice.form.view</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="edts.view_move_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='reject_edts']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level2</attribute>
+                </xpath>
+                <xpath expr="//button[@name='return_edts']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level2</attribute>
+                </xpath>
+                <xpath expr="//button[@name='approve_edts']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='validate_edts']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='countered_edts']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level2</attribute>
+                </xpath>
+                <xpath expr="//button[@name='process_finance']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level11</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Liquidation Details Tree View-->
+        <record id="liquidation_reference_tree" model="ir.ui.view">
+            <field name="name">liquidation.reference.tree</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level1')),(4, ref('edts_user_access.group_edts_level2'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_tree1" model="ir.ui.view">
+            <field name="name">liquidation.reference.tree1</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_tree2" model="ir.ui.view">
+            <field name="name">liquidation.reference.tree2</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level4')),(4, ref('edts_user_access.group_edts_level5')),(4, ref('edts_user_access.group_edts_level6')),(4, ref('edts_user_access.group_edts_level7')),(4, ref('edts_user_access.group_edts_level8')),(4, ref('edts_user_access.group_edts_level9')),(4, ref('edts_user_access.group_edts_level10'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_tree3" model="ir.ui.view">
+            <field name="name">liquidation.reference.tree3</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level11'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">1</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Liquidation Details Form View-->
+        <record id="liquidation_reference_form" model="ir.ui.view">
+            <field name="name">liquidation.reference.form</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level1')),(4, ref('edts_user_access.group_edts_level2'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_form1" model="ir.ui.view">
+            <field name="name">liquidation.reference.form1</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_form2" model="ir.ui.view">
+            <field name="name">liquidation.reference.form2</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level4')),(4, ref('edts_user_access.group_edts_level5')),(4, ref('edts_user_access.group_edts_level6')),(4, ref('edts_user_access.group_edts_level7')),(4, ref('edts_user_access.group_edts_level8')),(4, ref('edts_user_access.group_edts_level9')),(4, ref('edts_user_access.group_edts_level10'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_form3" model="ir.ui.view">
+            <field name="name">liquidation.reference.form3</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level11'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">1</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_form_buttons" model="ir.ui.view">
+            <field name="name">liquidation.reference.form</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='submit_request']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='approve_request']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='update_submission_status']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='update_liquidation_status']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='validate_request']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='cancel_request']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level3</attribute>
+                </xpath>
+                <xpath expr="//button[@name='recall_request']" position="attributes">
+                    <attribute name="groups">edts_user_access.group_edts_level2</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Liquidation Lines Tree View-->
+        <record id="liquidation_reference_line_tree" model="ir.ui.view">
+            <field name="name">liquidation.line.tree</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level1')),(4, ref('edts_user_access.group_edts_level2'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_line_tree1" model="ir.ui.view">
+            <field name="name">liquidation.line.tree1</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_line_tree2" model="ir.ui.view">
+            <field name="name">liquidation.line.tree2</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level4')),(4, ref('edts_user_access.group_edts_level5')),(4, ref('edts_user_access.group_edts_level6')),(4, ref('edts_user_access.group_edts_level7')),(4, ref('edts_user_access.group_edts_level8')),(4, ref('edts_user_access.group_edts_level9')),(4, ref('edts_user_access.group_edts_level10'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_line_tree3" model="ir.ui.view">
+            <field name="name">liquidation.line.tree3</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_tree"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level11'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">1</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Liquidation Lines Form View-->
+        <record id="liquidation_reference_line_form" model="ir.ui.view">
+            <field name="name">liquidation.lines.form</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level1')),(4, ref('edts_user_access.group_edts_level2'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_line_form1" model="ir.ui.view">
+            <field name="name">liquidation.lines.form1</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level3'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">0</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_line_form2" model="ir.ui.view">
+            <field name="name">liquidation.lines.form2</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level4')),(4, ref('edts_user_access.group_edts_level5')),(4, ref('edts_user_access.group_edts_level6')),(4, ref('edts_user_access.group_edts_level7')),(4, ref('edts_user_access.group_edts_level8')),(4, ref('edts_user_access.group_edts_level9')),(4, ref('edts_user_access.group_edts_level10'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="liquidation_reference_line_form3" model="ir.ui.view">
+            <field name="name">liquidation.lines.form3</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="inherit_id" ref="edts.liquidation_reference_line_form"/>
+            <field name="groups_id" eval="[(4, ref('edts_user_access.group_edts_level11'))]" />
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="create">1</attribute>
+                    <attribute name="delete">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

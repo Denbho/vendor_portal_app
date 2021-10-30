@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_move_form_inherit" model="ir.ui.view">
+            <field name="name">view.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/notebook[1]/page[@id='other_tab_entry']" position="after">
+                    <page string="Invoice Lines" attrs="{'invisible': ['|', ('edts_subtype', '=', False), ('edts_subtype', 'in', ['invoice_w_po'])]}">
+                        <field name="edts_invoice_doc_line_ids" readonly="1">
+                            <tree editable="bottom" string="Invoice Lines">
+                                <field name="invoice_doc_no"/>
+                                <field name="invoice_doc_status"/>
+                            </tree>
+                        </field>
+
+                        <group string="SAP Details">
+                            <field name="processed_by" force_save="1" readonly="1"/>
+                            <field name="processed_date" force_save="1" readonly="1"/>
+                        </group>
+
+                        <group string="API Remarks">
+                            <field name="edts_sap_remarks" force_save="1" readonly="1"/>
+                            <field name="get_invoice_doc_remarks" force_save="1" readonly="1"/>
+                            <field name="get_payment_doc_remarks" force_save="1" readonly="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="edts_invoice_form_view_inherit" model="ir.ui.view">
+            <field name="name">edts.invoice.form.view.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="edts.view_move_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='po_delivery_ids']" position="after">
+                    <group string="SAP Details">
+                        <field name="processed_by" force_save="1" readonly="1"/>
+                        <field name="processed_date" force_save="1" readonly="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="po_delivery_line_view_tree_inherit" model="ir.ui.view">
+            <field name="name">po.delivery.line.view.tree_inherit</field>
+            <field name="model">po.delivery.line</field>
+            <field name="inherit_id" ref="admin_purchase_order.po_delivery_line_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='total_amount']" position="after">
+                    <field name="invoice_doc_no"/>
+                    <field name="invoice_doc_status"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

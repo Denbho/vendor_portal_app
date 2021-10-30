@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="signature_wizard_form" model="ir.ui.view">
+            <field name="name">signature.wizard.form</field>
+            <field name="model">edts.signature.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="action" invisible="1"/>
+                    <group string="Department Head Signature" style="font-weight:bold;"
+                           attrs="{'invisible': [('action', 'not in', ['approve'])]}">
+                        <field name="dept_head_signature" nolabel="1" widget="signature"
+                               attrs="{'required': [('action', 'in', ['approve'])]}"/>
+                    </group>
+                    <group string="Accounting Department Signature"  style="font-weight:bold;"
+                           attrs="{'invisible': [('action', 'not in', ['validate'])]}">
+                        <field name="accounting_signature" nolabel="1" widget="signature"
+                               attrs="{'required': [('action', 'in', ['validate'])]}"/>
+                    </group>
+                    <footer>
+                        <button name="signature_action_proceed" string="Proceed" type="object" class="btn btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

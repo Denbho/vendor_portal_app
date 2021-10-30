@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="transfer_wizard_form" model="ir.ui.view">
+            <field name="name">transfer.wizard.form</field>
+            <field name="model">edts.transfer.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="edts_status" invisible="1"/>
+                        <field name="requestor_from" force_save="1" readonly="1"
+                               attrs="{'invisible': [('edts_status', 'not in', ['draft'])]}"/>
+                        <field name="requestor_to"
+                               domain="[('id', '!=', requestor_from)]"
+                               options="{'no_create':True, 'no_open': True}"
+                               attrs="{'invisible': [('edts_status', 'not in', ['draft'])]}"/>
+
+                        <separator attrs="{'invisible': [('edts_status', 'not in', ['draft'])]}"/>
+
+                        <field name="approver_from" force_save="1" readonly="1"
+                               attrs="{'invisible': [('edts_status', 'not in', ['waiting_for_head'])]}"/>
+                        <field name="approver_to"
+                               domain="[('id', '!=', approver_from)]"
+                               options="{'no_create':True, 'no_open': True}"
+                               attrs="{'invisible': [('edts_status', 'not in', ['waiting_for_head'])]}"/>
+
+                        <separator attrs="{'invisible': [('edts_status', 'not in', ['waiting_for_head'])]}"/>
+
+                        <field name="processor_from" force_save="1" readonly="1"
+                               attrs="{'invisible': [('edts_status', 'not in', ['waiting_for_accounting'])]}"/>
+                        <field name="processor_to"
+                               domain="[('id', '!=', processor_from)]"
+                               options="{'no_create':True, 'no_open': True}"
+                               attrs="{'invisible': [('edts_status', 'not in', ['waiting_for_accounting'])]}"/>
+                    </group>
+
+                    <footer>
+                        <button name="transfer_edts_action_proceed" string="Transfer" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<data>
+    <odoo>
+        <record model="ir.ui.view" id="reject_reason_form_view">
+            <field name="name">reject.reason.form.view</field>
+            <field name="model">reject.reason</field>
+            <field name="arch" type="xml">
+            <form string="Reject Reason">
+                <sheet>
+                    <group>
+                        <h3>
+                          Reject Reason
+                        </h3>
+                    </group>
+
+                    <group>
+                        <field name="name"/>
+                    </group>
+
+                </sheet>
+            </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="reject_reason_tree_view">
+            <field name="name">reject.reason.tree.view</field>
+            <field name="model">reject.reason</field>
+            <field name="arch" type="xml">
+                <tree string="Reject Reason">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="reject_reason_action_window">
+            <field name="name">Reject Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reject.reason</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('reject_reason_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('reject_reason_form_view')})]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for reject reason
+                </p>
+            </field>
+        </record>
+    </odoo>
+</data>

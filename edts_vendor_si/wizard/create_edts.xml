@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="admin_sales_invoice_create_edts_view_form" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.create.edts.view.form</field>
+            <field name="model">admin.sales.invoice.create.edts.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="payment_description" required="1"/>
+                        <field name="attention_to" options="{'no_create':True, 'no_open': True}" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="create_edts_action_proceed" string="Create" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

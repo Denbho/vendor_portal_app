@@ -1,0 +1,21 @@
+<data>
+    <odoo>
+        <record id="sequence_view_custom" model="ir.ui.view">
+            <field name="name">sequence.view.custom</field>
+            <field name="model">ir.sequence</field>
+            <field name="inherit_id" ref="base.sequence_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//page/group[2]" position="attributes">
+                    <attribute name="col">4</attribute>
+                </xpath>
+
+                <xpath expr="//page/group[2]/group[3]" position="after">
+                    <group>
+                        <span colspan="2">Company code: %%(company_code)s</span>
+                        <span colspan="2">Short code: %%(short_code)s</span>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </odoo>
+</data>

@@ -1,0 +1,141 @@
+<data>
+    <odoo>
+        <record model="ir.ui.view" id="edts_reason_tree_view">
+            <field name="name">edts.reason.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="EDTS Reason">
+                    <field name="state" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="edts_company_id" string="Company"/>
+                    <field name="company_code"/>
+                    <field name="reason"/>
+                    <field name="amount"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edts_purchase_order_tree_view">
+            <field name="name">edts.purchase.order.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="EDTS Purchase Order">
+                    <field name="state" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="edts_company_id" string="Company"/>
+                    <field name="company_code"/>
+                    <field name="vendor_id"/>
+                    <field name="universal_vendor_code"/>
+                    <field name="edts_purchase_id" string="Purchase Order"/>
+                    <field name="amount"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edts_rawland_acquisition_tree_view">
+            <field name="name">edts.rawland.acquisition.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="EDTS Rawland Acquisition">
+                    <field name="state" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="edts_company_id" string="Company"/>
+                    <field name="company_code"/>
+                    <field name="amount"/>
+                    <field name="rawland_payment_terms" string="Payment Terms"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edts_document_header_tree_view">
+            <field name="name">edts.document.header.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="EDTS Document Header">
+                    <field name="state" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="edts_company_id" string="Company"/>
+                    <field name="company_code"/>
+                    <field name="doc_header"/>
+                    <field name="amount"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edts_cmc_type_tree_view">
+            <field name="name">edts.cmc.type.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="EDTS CMC Type">
+                    <field name="state" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="edts_company_id" string="Company"/>
+                    <field name="company_code"/>
+                    <field name="cmc_type_id"/>
+                    <field name="amount"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edts_accruals_or_monthly_tree_view">
+            <field name="name">edts.accruals.or.monthly.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="EDTS Accruals Monthly">
+                    <field name="state" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="request_date"/>
+                    <field name="edts_company_id" string="Company"/>
+                    <field name="company_code"/>
+                    <field name="account_number"/>
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <field name="amount"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edts_stl_tree_view">
+            <field name="name">edts.stl.tree.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <tree string="Subject To Liquidation" create="false">
+                    <field name="state" invisible="1"/>
+                    <field name="name" string="EDTS NO."/>
+                    <field name="request_date"/>
+                    <field name="company_id"/>
+                    <field name="company_code"/>
+                    <field name="requestor"/>
+                    <field name="journal_id"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="liquidation_status"/>
+                    <field name="submission_status"/>
+                </tree>
+            </field>
+        </record>
+    </odoo>
+</data>

@@ -1,0 +1,367 @@
+<data>
+    <odoo>
+        <!-- Vendor -->
+        <record model="ir.actions.act_window" id="invoice_wo_po_action_window">
+            <field name="name">Invoice w/o PO</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_reason_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_vendor_search_view"/>
+            <field name="context">{
+                    'search_default_invoice_wo_po_filter': 1,
+                    'default_edts_subtype': 'invoice_wo_po',
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for invoice w/o po
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="invoice_w_po_action_window">
+            <field name="name">Invoice w/ PO</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_purchase_order_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_vendor_search_view"/>
+            <field name="context">{
+                    'search_default_invoice_w_po_filter': 1,
+                    'default_edts_subtype': 'invoice_w_po',
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for invoice w/ po
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="advance_payment_action_window">
+            <field name="name">Advance Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_purchase_order_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_vendor_search_view"/>
+            <field name="context">{
+                    'search_default_advance_payment_filter': 1,
+                    'default_edts_subtype': 'advance_payment'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for Advance Payment
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="rawland_acquisition_action_window">
+            <field name="name">Rawland Acquisition</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_rawland_acquisition_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_vendor_search_view"/>
+            <field name="context">{
+                    'search_default_rawland_acquisition_filter': 1,
+                    'default_edts_subtype': 'rawland_acquisition',
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for rawland acquisition
+                </p>
+            </field>
+        </record>
+
+        <!-- Employee -->
+        <record model="ir.actions.act_window" id="reimbursement_action_window">
+            <field name="name">Reimbursement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_reason_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_employee_search_view"/>
+            <field name="context">{
+                    'search_default_reimbursement_filter': 1,
+                    'default_edts_subtype': 'reimbursement'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for reimbursement
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="cash_advance_action_window">
+            <field name="name">Cash Advance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_document_header_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_employee_search_view"/>
+            <field name="context">{
+                    'search_default_cash_advance_filter': 1,
+                    'default_edts_subtype': 'cash_advance'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for cash advance
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="employee_stl_action_window">
+            <field name="name">Employee STL</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_document_header_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_employee_search_view"/>
+            <field name="context">{
+                    'search_default_employee_stl_filter': 1,
+                    'default_edts_subtype': 'stl'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for STL
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="techserv_liaison_action_window">
+            <field name="name">Techserv/Liaison</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_cmc_type_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_techserv_liaison_search_view"/>
+            <field name="context">{
+                    'search_default_techserv_liaison_filter': 1,
+                    'default_edts_subtype': 'techserv_liaison'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for Techserv/Liaison
+                </p>
+            </field>
+        </record>
+
+        <!-- Revolving Fund -->
+        <record model="ir.actions.act_window" id="setup_action_window">
+            <field name="name">Setup</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_document_header_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_revolving_fund_search_view"/>
+            <field name="context">{
+                    'search_default_setup_filter': 1,
+                    'default_edts_subtype': 'setup'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for revolving fund setup
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="return_action_window">
+            <field name="name">Return</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_document_header_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_revolving_fund_search_view"/>
+            <field name="context">{
+                    'search_default_return_filter': 1,
+                    'default_edts_subtype': 'return'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for revolving fund return
+                </p>
+            </field>
+        </record>
+
+        <!-- Agency Contracts -->
+        <record model="ir.actions.act_window" id="agency_contracts_accruals_templates_action_window">
+            <field name="name">Agency Contracts Accruals Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_accruals_or_monthly_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_agency_contracts_search_view"/>
+            <field name="context">{
+                    'search_default_agency_contracts_accruals_templates_filter': 1,
+                    'default_edts_subtype': 'agency_contracts_accruals'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for agency contracts accruals templates
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="agency_contracts_accruals_recurring_invoices_action_window">
+            <field name="name">Agency Contracts Recurring Invoices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_reason_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_agency_contracts_search_view"/>
+            <field name="context">{
+                    'search_default_agency_contracts_accruals_recurring_invoices_filter': 1,
+                    'default_edts_subtype': 'agency_contracts_accruals',
+                    'default_is_recurring_invoice': True
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Creation of Agency Contracts Recurring Invoice record is auto generated.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="agency_contracts_monthly_action_window">
+            <field name="name">Agency Contracts Monthly</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_accruals_or_monthly_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_agency_contracts_search_view"/>
+            <field name="context">{
+                    'search_default_agency_contracts_monthly_filter': 1,
+                    'default_edts_subtype': 'agency_contracts_monthly'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for agency contract monthly
+                </p>
+            </field>
+        </record>
+
+        <!-- Recurring Transactions -->
+        <record model="ir.actions.act_window" id="recurring_transactions_accruals_templates_action_window">
+            <field name="name">Recurring Transactions Accruals Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_accruals_or_monthly_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_recurring_transactions_search_view"/>
+            <field name="context">{
+                    'search_default_recurring_transactions_accruals_templates_filter': 1,
+                    'default_edts_subtype': 'recurring_transactions_accruals'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for recurring transactions accruals templates
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="recurring_transactions_accruals_recurring_invoices_action_window">
+            <field name="name">Recurring Transactions Recurring Invoices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_reason_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_recurring_transactions_search_view"/>
+            <field name="context">{
+                    'search_default_recurring_transactions_accruals_recurring_invoices_filter': 1,
+                    'default_edts_subtype': 'recurring_transactions_accruals',
+                    'default_is_recurring_invoice': True
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Creation of Recurring Transactions Recurring Invoice record is auto generated.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="recurring_transactions_monthly_action_window">
+            <field name="name">Recurring Transactions Monthly</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_accruals_or_monthly_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_recurring_transactions_search_view"/>
+            <field name="context">{
+                    'search_default_recurring_transactions_monthly_filter': 1,
+                    'default_edts_subtype': 'recurring_transactions_monthly'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for recurring transactions monthly
+                </p>
+            </field>
+        </record>
+
+        <!-- Subject To Liquidation -->
+        <record model="ir.actions.act_window" id="stl_action_window">
+            <field name="name">Subject To Liquidation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                    (0, 0, {'view_mode': 'tree', 'view_id': ref('edts_stl_tree_view')}),
+                                    (0, 0, {'view_mode': 'form', 'view_id': ref('account.view_move_form')})]"/>
+            <field name="search_view_id" ref="edts_stl_search_view"/>
+            <field name="context">{
+                    'search_default_stl_transactions_filter': 1
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a request for STL
+                </p>
+            </field>
+        </record>
+    </odoo>
+</data>

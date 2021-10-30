@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edts_info,access.edts.info,model_edts_info,base.group_user,1,1,1,1
+access_edts_payment_reference_line,access.edts.payment.reference.line,model_edts_payment_reference_line,base.group_user,1,1,1,1
+access_edts_liquidation_reference,access.edts.liquidation.reference,model_edts_liquidation_reference,base.group_user,1,1,1,1
+access_edts_liquidation_reference_line,access.edts.liquidation.reference.line,model_edts_liquidation_reference_line,base.group_user,1,1,1,1
+access_edts_liquidation_reference_line_type,access.edts.liquidation.reference.line.type,model_edts_liquidation_reference_line_type,base.group_user,1,1,1,1
+access_edts_extension_reference_line,access.edts.extension.reference.line,model_edts_extension_reference_line,base.group_user,1,1,1,1
+access_edts_cmc_type,access.edts.cmc.type,model_edts_cmc_type,base.group_user,1,1,1,1
