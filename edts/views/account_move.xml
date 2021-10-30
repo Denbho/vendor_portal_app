@@ -1,0 +1,576 @@
+<data>
+    <odoo>
+        <record id="view_move_form_inherit" model="ir.ui.view">
+            <field name="name">view.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="attributes">
+                    <attribute name="attrs">{'invisible': [('edts_subtype', '!=', False)]}</attribute>
+                </xpath>
+
+                <!-- EDTS Header -->
+                <xpath expr="//header" position="after">
+                    <header attrs="{'invisible': [('edts_subtype', '=', False)]}">
+
+                        <!--Invisible Fields-->
+                        <field name="edts_subtype" invisible="1"/>
+                        <field name="sap_client_id" invisible="1"/>
+                        <field name="is_edts_field_readonly" invisible="1"/>
+                        <field name="countered" invisible="1"/>
+                        <field name="sap_api_status" invisible="1"/>
+                        <field name="new_renewal_id" invisible="1"/>
+                        <field name="is_in_valid_renewal_date" invisible="1"/>
+                        <field name="is_recurring_invoice" invisible="1"/>
+
+                        <field name="is_requestor" invisible="1"/>
+                        <field name="is_approver" invisible="1"/>
+                        <field name="is_processor" invisible="1"/>
+
+                        <field name="hide_transfer_btn" invisible="1"/>
+                        <field name="hide_recall_btn" invisible="1"/>
+                        <field name="hide_return_reject_btn" invisible="1"/>
+
+                        <button name="transfer_edts" string="Transfer" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', ('name', '=', '/'), ('status', 'not in', ['draft', 'waiting_for_head', 'waiting_for_accounting']),
+                                                       ('hide_transfer_btn', '=', True)]}"/>
+                        <button name="submit_edts" string="Submit" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', ('name', '=', '/'), ('status', 'not in', ['draft']), ('is_requestor', '=', False)]}"/>
+                        <button name="recall_edts" string="Recall" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_head', 'waiting_for_accounting']), ('hide_recall_btn', '=', True)]}"
+                                confirm="Would you like to proceed?"/>
+                        <button name="approve_edts" string="Approve" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_head']), ('is_approver', '=', False)]}"/>
+                        <button name="validate_edts" string="Validate" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_accounting']), ('is_processor', '=', False)]}"/>
+                        <button name="countered_edts" string="Countered" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', '|', ('status', 'not in', ['processing_accounting']), ('is_processor', '=', False), ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'reimbursement', 'techserv_liaison', 'agency_contracts_monthly', 'recurring_transactions_monthly']), ('countered', '=', True)]}"/>
+                        <button name="post_edts_data" string="Post to SAP" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                                attrs="{'invisible' : ['|', '|', '|', '|', ('status', 'not in', ['processing_accounting']), ('is_processor', '=', False), ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'rawland_acquisition', 'reimbursement', 'cash_advance', 'techserv_liaison', 'setup']),
+                                                       '&amp;', ('edts_subtype', 'in', ['invoice_wo_po', 'invoice_w_po', 'reimbursement', 'techserv_liaison']), ('countered', '=', False),
+                                                       '&amp;', ('edts_subtype', 'in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'rawland_acquisition', 'reimbursement', 'cash_advance', 'techserv_liaison', 'setup']), ('sap_api_status', 'not in', [False, 'failed'])]}"/>
+                        <button name="get_invoice_doc" string="Get Invoice Document" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                                attrs="{'invisible' : ['|', '|', '|', ('status', 'not in', ['processing_accounting']), ('is_processor', '=', False), ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'rawland_acquisition', 'reimbursement', 'cash_advance', 'techserv_liaison', 'setup']),
+                                                       '&amp;', ('edts_subtype', 'in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'rawland_acquisition', 'reimbursement', 'cash_advance', 'techserv_liaison', 'setup']), ('sap_api_status', 'not in', ['posted_to_sap'])]}"/>
+                        <button name="get_payment" string="Get Payment" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                                attrs="{'invisible' : ['|', '|', ('status', 'not in', ['processing_finance', 'partial_payment_released']), ('is_processor', '=', False), ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'rawland_acquisition', 'reimbursement', 'cash_advance', 'techserv_liaison', 'setup'])]}"/>
+                        <button name="process_finance" string="Process Finance" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', '|', ('status', 'not in', ['processing_accounting']), ('edts_subtype', 'in', ['return']),
+                                                       '&amp;', ('edts_subtype', 'in', ['invoice_wo_po', 'invoice_w_po', 'reimbursement', 'techserv_liaison', 'agency_contracts_monthly', 'recurring_transactions_monthly']), ('countered', '=',  False),
+                                                       '&amp;', ('edts_subtype', 'in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'rawland_acquisition', 'reimbursement', 'cash_advance', 'techserv_liaison', 'setup']), ('sap_api_status', 'not in', ['invoice_doc_received'])]}"
+                                confirm="Would you like to proceed?"/>
+                        <button name="done_edts" string="Done" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', ('status', 'not in', ['processing_accounting']), ('is_processor', '=', False), ('edts_subtype', 'not in', ['return'])]}"
+                                confirm="Would you like to proceed?"/>
+                        <button name="renew_recurring_edts" string="Renew" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', '|', ('status', 'in', ['draft']), ('edts_subtype', 'not in', ['agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']),
+                                                       ('new_renewal_id', '!=', False), ('is_in_valid_renewal_date', '=', False)]}"
+                                confirm="Would you like to proceed?"/>
+                        <button name="extend_recurring_edts" string="Extend" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : ['|', '|', '|', ('status', 'in', ['draft']), ('edts_subtype', 'not in', ['agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']),
+                                                       ('new_renewal_id', '!=', False), ('is_in_valid_renewal_date', '=', False)]}"/>
+                        <button name="reject_edts" string="Reject" type="object" class="btn btn-primary btn-danger"
+                                attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_head', 'waiting_for_accounting']), ('hide_return_reject_btn', '=', True)]}"/>
+                        <button name="return_edts" string="Return" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                                attrs="{'invisible' : ['|', ('status', 'not in', ['waiting_for_head', 'waiting_for_accounting']), ('hide_return_reject_btn', '=', True)]}"/>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,waiting_for_head,waiting_for_accounting"/>
+                    </header>
+                </xpath>
+
+                <xpath expr="//field[@name='restrict_mode_hash_table']" position="after">
+                    <field name="edts_subtype" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//div[1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('edts_subtype', '!=', False), ('state', '!=', 'draft'), ('tax_lock_date_message', '=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//div[2]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', '|', ('edts_subtype', '!=', False), ('type', 'not in', ('out_invoice', 'out_refund')), ('invoice_has_outstanding', '=', False), ('invoice_payment_state', '!=', 'not_paid')]}</attribute>
+                </xpath>
+
+                <xpath expr="//div[3]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', '|', ('edts_subtype', '!=', False), ('type', 'not in', ('in_invoice', 'in_refund')), ('invoice_has_outstanding', '=', False), ('invoice_payment_state', '!=', 'not_paid')]}</attribute>
+                </xpath>
+
+                <xpath expr="//div[4]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('edts_subtype', '!=', False), ('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt')), ('invoice_has_matching_suspense_amount','=',False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//sheet/div[@name='button_box']/button[@name='open_reconcile_view']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', '|', ('edts_subtype', '!=', False), ('type', '!=', 'entry'), ('id', '=', False), ('has_reconciled_entries', '=', False)]}</attribute>
+                </xpath>
+
+                <!-- EDTS Smart Button -->
+                <xpath expr="//sheet/div[@name='button_box']/button[@name='open_reconcile_view']" position="after">
+                    <button class="oe_stat_button" icon="fa-money" style="width:16%"
+                            attrs="{'invisible' : ['|', '|', ('edts_subtype', '=', False), ('status', 'in', ['draft','waiting_for_head','waiting_for_accounting', 'processing_accounting', 'ongoing', 'done', 'rejected'])]}">
+                        <field string="Released Payment" name="total_payment_amount_display" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="get_all_payments" icon="fa-list-alt"
+                            attrs="{'invisible' : ['|', '|', '|', ('edts_subtype', '=', False),
+                                                   '&amp;', ('is_approver', '=', False), ('is_processor', '=', False),
+                                                   ('status', 'in', ['draft','waiting_for_head','waiting_for_accounting', 'processing_accounting', 'ongoing', 'done', 'rejected'])]}">
+                        <field string="Payments" name="total_payment_count" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="get_need_released_payments" icon="fa-mail-forward"
+                            attrs="{'invisible' : ['|', '|', '|', '|', ('edts_subtype', '=', False),
+                                                   '&amp;', ('is_approver', '=', False), ('is_processor', '=', False),
+                                                   ('status', 'in', ['draft','waiting_for_head','waiting_for_accounting', 'processing_accounting', 'ongoing', 'done', 'rejected']),
+                                                   ('need_released_count', '=', 0)]}">
+                        <field string="To Release" name="need_released_count" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="get_need_encashed_payments" icon="fa-edit"
+                            attrs="{'invisible' : ['|', '|', '|', '|', ('edts_subtype', '=', False),
+                                                   '&amp;', ('is_approver', '=', False), ('is_processor', '=', False),
+                                                   ('status', 'in', ['draft','waiting_for_head','waiting_for_accounting', 'processing_accounting', 'ongoing', 'done', 'rejected']),
+                                                   ('need_encashed_count', '=', 0)]}">
+                        <field string="To Encash" name="need_encashed_count" widget="statinfo"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="get_all_liquidations" icon="fa-calculator"
+                            attrs="{'invisible' : ['|', '|', ('edts_subtype', 'not in', ['advance_payment', 'cash_advance', 'stl', 'techserv_liaison']),
+                                                   '&amp;', ('is_approver', '=', False), ('is_processor', '=', False),
+                                                   ('status', 'not in', ['fully_paid'])]}">
+                        <field string="Liquidations" name="total_liquidation_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//sheet/widget[1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('edts_subtype', '!=', False), ('invoice_payment_state', '!=', 'paid'), ('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))]}</attribute>
+                </xpath>
+
+                <!-- EDTS Web Ribbon - Posted to SAP -->
+                <xpath expr="//sheet/widget[1]" position="after">
+                    <widget name="web_ribbon" title="Posted to SAP" bg_color="bg-success" attrs="{'invisible': ['|', ('edts_subtype', '=', False), ('sap_api_status', 'not in', ['posted_to_sap'])]}"/>
+                </xpath>
+
+                <!-- widget[3] instead of widget[2] due to added widget above -->
+                <xpath expr="//sheet/widget[3]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('edts_subtype', '!=', False), ('invoice_payment_state', '!=', 'in_payment'), ('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))]}</attribute>
+                </xpath>
+
+                <!-- EDTS Web Ribbon - Failed Posting -->
+                <xpath expr="//sheet/widget[3]" position="after">
+                    <widget name="web_ribbon" title="Failed Posting" bg_color="bg-danger" attrs="{'invisible': ['|', ('edts_subtype', '=', False), ('sap_api_status', 'not in', ['failed'])]}"/>
+                </xpath>
+
+                <xpath expr="//sheet/div[2]" position="attributes">
+                    <attribute name="attrs">{'invisible': [('edts_subtype', '!=', False)]}</attribute>
+                </xpath>
+
+                <!-- EDTS Form Title -->
+                <xpath expr="//sheet/div[2]" position="after">
+                    <group attrs="{'invisible': [('edts_subtype', '=', False)]}" col="2">
+                        <group>
+                            <div class="oe_title">
+                                <h1 attrs="{'invisible' : [('name', 'in', '/')]}">
+                                  <field name="name"/>
+                                </h1>
+
+                                <div attrs="{'invisible': [('requestor', '=', False)]}">
+                                    <separator/>
+                                    <label for="requestor" style="font-weight:bold;"/>
+                                    <field name="requestor" readonly="1"/>
+                                </div>
+
+                                <div attrs="{'invisible': [('approver', '=', False)]}">
+                                    <label for="approver" style="font-weight:bold;"/>
+                                    <field name="approver" readonly="1"/>
+                                </div>
+
+                                <div attrs="{'invisible': [('processor', '=', False)]}">
+                                    <label for="processor" style="font-weight:bold;"/>
+                                    <field name="processor" readonly="1"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group attrs="{'invisible' : [('countered', '=', False)]}">
+                            <field name="countered_date"/>
+                            <field name="countered_by"/>
+                            <field name="countering_notes" attrs="{'readonly' : True}"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <!-- group[2] instead of group[1] due to added group above -->
+                <xpath expr="//sheet/group[2]" position="attributes">
+                    <attribute name="attrs">{'invisible': [('edts_subtype', '!=', False)]}</attribute>
+                </xpath>
+
+                <!-- EDTS Form Body -->
+                <xpath expr="//sheet/group[2]" position="after">
+                    <group attrs="{'invisible': [('edts_subtype', '=', False)]}" col="2">
+                        <group>
+                            <field name="request_date"/>
+                            <field name="reason" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <label for="edts_company_id" string="Company"/>
+                            <div class="o_row">
+                                [<field name="company_code" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>]
+                                <field name="edts_company_id" options="{'no_create':True, 'no_open': True}" string="Company" domain="[('id', 'in', allowed_company_ids)]" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)], 'required': True}"/>
+                            </div>
+                            <field name="journal_id" options="{'no_create':True, 'no_open': True}" domain="[('company_id', '=', edts_company_id), ('edts_subtype', '=', edts_subtype)]" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="balance" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_w_po', 'advance_payment'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="acquisition_cost" attrs="{'invisible' : [('edts_subtype', 'not in', ['rawland_acquisition'])], 'required': True}"/>
+                            <field name="amount" force_save="1" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)], 'required': True}"/>
+                            <field name="approved_amount" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                                '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                                  'readonly' : [('is_edts_field_readonly', '=', True)],
+                                                                  'required': ['&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                               ('is_recurring_invoice', '=', False)]}"/>
+                            <field name="billed_amount" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                              '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                                  'readonly' : [('is_edts_field_readonly', '=', True)],
+                                                                  'required': ['&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                               ('is_recurring_invoice', '=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="edts_purchase_id" options="{'no_create':True, 'no_open': True}" string="Purchase Order" domain="[('company_id', '=', edts_company_id)]" attrs="{'invisible' : [('edts_subtype', 'not in', ['invoice_w_po', 'advance_payment'])], 'required': [('edts_subtype', 'in', ['invoice_w_po', 'advance_payment'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+
+                            <!-- Vendor -->
+                            <field name="vendor_code_113" string="Vendor Code" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'reimbursement', 'cash_advance', 'stl', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']), ('sap_client_id', '!=', 113)],
+                                                                                       'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="vendor_code_303" string="Vendor Code" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'reimbursement', 'cash_advance', 'stl', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']), ('sap_client_id', '!=', 303)],
+                                                                                       'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <label for="vendor_id" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'reimbursement', 'cash_advance', 'stl', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly'])]}"/>
+                            <div class="o_row" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'reimbursement', 'cash_advance', 'stl', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly'])]}">
+                                [<field name="universal_vendor_code" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>]
+                                <field name="vendor_id" options="{'no_create':True, 'no_open': True}" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            </div>
+
+                            <!-- Rawland Owner -->
+                            <field name="vendor_code_113" string="Rawland Owner Code" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['rawland_acquisition']), ('sap_client_id', '!=', 113)],
+                                                                                              'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="vendor_code_303" string="Rawland Owner Code" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['rawland_acquisition']), ('sap_client_id', '!=', 303)],
+                                                                                              'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <label for="rawland_owner_id" attrs="{'invisible': [('edts_subtype', 'not in', ['rawland_acquisition'])]}"/>
+                            <div class="o_row" attrs="{'invisible': [('edts_subtype', 'not in', ['rawland_acquisition'])]}">
+                                [<field name="universal_vendor_code" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>]
+                                <field name="rawland_owner_id" domain="[('vendor_account_group_code', '=', 7000)]" options="{'no_create':True, 'no_open': True}" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            </div>
+                            <field name="accountable_person" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+
+                            <!-- Employee -->
+                            <label for="employee_id" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'reimbursement', 'cash_advance', 'stl', 'agency_contracts_accruals', 'recurring_transactions_accruals']),
+                                                                           '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', False)]}"/>
+                            <div class="o_row" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'reimbursement', 'cash_advance', 'stl']),
+                                                                     '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', False)]}">
+                                [<field name="employee_code" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>]
+                                <field name="employee_id" domain="[('vendor_account_group_code', '=', 6000)]" options="{'no_create':True, 'no_open': True}" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            </div>
+
+                            <!-- Custodian -->
+                            <label for="employee_id" string="Custodian" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['setup', 'return', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']),
+                                                                                              '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)]}"/>
+                            <div class="o_row" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['setup', 'return', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']),
+                                                                     '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)]}">
+                                [<field name="employee_code" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>]
+                                <field name="employee_id" domain="[('vendor_account_group_code', '=', 6000)]" options="{'no_create':True, 'no_open': True}" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            </div>
+
+                            <!-- Customer -->
+                            <label for="employee_id" string="Customer" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])]}"/>
+                            <div class="o_row" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])]}">
+                                [<field name="employee_code" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>]
+                                <field name="employee_id" domain="[('vendor_account_group_code', '=', 6000)]" options="{'no_create':True, 'no_open': True}" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            </div>
+
+                            <field name="property_admin_sale_id" options="{'no_create':True, 'no_open': True}" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="asset" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'rawland_acquisition', 'reimbursement', 'agency_contracts_accruals', 'recurring_transactions_accruals']),
+                                                                      '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', False)],
+                                                        'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="internal_order" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'reimbursement', 'agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="profit_center_id" options="{'no_create':True, 'no_open': True}" domain="[('company_id', '=', edts_company_id)]" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="payment_term_id" options="{'no_create':True, 'no_open': True}" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_w_po', 'advance_payment'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="baseline_date" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_w_po', 'advance_payment'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="invoice_type" string="Type" attrs="{'invisible': [('edts_subtype', 'not in', ['invoice_w_po'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="down_payment_percent" widget='percentage' attrs="{'invisible' : ['|', ('edts_subtype', 'not in', ['invoice_w_po']), ('invoice_type', 'not in', ['down_payment'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="retention_release_percent" widget='percentage' attrs="{'invisible' : ['|', ('edts_subtype', 'not in', ['invoice_w_po']), ('invoice_type', 'not in', ['retention_release'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="baseline_start_date" attrs="{'invisible' : [('edts_subtype', 'not in', ['rawland_acquisition'])], 'readonly' : [('is_edts_field_readonly', '=', True)], 'required': [('edts_subtype', 'in', ['rawland_acquisition'])]}"/>
+                            <field name="baseline_end_date" attrs="{'invisible' : [('edts_subtype', 'not in', ['rawland_acquisition'])], 'readonly' : [('is_edts_field_readonly', '=', True)], 'required': [('edts_subtype', 'in', ['rawland_acquisition'])]}"/>
+                            <field name="rawland_payment_terms" string="Payment Terms" widget="radio" attrs="{'invisible' : [('edts_subtype', 'not in', ['rawland_acquisition'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="project_description" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="wbs_element" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="cmc_type_id" options="{'no_create':True, 'no_open': True}" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="payee" attrs="{'invisible': [('edts_subtype', 'not in', ['techserv_liaison'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="cash_journal_no" attrs="{'invisible': [('edts_subtype', 'not in', ['setup', 'return'])], 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="account_number" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                               '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                                 'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="department" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                           '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                             'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            <field name="valid_from" force_save="1" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                           '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                             'readonly' : [('is_edts_field_readonly', '=', True)],
+                                                             'required': ['&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                          ('is_recurring_invoice', '=', False)]}"/>
+                            <field name="valid_to" force_save="1" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                         '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                           'readonly' : [('is_edts_field_readonly', '=', True)],
+                                                           'required': ['&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                        ('is_recurring_invoice', '=', False)]}"/>
+                            <field name="run_day" attrs="{'invisible': ['|', ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals']),
+                                                                        '&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals']), ('is_recurring_invoice', '=', True)],
+                                                          'readonly' : [('is_edts_field_readonly', '=', True)],
+                                                          'required': ['&amp;', ('edts_subtype', 'in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                       ('is_recurring_invoice', '=', False)]}"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <!-- EDTS Notebook -->
+                <xpath expr="//sheet/notebook[1]/page[@id='invoice_tab']" position="before">
+                    <page string="Entry Data"
+                          attrs="{'invisible': [('edts_subtype', '=', False)]}">
+                        <group col="2">
+                            <group>
+                                <field name="document_date"/>
+                                <field name="posting_date"/>
+                                <field name="ref" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                                <field name="doc_header" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                                <field name="assignment" attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook[1]/page[@id='invoice_tab']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('edts_subtype', '!=', False), '&amp;', ('edts_subtype', '=', False), ('type', '=', 'entry')]}</attribute>
+                </xpath>
+
+                <xpath expr="//sheet/notebook[1]/page[@id='aml_tab']" position="replace">
+                    <page id="aml_tab" string="Journal Items" groups="account.group_account_user">
+                        <field name="line_ids"
+                               context="{'default_type': context.get('default_type'),
+                                         'line_ids': line_ids,
+                                         'journal_id': journal_id,
+                                         'default_partner_id': commercial_partner_id,
+                                         'default_currency_id': currency_id != company_currency_id and currency_id or False}">
+                            <tree editable="bottom" string="Journal Items" decoration-muted="display_type in ('line_section', 'line_note')" default_order="sequence, date desc, move_name desc, id">
+                                <!-- Displayed fields -->
+                                <field name="posting_key"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '=', False)]}"/>
+                                <field name="account_id"
+                                       attrs="{'required': ['&amp;',('parent.edts_subtype', '=', False), ('display_type', 'not in', ('line_section', 'line_note'))],
+                                               'invisible': ['&amp;',('parent.edts_subtype', '=', False), ('display_type', 'in', ('line_section', 'line_note'))],}"
+                                       domain="['&amp;', ('deprecated', '=', False), '|', ('company_id', '=', parent.company_id), ('company_id', '=', parent.edts_company_id)]"/>
+
+                                <field name="partner_id"
+                                       domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"
+                                       attrs="{'column_invisible': ['|', ('parent.edts_subtype', '!=', False), '&amp;',('parent.edts_subtype', '=', False), ('parent.type', '!=', 'entry')]}"/>
+
+                                <field name="description"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '=', False)]}"/>
+
+                                <field name="text"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '=', False)]}"/>
+
+                                <field name="name" widget="section_and_note_text" optional="hide"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '!=', False)]}"/>
+
+                                <field name="analytic_account_id" optional="hide"
+                                       domain="['|', ('company_id', '=', parent.company_id), ('company_id', '=', False)]"
+                                       groups="analytic.group_analytic_accounting"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '!=', False)]}"/>
+
+                                <field name="analytic_tag_ids" optional="hide"
+                                       groups="analytic.group_analytic_tags"
+                                       widget="many2many_tags"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '!=', False)]}"/>
+
+                                <field name="date_maturity" optional="hide"
+                                       invisible="['|', ('parent.edts_subtype', '!=', False), context.get('view_no_maturity')]"/>
+
+                                <field name="amount_currency" groups="base.group_multi_currency" optional="hide"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '!=', False)]}"/>
+
+                                <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"
+                                       attrs="{'column_invisible': ['|', ('parent.edts_subtype', '!=', False), '&amp;',('parent.edts_subtype', '=', False), ('parent.type', '!=', 'entry')]}"/>
+
+                                <field name="tax_ids" widget="many2many_tags" optional="hide" domain="[('type_tax_use', '=?', parent.invoice_filter_type_domain)]" context="{'append_type_to_tax_name': not parent.invoice_filter_type_domain}" options="{'no_create': True}" force_save="1"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '!=', False)], 'readonly': ['|', '|', ('display_type', 'in', ('line_section', 'line_note')), ('tax_line_id', '!=', False), '&amp;', ('parent.type', 'in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt')), ('account_internal_type', 'in', ('receivable', 'payable')),]}"/>
+
+                                <field name="debit" sum="Total Debit"
+                                       attrs="{'invisible': ['&amp;',('parent.edts_subtype', '=', False), ('display_type', 'in', ('line_section', 'line_note'))]}"/>
+
+                                <field name="credit" sum="Total Credit"
+                                       attrs="{'invisible': ['&amp;',('parent.edts_subtype', '=', False), ('display_type', 'in', ('line_section', 'line_note'))]}"/>
+
+                                <field name="country_id" invisible="1"/>
+
+                                <field name="tag_ids" widget="many2many_tags" string="Tax Grids" optional="show" domain="[('country_id', '=', country_id), ('applicability', '=', 'taxes')]"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '!=', False)]}"/>
+
+                                <field name="cash_flow_code"
+                                       attrs="{'column_invisible': [('parent.edts_subtype', '=', False)]}"/>
+
+                                <!-- Others fields -->
+                                <field name="payment_id" invisible="1"/>
+
+                                <field name="product_id" invisible="1"/>
+                                <field name="quantity" invisible="1"/>
+                                <field name="product_uom_id" invisible="1"/>
+                                <field name="price_unit" invisible="1"/>
+                                <field name="discount" invisible="1"/>
+                                <field name="price_subtotal" invisible="1"/>
+                                <field name="price_total" invisible="1"/>
+
+                                <field name="sequence" invisible="1"/>
+                                <field name="move_name" invisible="1"/>
+                                <field name="date" invisible="1"/>
+                                <field name="tax_line_id" invisible="1"/>
+                                <field name="tax_group_id" invisible="1"/>
+                                <field name="tax_repartition_line_id" invisible="1" force_save="1"/>
+                                <field name="tax_base_amount" invisible="1" force_save="1"/>
+                                <field name="tax_exigible" invisible="1" force_save="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="company_currency_id" invisible="1"/>
+                                <field name="recompute_tax_line" invisible="1" force_save="1"/>
+                                <field name="display_type" force_save="1" invisible="1"/>
+                                <field name="is_rounding_line" invisible="1"/>
+                                <field name="exclude_from_invoice_tab" invisible="1"/>
+                                <field name="account_internal_type" invisible="1"/>
+                            </tree>
+                            <!-- Form view to cover mobile use -->
+                            <form>
+                                <group>
+                                    <field name="tax_line_id" invisible="1"/>
+                                    <field name="account_id" domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
+                                    <field name="partner_id" domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"/>
+                                    <field name="name"/>
+                                    <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_tags" widget="many2many_tags"/>
+                                    <field name="amount_currency" groups="base.group_multi_currency"/>
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                                    <field name="debit" sum="Total Debit"/>
+                                    <field name="credit" sum="Total Credit"/>
+                                    <field name="tax_ids" string="Taxes Applied" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="date_maturity" required="0" invisible="context.get('view_no_maturity', False)"/>
+                                    <field name="recompute_tax_line" invisible="1" readonly="1"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook[1]/page[@id='other_tab']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('edts_subtype', '!=', False), '&amp;', ('edts_subtype', '=', False), ('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//sheet/notebook[1]/page[@id='other_tab_entry']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('edts_subtype', '!=', False), '&amp;', ('edts_subtype', '=', False), ('type', '!=', 'entry')]}</attribute>
+                </xpath>
+
+                <xpath expr="//sheet/notebook[1]/page[@id='other_tab_entry']" position="after">
+                    <page string="DR/GRs" attrs="{'invisible': ['|', ('edts_subtype', '=', False), ('edts_subtype', 'not in', ['invoice_w_po'])]}">
+                        <field name="po_delivery_ids" nolabel="1" domain="[('po_id', '=', edts_purchase_id)]" options="{'no_create':True, 'no_open': True}"
+                               attrs="{'readonly' : [('is_edts_field_readonly', '=', True)]}"/>
+
+                        <group string="API Remarks">
+                            <field name="edts_sap_remarks" force_save="1" readonly="1"/>
+                            <field name="get_invoice_doc_remarks" force_save="1" readonly="1"/>
+                            <field name="get_payment_doc_remarks" force_save="1" readonly="1"/>
+                        </group>
+                    </page>
+
+                    <page string="Approval Signatures"
+                          attrs="{'invisible': ['|', ('edts_subtype', '=', False), '&amp;', ('dept_head_signature', '=', False), ('accounting_signature', '=', False)]}">
+                        <group>
+                            <label colspan="2" for="dept_head_signature"
+                                   attrs="{'invisible': [('dept_head_signature', '=', False)]}"/>
+                            <div attrs="{'invisible': [('dept_head_signature', '=', False)], 'readonly' : True}">
+                                <field name="approver"/>
+                                <field colspan="2" name="dept_head_signature" widget="signature"/>
+                                <separator/>
+                            </div>
+
+                            <label colspan="2" for="accounting_signature"
+                                   attrs="{'invisible': [('accounting_signature', '=', False)]}"/>
+                            <div attrs="{'invisible': [('accounting_signature', '=', False)], 'readonly' : True}">
+                                <field name="processor"/>
+                                <field colspan="2" name="accounting_signature" widget="signature"/>
+                            </div>
+                        </group>
+                    </page>
+
+                    <page string="Tracking Details" attrs="{'invisible' : ['|', '|', ('edts_subtype', '=', False), ('edts_subtype', 'not in', ['return']), ('status', 'not in', ['done'])]}">
+                        <group col="3">
+                            <group>
+                                <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                <field name="fund_returned_date"/>
+                                <field name="fund_returned_by"/>
+                            </group>
+                        </group>
+                    </page>
+
+                    <page string="Recurring Reference/s" attrs="{'invisible' : ['|', '|', ('edts_subtype', '=', False), ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals']),
+                                                                                '&amp;', ('parent_recurring_id', '=', False), ('child_recurring_ids', '=', [])]}">
+                        <group col="3" attrs="{'invisible' : [('parent_recurring_id', '=', False)]}">
+                            <group>
+                                <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                <field name="parent_recurring_id"/>
+                                <separator/>
+                                <field name="valid_from" force_save="1" readonly="1"/>
+                                <field name="valid_to" force_save="1" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <group col="3" attrs="{'invisible' : [('child_recurring_ids', '=', [])]}">
+                            <group>
+                                <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                <field name="child_recurring_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </page>
+
+                    <page string="Extension Reference" attrs="{'invisible' : ['|', '|', ('edts_subtype', '=', False), ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']), ('extension_reference_ids', '=', [])]}">
+                        <field name="extension_reference_ids" readonly="1">
+                            <tree editable="bottom" string="Extension Reference/s">
+                                <control>
+                                    <create name="add_line_control" string="Add line"/>
+                                </control>
+
+                                <field name="transaction_extended_date"/>
+                                <field name="transaction_extended_by"/>
+                                <field name="extension_reason_id"/>
+                                <field name="extension_remarks"/>
+                                <field name="extension_child_recurring_ids"/>
+                            </tree>
+
+                            <form>
+                                <group>
+                                    <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                    <field name="transaction_extended_date"/>
+                                    <field name="transaction_extended_by"/>
+                                    <field name="extension_reason_id"/>
+                                    <field name="extension_remarks"/>
+                                    <field name="extension_child_recurring_ids" widget="many2many_tags"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                    <page string="Renewal Reference/s" attrs="{'invisible' : ['|', '|', ('edts_subtype', '=', False), ('edts_subtype', 'not in', ['agency_contracts_accruals', 'recurring_transactions_accruals', 'agency_contracts_monthly', 'recurring_transactions_monthly']),
+                                                                              '&amp;', ('old_renewal_id', '=', False), ('new_renewal_id', '=', False)]}">
+                        <group>
+                            <field name="old_renewal_id" attrs="{'invisible' : [('old_renewal_id', '=', False)]}"/>
+                            <field name="new_renewal_id" attrs="{'invisible' : [('new_renewal_id', '=', False)]}"/>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/notebook[1]" position="after">
+                    <group attrs="{'invisible' : ['|', '|', ('edts_subtype', '=', False), ('status', 'not in', ['draft', 'rejected']), ('wizard_reason', '=', False)]}">
+                        <span class="font-weight-bold">Internal Notes:</span>
+                        <br/>
+                        <span>
+                            <field name="wizard_reason" readonly="1"/>
+                        </span>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </odoo>
+</data>

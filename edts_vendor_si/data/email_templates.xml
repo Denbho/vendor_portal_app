@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="email_template_edts_invoice_created_notification" model="mail.template">
+            <field name="name">EDTS - Invoice Created Notification</field>
+            <field name="model_id" ref="edts_vendor_si.model_admin_sales_invoice"/>
+            <field name="email_to">${object.attention_to.partner_id.email|safe}</field>
+            <field name="subject">&lt;SI No. ${object.vendor_si_number}&gt; EDTS Invoice Created Notification</field>
+            <field name="lang">${object.attention_to.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>Dear ${object.attention_to.name},</p>
+                <p>
+                    This is to notify you that an EDTS Record <b>${object.account_move_id.name}</b> with a subtype of <b>${object.account_move_id.edts_subtype_label}</b> has been created based from SI No. <b>${object.vendor_si_number}</b>
+                    <br/>
+                    For more information, go to -> <a href="${ctx['url']}">View Request</a> and <b>process</b> the said record.
+                    <br/><br/>
+                    Thank you!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

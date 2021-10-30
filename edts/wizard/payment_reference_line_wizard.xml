@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="payment_reference_received_by_form" model="ir.ui.view">
+            <field name="name">payment.reference.received.by.form</field>
+            <field name="model">edts.payment.reference.line.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Payment Reference">
+                    <sheet>
+                        <group>
+                            <field name="mode" invisible="1"/>
+                            <field name="payment_received_by"/>
+                            <field name="payment_received_date"/>
+                        </group>
+                        <footer>
+                            <button name="release_action_proceed" string="Release" type="object" class="oe_highlight"/>
+                            <button string="Cancel" special="cancel" class="oe_highlight"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

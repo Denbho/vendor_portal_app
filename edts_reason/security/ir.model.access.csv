@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_return_reason,access.return.reason,model_return_reason,base.group_user,1,1,1,1
+access_reject_reason,access.reject.reason,model_reject_reason,base.group_user,1,1,1,1
+access_extension_reason,access.extension.reason,model_extension_reason,base.group_user,1,1,1,1

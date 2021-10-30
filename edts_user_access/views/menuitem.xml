@@ -1,0 +1,71 @@
+<odoo>
+    <data>
+        <record model="ir.ui.menu" id="edts.edts_menu_root">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.vendor_invoice_wo_po">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.vendor_invoice_w_po">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level2'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.vendor_advance_payment">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.vendor_rawland_acquisition">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_employee">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.employee_reimbursement">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.employee_cash_advance">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.employee_stl">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_techserv_liaison">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_revolving_fund">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level3'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.revolving_fund_setup">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level3'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.revolving_fund_return">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level3'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_agency_contracts">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_recurring_transactions">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_subject_to_liquidation">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level1'))]" />
+        </record>
+
+        <record model="ir.ui.menu" id="edts.edts_configuration">
+            <field name="groups_id" eval="[ (4, ref('edts_user_access.group_edts_level11'))]" />
+        </record>
+    </data>
+</odoo>
