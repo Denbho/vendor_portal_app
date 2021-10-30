@@ -1,0 +1,165 @@
+<data>
+    <odoo>
+        <menuitem id="edts_menu_root"
+                  name="EDTS"
+                  web_icon="edts,static/src/img/icon.png"
+                  action="edts.invoice_wo_po_action_window" />
+
+        <!-- Vendor -->
+        <menuitem id="edts_vendor"
+                  name="Vendor" parent="edts.edts_menu_root"
+                  sequence="10"/>
+
+        <menuitem id="vendor_invoice_wo_po"
+                  name="Invoice w/o PO" action="edts.invoice_wo_po_action_window"
+                  parent="edts_vendor" />
+
+        <menuitem id="vendor_invoice_w_po"
+                  name="Invoice w/ PO" action="edts.invoice_w_po_action_window"
+                  parent="edts_vendor" />
+
+        <menuitem id="vendor_advance_payment"
+                  name="Advance Payment" action="edts.advance_payment_action_window"
+                  parent="edts_vendor" />
+
+        <menuitem id="vendor_rawland_acquisition"
+                  name="Rawland Acquisition" action="edts.rawland_acquisition_action_window"
+                  parent="edts_vendor" sequence="30"/>
+
+        <!-- Employee -->
+        <menuitem id="edts_employee"
+                  name="Employee" parent="edts.edts_menu_root"
+                  sequence="20"/>
+
+        <menuitem id="employee_reimbursement"
+                  name="Reimbursement" action="edts.reimbursement_action_window"
+                  parent="edts_employee" />
+
+        <menuitem id="employee_cash_advance"
+                  name="Cash Advance" action="edts.cash_advance_action_window"
+                  parent="edts_employee" />
+
+        <menuitem id="employee_stl"
+                  name="STL" action="edts.employee_stl_action_window"
+                  parent="edts_employee" />
+
+        <!-- Techserv/Liaison -->
+        <menuitem id="edts_techserv_liaison"
+                  name="Techserv/Liaison" action="edts.techserv_liaison_action_window"
+                  parent="edts.edts_menu_root"
+                  sequence="30"/>
+
+        <!-- Revolving Fund -->
+        <menuitem id="edts_revolving_fund"
+                  name="Revolving Fund" parent="edts.edts_menu_root"
+                  sequence="40"/>
+
+        <menuitem id="revolving_fund_setup"
+                  name="Setup" action="edts.setup_action_window"
+                  parent="edts.edts_revolving_fund" />
+
+        <menuitem id="revolving_fund_return"
+                  name="Return" action="edts.return_action_window"
+                  parent="edts.edts_revolving_fund" />
+
+        <!-- Agency Contracts -->
+        <menuitem id="edts_agency_contracts"
+                  name="Agency Contracts" parent="edts.edts_menu_root"
+                  sequence="50"/>
+
+        <menuitem id="agency_contracts_accruals"
+                  name="Accruals" parent="edts.edts_agency_contracts" />
+
+        <menuitem id="agency_contracts_accruals_template"
+                  name="Templates" action="edts.agency_contracts_accruals_templates_action_window"
+                  parent="edts.agency_contracts_accruals" />
+
+        <menuitem id="agency_contracts_accruals_recurring_invoices"
+                  name="Recurring Invoices" action="edts.agency_contracts_accruals_recurring_invoices_action_window"
+                  parent="edts.agency_contracts_accruals" />
+
+        <menuitem id="agency_contracts_monthly"
+                  name="Monthly" action="edts.agency_contracts_monthly_action_window"
+                  parent="edts.edts_agency_contracts" />
+
+        <!-- Recurring Transactions -->
+        <menuitem id="edts_recurring_transactions"
+                  name="Recurring Transactions" parent="edts.edts_menu_root"
+                  sequence="60"/>
+
+        <menuitem id="recurring_transactions_accruals"
+                  name="Accruals" parent="edts.edts_recurring_transactions" />
+
+        <menuitem id="recurring_transactions_accruals_template"
+                  name="Templates" action="edts.recurring_transactions_accruals_templates_action_window"
+                  parent="edts.recurring_transactions_accruals" />
+
+        <menuitem id="recurring_transactions_accruals_recurring_invoices"
+                  name="Recurring Invoices" action="edts.recurring_transactions_accruals_recurring_invoices_action_window"
+                  parent="edts.recurring_transactions_accruals" />
+
+        <menuitem id="recurring_transactions_monthly"
+                  name="Monthly" action="edts.recurring_transactions_monthly_action_window"
+                  parent="edts.edts_recurring_transactions" />
+
+        <!-- Subject To Liquidation -->
+        <menuitem id="edts_subject_to_liquidation"
+                  name="Subject To Liquidation" action="edts.stl_action_window"
+                  parent="edts.edts_menu_root"
+                  sequence="70"/>
+
+        <menuitem id="edts_stl_transactions"
+                  name="EDTS Transactions" action="edts.stl_action_window"
+                  parent="edts.edts_subject_to_liquidation"/>
+
+        <!-- Liquidations -->
+        <menuitem id="edts_liquidations"
+                  name="Liquidations" parent="edts.edts_subject_to_liquidation"/>
+
+        <menuitem id="edts_liquidation_details"
+                  name="Liquidation Details" action="edts.liquidation_reference_action_window"
+                  parent="edts.edts_liquidations"/>
+
+        <menuitem id="edts_liquidation_lines"
+                  name="Liquidation Lines" action="edts.liquidation_reference_line_action_window"
+                  parent="edts.edts_liquidations"/>
+
+        <!-- Configuration -->
+        <menuitem id="edts_configuration"
+                  name="Configuration" parent="edts.edts_menu_root"
+                  sequence="90"/>
+
+        <menuitem id="configuration_techserv_liaison"
+                  name="Techserv/Liaison" parent="edts.edts_configuration"
+                  sequence="70"/>
+
+        <menuitem id="configuration_cmc_type"
+                  name="CMC Type" action="edts.edts_cmc_type_action_window"
+                  parent="edts.configuration_techserv_liaison" />
+
+        <menuitem id="configuration_liquidation_lines"
+                  name="Liquidation Lines" parent="edts.edts_configuration"
+                  sequence="80"/>
+
+        <menuitem id="configuration_liquidation_lines_types"
+                  name="Types" action="edts.liquidation_reference_line_type_action_window"
+                  parent="edts.configuration_liquidation_lines" />
+
+        <menuitem id="configuration_reason"
+                  name="Reason" parent="edts.edts_configuration"
+                  sequence="90"/>
+
+        <menuitem id="configuration_return_reason"
+                  name="Return Reason" action="edts_reason.return_reason_action_window"
+                  parent="edts.configuration_reason" />
+
+        <menuitem id="configuration_reject_reason"
+                  name="Reject Reason" action="edts_reason.reject_reason_action_window"
+                  parent="edts.configuration_reason" />
+
+        <menuitem id="configuration_extension_reason"
+                  name="Extension Reason" action="edts_reason.extension_reason_action_window"
+                  parent="edts.configuration_reason" />
+
+    </odoo>
+</data>

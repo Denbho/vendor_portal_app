@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="submit_wizard_form" model="ir.ui.view">
+            <field name="name">submit.wizard.form</field>
+            <field name="model">edts.submit.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="edts_subtype" invisible="1"/>
+                        <field name="requestor" invisible="1"/>
+                        <field name="approver" placeholder="Department Head." options="{'no_create':True, 'no_open': True}"
+                               domain="[('id', '!=', requestor)]"
+                               attrs="{'invisible': [('edts_subtype', 'in', ['return'])], 'required': [('edts_subtype', 'not in', ['return'])]}"/>
+                        <field name="processor" placeholder="Accounting Department." options="{'no_create':True, 'no_open': True}" required="1"/>
+                    </group>
+
+                    <footer>
+                        <button name="submit_edts_action_proceed" string="Submit" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

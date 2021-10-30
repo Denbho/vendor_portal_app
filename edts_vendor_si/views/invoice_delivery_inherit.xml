@@ -1,0 +1,30 @@
+<data>
+    <odoo>
+        <record id="admin_sales_invoice_view_form_inherit" model="ir.ui.view">
+            <field name="name">admin.sales.invoice.view.form.inherit</field>
+            <field name="model">admin.sales.invoice</field>
+            <field name="inherit_id" ref="admin_purchase_order.admin_sales_invoice_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header/field[@name='state']" position="replace">
+                </xpath>
+
+                <xpath expr="//header/button" position="after">
+                    <button name="create_edts" attrs="{'invisible': ['|', ('countered', '=', False), ('account_move_id', '!=', False)]}" string="Create EDTS" type="object" class="btn btn-primary"/>
+                </xpath>
+
+                <xpath expr="//field[@name='service_order_number']" position="after">
+                    <field name="edts_status" invisible="1"/>
+                    <field name="account_move_id" attrs="{'invisible': ['|', ('account_move_id', '=', False), ('edts_status', 'in', ['rejected'])]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='countered_date']" position="after">
+                    <field name="countered_by" attrs="{'invisible': [('countered', '=', False)], 'readonly': True}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='po_delivery_ids']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('account_move_id', '!=', False)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </odoo>
+</data>

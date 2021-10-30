@@ -1,0 +1,259 @@
+<odoo>
+    <data>
+        <record id="payment_reference_form" model="ir.ui.view">
+            <field name="name">payment.reference.form</field>
+            <field name="model">edts.payment.reference.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Payment Reference">
+                    <sheet>
+
+                        <div class="oe_title">
+                            <label for="payment_doc" class="oe_edit_only"/>
+                            <h1>
+                                <field name="payment_doc" attrs="{'readonly': [('released', '=', True)]}"/>
+                            </h1>
+                        </div>
+
+                        <group col="2">
+                            <group>
+                                <label for="ap_doc"/>
+                                <div class="o_row">
+                                    [<field name="fiscal_year" force_save="1"/>]
+                                    <field name="ap_doc" attrs="{'readonly': [('released', '=', True)]}"/>
+                                </div>
+                                <field name="mode" attrs="{'readonly': [('released', '=', True)]}"/>
+                                <field name="check_no" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])], 'readonly': [('released', '=', True)], 'required': [('mode', 'in', ['check', 'check_writer'])]}"/>
+                                <field name="check_date" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])], 'readonly': [('released', '=', True)], 'required': [('mode', 'in', ['check', 'check_writer'])]}"/>
+                                <field name="payment_amount" attrs="{'readonly': [('released', '=', True)]}"/>
+                            </group>
+                            <group>
+                                <field name="is_payment_ready_for_releasing" attrs="{'invisible': [('released', '=', True)]}"/>
+                                <field name="or_number" attrs="{'invisible': [('or_number', '=', False)], 'readonly': [('released', '=', True)]}"/>
+                                <field name="or_date" attrs="{'invisible': [('or_date', '=', False)], 'readonly': [('released', '=', True)]}"/>
+                                <field name="released"/>
+                                <field name="encashed" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tracking Details">
+                                <group col="2">
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="payment_received_date" attrs="{'readonly': [('released', '=', False)]}"/>
+                                        <field name="payment_received_by" attrs="{'readonly': [('released', '=', False)]}"/>
+
+                                        <separator/>
+
+                                        <field name="processed_by"/>
+                                        <field name="processed_date"/>
+
+                                    </group>
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="released_date"/>
+                                        <field name="released_by"/>
+
+                                        <separator/>
+
+                                        <field name="encashed_date" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                        <field name="encashed_by" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="payment_reference_to_release_form" model="ir.ui.view">
+            <field name="name">payment.reference.to.release.form</field>
+            <field name="model">edts.payment.reference.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Payment Reference">
+                    <header>
+                        <button name="release_payment" string="Release" type="object" class="btn btn-primary"
+                                attrs="{'invisible' : [('released', '=', True)]}"/>
+                        <button name="release_payment_via_api" string="Release via API" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                                attrs="{'invisible' : [('released', '=', True)]}"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_title">
+                            <label for="payment_doc" class="oe_edit_only"/>
+                            <h1>
+                                <field name="payment_doc" attrs="{'readonly': [('released', '=', True)]}"/>
+                            </h1>
+                        </div>
+
+                        <group col="2">
+                            <group>
+                                <label for="ap_doc"/>
+                                <div class="o_row">
+                                    [<field name="fiscal_year" force_save="1"/>]
+                                    <field name="ap_doc" attrs="{'readonly': [('released', '=', True)]}"/>
+                                </div>
+                                <field name="mode" attrs="{'readonly': [('released', '=', True)]}"/>
+                                <field name="check_no" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])], 'readonly': [('released', '=', True)]}"/>
+                                <field name="check_date" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])], 'readonly': [('released', '=', True)]}"/>
+                                <field name="payment_amount" attrs="{'readonly': [('released', '=', True)]}"/>
+                            </group>
+                            <group>
+                                <field name="or_number" attrs="{'readonly': [('released', '=', True)]}"/>
+                                <field name="or_date" attrs="{'readonly': [('released', '=', True)]}"/>
+                                <field name="released"/>
+                                <field name="encashed" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tracking Details">
+                                <group col="2">
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="payment_received_date" attrs="{'readonly': [('released', '=', False)]}"/>
+                                        <field name="payment_received_by" attrs="{'readonly': [('released', '=', False)]}"/>
+
+                                        <separator/>
+
+                                        <field name="processed_by"/>
+                                        <field name="processed_date"/>
+
+                                    </group>
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="released_date"/>
+                                        <field name="released_by"/>
+
+                                        <separator/>
+
+                                        <field name="encashed_date" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                        <field name="encashed_by" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="API Remarks">
+                                <group>
+                                    <field name="released_api_remarks" force_save="1" readonly="1"/>
+                                    <field name="encashed_api_remarks" force_save="1" readonly="1"
+                                           attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="payment_reference_to_encash_form" model="ir.ui.view">
+            <field name="name">payment.reference.to.encash.form</field>
+            <field name="model">edts.payment.reference.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Payment Reference">
+                    <header>
+                        <button name="encash_payment" string="Encash" type="object" class="btn btn-primary" confirm="Would you like to proceed?"
+                                attrs="{'invisible' : [('encashed', '=', True)]}"/>
+                        <button name="encash_payment_via_api" string="Encash via API" type="object" class="btn btn-primary btn-warning" style="color:white;"
+                                attrs="{'invisible' : [('encashed', '=', True)]}"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_title">
+                            <label for="payment_doc" class="oe_edit_only"/>
+                            <h1>
+                                <field name="payment_doc" attrs="{'readonly': [('released', '=', True)]}"/>
+                            </h1>
+                        </div>
+
+                        <group col="2">
+                            <group>
+                                <label for="ap_doc"/>
+                                <div class="o_row">
+                                    [<field name="fiscal_year" force_save="1"/>]
+                                    <field name="ap_doc"/>
+                                </div>
+                                <field name="mode"/>
+                                <field name="check_no" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                <field name="check_date" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                <field name="payment_amount"/>
+                            </group>
+                            <group>
+                                <field name="or_number"/>
+                                <field name="or_date"/>
+                                <field name="released"/>
+                                <field name="encashed" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tracking Details">
+                                <group col="2">
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="payment_received_date" attrs="{'readonly': [('released', '=', False)]}"/>
+                                        <field name="payment_received_by" attrs="{'readonly': [('released', '=', False)]}"/>
+
+                                        <separator/>
+
+                                        <field name="processed_by"/>
+                                        <field name="processed_date"/>
+
+                                    </group>
+                                    <group>
+                                        <div> <!-- Render 50% space for label and 50% for fields --></div>
+                                        <field name="released_date"/>
+                                        <field name="released_by"/>
+
+                                        <separator/>
+
+                                        <field name="encashed_date" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                        <field name="encashed_by" attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="API Remarks">
+                                <group>
+                                    <field name="released_api_remarks" force_save="1" readonly="1"/>
+                                    <field name="encashed_api_remarks" force_save="1" readonly="1"
+                                           attrs="{'invisible': [('mode', 'not in', ['check', 'check_writer'])]}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="payment_reference_tree" model="ir.ui.view">
+            <field name="name">payment.reference.tree</field>
+            <field name="model">edts.payment.reference.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Payment Reference">
+                    <field name="payment_doc"/>
+                    <field name="ap_doc"/>
+                    <field name="mode"/>
+                    <field name="payment_amount" sum="Amount"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

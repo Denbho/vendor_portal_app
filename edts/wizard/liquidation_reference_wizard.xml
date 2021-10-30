@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="update_liquidation_status_form" model="ir.ui.view">
+            <field name="name">update.liquidation.status.form</field>
+            <field name="model">edts.liquidation.reference.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="liquidation_status" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="update_liquidation_status_action_proceed" string="Update" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="update_submission_status_form" model="ir.ui.view">
+            <field name="name">update.submission.status.form</field>
+            <field name="model">edts.liquidation.reference.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="submission_status" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="update_submission_status_action_proceed" string="Update" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

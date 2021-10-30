@@ -1,0 +1,188 @@
+<odoo>
+    <data>
+        <record id="edts_vendor_search_view" model="ir.ui.view">
+            <field name="name">edts.vendor.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Vendor">
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter string="Invoice w/o PO" name="invoice_wo_po_filter" domain="[('edts_subtype', 'in', ['invoice_wo_po'])]"/>
+                    <filter string="Invoice w/ PO" name="invoice_w_po_filter" domain="[('edts_subtype', 'in', ['invoice_w_po'])]"/>
+                    <filter string="Advance Payment" name="advance_payment_filter" domain="[('edts_subtype', 'in', ['advance_payment'])]"/>
+                    <filter string="Rawland Acquisition" name="rawland_acquisition_filter" domain="[('edts_subtype', 'in', ['rawland_acquisition'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_employee_search_view" model="ir.ui.view">
+            <field name="name">edts.employee.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Employee">
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter string="Reimbursement" name="reimbursement_filter" domain="[('edts_subtype', 'in', ['reimbursement'])]"/>
+                    <filter string="Cash Advance" name="cash_advance_filter" domain="[('edts_subtype', 'in', ['cash_advance'])]"/>
+                    <filter string="Employee STL" name="employee_stl_filter" domain="[('edts_subtype', 'in', ['stl'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_techserv_liaison_search_view" model="ir.ui.view">
+            <field name="name">edts.techserv.liaison.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Techserv/Liaison">
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter string="Techserv/Liaison" name="techserv_liaison_filter" domain="[('edts_subtype', 'in', ['techserv_liaison'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_revolving_fund_search_view" model="ir.ui.view">
+            <field name="name">edts.revolving.fund.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Revolving Fund">
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter string="Setup" name="setup_filter" domain="[('edts_subtype', 'in', ['setup'])]"/>
+                    <filter string="Return" name="return_filter" domain="[('edts_subtype', 'in', ['return'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_agency_contracts_search_view" model="ir.ui.view">
+            <field name="name">edts.agency.contracts.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Agency Contracts">
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="account_number"/>
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter string="Agency Contracts Accruals Templates" name="agency_contracts_accruals_templates_filter" domain="[('edts_subtype', 'in', ['agency_contracts_accruals']), ('parent_recurring_id', '=', False)]"/>
+                    <filter string="Agency Contracts Accruals Recurring Invoices" name="agency_contracts_accruals_recurring_invoices_filter" domain="[('edts_subtype', 'in', ['agency_contracts_accruals']), ('parent_recurring_id', '!=', False)]"/>
+                    <filter string="Agency Contracts Monthly" name="agency_contracts_monthly_filter" domain="[('edts_subtype', 'in', ['agency_contracts_monthly'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_recurring_transactions_search_view" model="ir.ui.view">
+            <field name="name">edts.recurring.transactions.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Recurring Transactions">
+                    <field name="name" string="EDTS NO."/>
+                    <field name="journal_id"/>
+                    <field name="account_number"/>
+                    <field name="valid_from"/>
+                    <field name="valid_to"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter string="Recurring Transactions Accruals Templates" name="recurring_transactions_accruals_templates_filter" domain="[('edts_subtype', 'in', ['recurring_transactions_accruals']), ('parent_recurring_id', '=', False)]"/>
+                    <filter string="Recurring Transactions Accruals Recurring Invoices" name="recurring_transactions_accruals_recurring_invoices_filter" domain="[('edts_subtype', 'in', ['recurring_transactions_accruals']), ('parent_recurring_id', '!=', False)]"/>
+                    <filter string="Recurring Transactions Monthly" name="recurring_transactions_monthly_filter" domain="[('edts_subtype', 'in', ['recurring_transactions_monthly'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_stl_search_view" model="ir.ui.view">
+            <field name="name">edts.stl.search.view</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Subject To Liquidation">
+                    <field name="name"/>
+                    <filter string="Group by EDTS Subtype" name="edts_subtype_filter" domain="[]" context="{'group_by': 'edts_subtype'}"/>
+                    <filter string="Group by Liquidation Status" name="liquidation_status_filter" domain="[]" context="{'group_by': 'liquidation_status'}"/>
+                    <filter string="Group by Submission Status" name="submission_status_filter" domain="[]" context="{'group_by': 'submission_status'}"/>
+                    <separator/>
+                    <filter string="STL Transactions" name="stl_transactions_filter" domain="[('edts_subtype', 'in', ['advance_payment', 'cash_advance','stl', 'techserv_liaison']), ('status', 'in', ['fully_paid'])]"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="edts_company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_liquidation_reference_search_view" model="ir.ui.view">
+            <field name="name">edts.liquidation.reference.search.view</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Liquidation">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_liquidation_details_search_view" model="ir.ui.view">
+            <field name="name">edts.liquidation.details.search.view</field>
+            <field name="model">edts.liquidation.reference</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Liquidation Reference">
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="account_move_id"/>
+                    <filter string="Group by Status" name="status_filter" domain="[]" context="{'group_by': 'status'}"/>
+                    <filter string="Group by EDTS Subtype" name="edts_subtype_filter" domain="[]" context="{'group_by': 'edts_subtype'}"/>
+                    <filter string="Group by Liquidation Status" name="liquidation_status_filter" domain="[]" context="{'group_by': 'liquidation_status'}"/>
+                    <filter string="Group by Submission Status" name="submission_status_filter" domain="[]" context="{'group_by': 'submission_status'}"/>
+                    <separator/>
+                    <searchpanel>
+                        <field name="company_id" string="Company" icon="fa-building"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="edts_liquidation_reference_line_search_view" model="ir.ui.view">
+            <field name="name">edts.liquidation.reference.line.search.view</field>
+            <field name="model">edts.liquidation.reference.line</field>
+            <field name="arch" type="xml">
+                <search string="EDTS Liquidation Reference Line">
+                    <field name="liquidation_reference_id"/>
+                    <field name="invoice_doc_number"/>
+                    <filter string="Group by Type" name="type_filter" domain="[]" context="{'group_by': 'liquidation_type_id'}"/>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

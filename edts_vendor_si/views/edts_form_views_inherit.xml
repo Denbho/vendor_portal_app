@@ -1,0 +1,69 @@
+<data>
+    <odoo>
+        <record id="edts_invoice_form_view_inherit" model="ir.ui.view">
+            <field name="name">edts.invoice.form.view.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="edts.view_move_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group[1]/div/h1" position="after">
+                    <div attrs="{'invisible' : [('admin_sales_invoice_id', '=', False)]}">
+                        <label for='admin_sales_invoice_id' style="font-weight:bold;"/>
+                        <field name='admin_sales_invoice_id'/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='company_code']" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='edts_company_id']" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)], 'required': True}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='balance']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('edts_subtype', 'not in', ['invoice_w_po', 'advance_payment'])], 'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='amount']" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)], 'required': True}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='edts_purchase_id']" position="attributes">
+                    <attribute name="attrs">{'invisible' : [('edts_subtype', 'not in', ['invoice_w_po', 'advance_payment'])], 'required': [('edts_subtype', 'in', ['invoice_w_po', 'advance_payment'])], 'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='vendor_code_113'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'reimbursement', 'cash_advance', 'stl', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']), ('sap_client_id', '!=', 113)], 'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='vendor_code_303'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('edts_subtype', 'not in', ['invoice_wo_po', 'invoice_w_po', 'advance_payment', 'reimbursement', 'cash_advance', 'stl', 'techserv_liaison', 'agency_contracts_accruals', 'agency_contracts_monthly', 'recurring_transactions_accruals', 'recurring_transactions_monthly']), ('sap_client_id', '!=', 303)],'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='universal_vendor_code'][1]" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='vendor_id']" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='assignment']" position="attributes">
+                    <attribute name="attrs">{'readonly' : ['|', ('is_edts_field_readonly', '=', True), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']" position="attributes">
+                    <attribute name="attrs">{'readonly': ['&amp;', ('edts_subtype', '!=', False), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='po_delivery_ids']" position="attributes">
+                    <attribute name="attrs">{'readonly': ['&amp;', ('edts_subtype', '!=', False), ('admin_sales_invoice_id', '!=', False)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+    </odoo>
+</data>

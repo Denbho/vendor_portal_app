@@ -1,0 +1,76 @@
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_category_edts_access">
+            <field name="name">EDTS</field>
+            <field name="sequence">9</field>
+        </record>
+
+        <record id="group_edts_level1" model="res.groups">
+            <field name="name">Level 1: Non - Accounting /Non- Finance</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+        </record>
+
+        <record id="group_edts_level2" model="res.groups">
+            <field name="name">Level 2: Purchasing Staff/TL</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level1'))]"/>
+        </record>
+        
+        <record id="group_edts_level3" model="res.groups">
+            <field name="name">Level 3: Department Heads</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level2'))]"/>
+        </record>
+        
+        <record id="group_edts_level4" model="res.groups">
+            <field name="name">Level 4: Accounting Staff</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level3'))]"/>
+        </record>
+        
+        <record id="group_edts_level5" model="res.groups">
+            <field name="name">Level 5: Finance Staff</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level4'))]"/>
+        </record>
+        
+        <record id="group_edts_level6" model="res.groups">
+            <field name="name">Level 6: Finance Lead</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level5'))]"/>
+        </record>
+        
+        <record id="group_edts_level7" model="res.groups">
+            <field name="name">Level 7: Accounting Lead</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level6'))]"/>
+        </record>
+        
+        <record id="group_edts_level8" model="res.groups">
+            <field name="name">Level 8: Finance Head</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level7'))]"/>
+        </record>
+        
+        <record id="group_edts_level9" model="res.groups">
+            <field name="name">Level 9: Accounting Head</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level8'))]"/>
+        </record>
+
+        <record id="group_edts_level10" model="res.groups">
+            <field name="name">Level 10: Audit</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level9'))]"/>
+        </record>
+        
+        <record id="group_edts_level11" model="res.groups">
+            <field name="name">Level 11: Admin</field>
+            <field name="category_id" ref="module_category_edts_access"/>
+            <field name="implied_ids" eval="[(4, ref('group_edts_level10'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id='cron_edts_pending_for_approval_notification' model='ir.cron'>
+            <field name='name'>EDTS: Pending For Approval Notification</field>
+            <field name='model_id' ref='model_account_move'/>
+            <field name='state'>code</field>
+            <field name='code'>model._cron_edts_pending_for_approval_notification()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 10:00:00')"/>
+            <field name='numbercall'>-1</field>
+        </record>
+
+        <record id='cron_edts_sap_process' model='ir.cron'>
+            <field name='name'>EDTS: EDTS - SAP Background Process</field>
+            <field name='model_id' ref='model_account_move'/>
+            <field name='state'>code</field>
+            <field name='code'>model._cron_edts_sap_process()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name='numbercall'>-1</field>
+        </record>
+
+        <record id='cron_automatic_creation_of_recurring_transactions' model='ir.cron'>
+            <field name='name'>EDTS: Automatic Creation of Recurring Transactions</field>
+            <field name='model_id' ref='model_account_move'/>
+            <field name='state'>code</field>
+            <field name='code'>model.cron_automatic_creation_of_recurring_transactions()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')"/>
+            <field name='numbercall'>-1</field>
+        </record>
+
+        <record id='cron_email_and_status_update_for_recurring_transactions' model='ir.cron'>
+            <field name='name'>EDTS: Email and Status Update for Recurring Transactions</field>
+            <field name='model_id' ref='model_account_move'/>
+            <field name='state'>code</field>
+            <field name='code'>model.cron_email_and_status_update_for_recurring_transactions()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')"/>
+            <field name='numbercall'>-1</field>
+        </record>
+    </data>
+</odoo>
